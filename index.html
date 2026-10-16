@@ -1,0 +1,1502 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA & Cumulative Calculator</title>
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --text-main: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --banner-overlay: rgba(15, 23, 42, 0.85);
+            --input-border: #cbd5e1;
+            --input-bg: #ffffff;
+            --accent-color: #2563eb;
+        }
+
+        body.dark-theme {
+            --bg-body: #0f172a;
+            --text-main: #f8fafc;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --banner-overlay: rgba(15, 23, 42, 0.92);
+            --input-border: #475569;
+            --input-bg: #0f172a;
+            --accent-color: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 99, 235, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+            }
+        }
+
+        @keyframes neonGlow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(59,130,246,0.6), 0 0 15px rgba(59,130,246,0.4);
+            }
+
+            50% {
+                text-shadow: 0 0 15px rgba(168,85,247,0.8), 0 0 25px rgba(168,85,247,0.6);
+            }
+        }
+
+        /* Cover Page */
+        #cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(rgba(15,23,42,0.82), rgba(15,23,42,0.82)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1600&auto=format&fit=crop') center/cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+            #cover-page h1 {
+                font-size: 3.2rem;
+                margin-bottom: 15px;
+                font-weight: 800;
+                animation: fadeInSlideUp 0.8s ease;
+            }
+
+            #cover-page p {
+                font-size: 1.25rem;
+                margin-bottom: 35px;
+                color: #e2e8f0;
+                max-width: 600px;
+                animation: fadeInSlideUp 1s ease;
+            }
+
+        .btn-start {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+            animation: fadeInSlideUp 1.2s ease, pulseGlow 2.5s infinite;
+            transition: transform 0.2s ease;
+        }
+
+            .btn-start:hover {
+                transform: translateY(-3px) scale(1.03);
+            }
+
+        /* Calculator Page */
+        #calculator-page {
+            display: none;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .page-active {
+            animation: fadeInSlideUp 0.5s ease forwards;
+        }
+
+        .header-banner {
+            background: linear-gradient(var(--banner-overlay), var(--banner-overlay)), url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop') center/cover;
+            color: white;
+            padding: 28px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .preset-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .preset-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .universities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .uni-card {
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
+        }
+
+            .uni-card:hover {
+                border-color: var(--accent-color);
+                transform: translateY(-2px);
+            }
+
+            .uni-card.active {
+                border-color: var(--accent-color);
+                background: rgba(37, 99, 235, 0.08);
+            }
+
+        .uni-icon-svg {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .uni-details h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .uni-details p {
+            font-size: 0.78rem;
+            opacity: 0.7;
+        }
+
+        .department-selector-wrapper {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+            animation: fadeInSlideUp 0.3s ease;
+        }
+
+        .dept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .dept-card {
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-bg);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+            .dept-card:hover, .dept-card.selected {
+                background: var(--accent-color);
+                color: white;
+                border-color: var(--accent-color);
+            }
+
+        /* Contact Box */
+        .contact-notice-box {
+            background: rgba(37, 99, 235, 0.06);
+            border: 1px dashed var(--accent-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .contact-email-link {
+            color: var(--accent-color);
+            font-weight: 700;
+            text-decoration: none;
+            background: var(--card-bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+            .contact-email-link:hover {
+                background: var(--accent-color);
+                color: white;
+            }
+
+        .semester-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            animation: fadeInSlideUp 0.4s ease;
+        }
+
+        .semester-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .course-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            animation: fadeInSlideUp 0.35s ease;
+        }
+
+            .course-row input, .course-row select {
+                padding: 11px;
+                border: 1px solid var(--input-border);
+                background: var(--input-bg);
+                color: var(--text-main);
+                border-radius: 8px;
+                font-size: 14px;
+                outline: none;
+            }
+
+        .course-name {
+            flex: 3;
+        }
+
+        .course-credit, .course-grade {
+            flex: 1.5;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 9px 16px;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add-course {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px dashed #22c55e;
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-add-semester {
+            background: #2563eb;
+            color: white;
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            border-radius: 12px;
+        }
+
+        .result-card {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 28px 20px 20px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+
+        .speedometer-wrapper {
+            position: relative;
+            width: 260px;
+            height: 140px;
+            margin: 15px auto 0 auto;
+            overflow: hidden;
+        }
+
+        .gauge-svg {
+            width: 260px;
+            height: 260px;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 18;
+            stroke-linecap: round;
+        }
+
+        .gauge-progress {
+            fill: none;
+            stroke: url(#gauge-gradient);
+            stroke-width: 18;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .needle {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            width: 4px;
+            height: 85px;
+            background: #ef4444;
+            border-radius: 4px;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(-90deg);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+            z-index: 5;
+        }
+
+        .needle-hub {
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #f8fafc;
+            border: 3px solid #ef4444;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+        }
+
+        .gpa-display {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #4ade80;
+            margin-top: -10px;
+        }
+
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 240px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-back {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .animated-credit {
+            display: inline-block;
+            color: #3b82f6;
+            animation: neonGlow 3s infinite ease-in-out;
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+            .animated-credit:hover {
+                transform: scale(1.08) letter-spacing(3.5px);
+            }
+
+        .cover-footer {
+            position: absolute;
+            bottom: 25px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 15px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .calc-footer {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Page -->
+    <div id="cover-page">
+        <h1>GPA Calculator</h1>
+        <p>Track your academic progress and calculate your semester and cumulative GPA easily.</p>
+        <button class="btn-start" onclick="goToCalculator()">Go to Calculate Your GPA</button>
+
+        <footer class="cover-footer">
+            <span class="animated-credit">Dir. By Mohamed Adel</span>
+        </footer>
+    </div>
+
+    <!-- Calculator Page -->
+    <div id="calculator-page">
+        <div class="top-nav">
+            <button class="btn-back" onclick="goToCover()">← Home</button>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+            </button>
+
+            <button class="btn-reset" onclick="resetAllData()">Clear Data</button>
+        </div>
+
+        <div class="header-banner">
+            <h2>Semester & Cumulative Calculator</h2>
+            <p>Your inputs are saved automatically in your browser.</p>
+        </div>
+
+        <div class="preset-panel">
+            <div class="preset-title">🏛️ Select University & Faculty Roadmap</div>
+
+            <div class="universities-grid">
+                <div class="uni-card active" id="card-cu" onclick="selectUniversity('cu')">
+                    <svg class="uni-icon-svg" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="30" fill="#2563EB" opacity="0.15" />
+                        <path d="M32 12L10 24L32 36L54 24L32 12Z" stroke="#2563EB" stroke-width="3" stroke-linejoin="round" />
+                        <path d="M18 29.5V42C18 42 24 48 32 48C40 48 46 42 46 42V29.5" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
+                    </svg>
+                    <div class="uni-details">
+                        <h4>Cairo University</h4>
+                        <p>Faculty of Engineering</p>
+                    </div>
+                </div>
+
+                <div class="uni-card" id="card-asu" onclick="selectUniversity('asu')">
+                    <svg class="uni-icon-svg" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="30" fill="#E11D48" opacity="0.15" />
+                        <path d="M32 14L14 48H50L32 14Z" stroke="#E11D48" stroke-width="3" stroke-linejoin="round" />
+                        <circle cx="32" cy="32" r="6" fill="#E11D48" />
+                    </svg>
+                    <div class="uni-details">
+                        <h4>Ain Shams University</h4>
+                        <p>Faculty of Engineering</p>
+                    </div>
+                </div>
+
+                <div class="uni-card" id="card-helwan" onclick="selectUniversity('helwan')">
+                    <svg class="uni-icon-svg" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="30" fill="#0D9488" opacity="0.15" />
+                        <rect x="18" y="20" width="28" height="28" rx="4" stroke="#0D9488" stroke-width="3" />
+                        <path d="M26 20V48M38 20V48" stroke="#0D9488" stroke-width="2" />
+                    </svg>
+                    <div class="uni-details">
+                        <h4>Capital Univ (Helwan)</h4>
+                        <p>Faculty of Engineering</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="department-selector-wrapper" id="dept-wrapper" style="display: block;">
+                <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">📐 Choose Engineering Department:</div>
+                <div class="dept-grid">
+                    <div class="dept-card" onclick="selectDepartment('freshman', event)">🌱 Freshman Year (إعدادي فقط)</div>
+                    <div class="dept-card" onclick="selectDepartment('sbe', event)">🧬 Biomedical Eng (SBE)</div>
+                    <div class="dept-card" onclick="selectDepartment('mep', event)">🔥 Mech Power (MEP)</div>
+                    <div class="dept-card" onclick="selectDepartment('arc', event)">🏛️ Architecture (ARC)</div>
+                    <div class="dept-card" onclick="selectDepartment('eec', event)">📡 Electronics & Comm (EEC)</div>
+                    <div class="dept-card" onclick="selectDepartment('epe', event)">⚡ Electrical Power (EPE)</div>
+                    <div class="dept-card" onclick="selectDepartment('mdp', event)">⚙️ Mech Production (MDP)</div>
+                    <div class="dept-card" onclick="selectDepartment('cve', event)">🏗️ Civil Eng (CVE)</div>
+                    <div class="dept-card" onclick="selectDepartment('cmp', event)">💻 Computer Eng (CMP)</div>
+                    <div class="dept-card" onclick="selectDepartment('aer', event)">🚀 Aerospace Eng (AER)</div>
+                    <div class="dept-card" onclick="selectDepartment('che', event)">🧪 Chemical Eng (CHE)</div>
+                    <div class="dept-card" onclick="selectDepartment('met', event)">⚒️ Metallurgy Eng (MET)</div>
+                </div>
+            </div>
+
+            <!-- Feedback & Roadmap Contact Notice -->
+            <div class="contact-notice-box">
+                <span>📩 Send your faculty roadmap PDF or feedback to add it instantly:</span>
+                <a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" class="contact-email-link">mohamed.abdefattah07@eng-st.cu.edu.eg</a>
+            </div>
+        </div>
+
+        <div id="semesters-container"></div>
+
+        <button type="button" class="btn-add-semester" onclick="addSemester()">+ Add New Semester</button>
+
+        <div class="result-card">
+            <h2>Overall GPA</h2>
+
+            <div class="speedometer-wrapper">
+                <svg class="gauge-svg" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ef4444" />
+                            <stop offset="50%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#4ade80" />
+                        </linearGradient>
+                    </defs>
+                    <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
+                    <path id="gauge-progress" class="gauge-progress" d="M 10 50 A 40 40 0 0 1 90 50" />
+                </svg>
+                <div id="needle" class="needle"></div>
+                <div class="needle-hub"></div>
+            </div>
+
+            <div class="gauge-labels">
+                <span>0.00</span>
+                <span>2.00</span>
+                <span>4.00</span>
+            </div>
+
+            <div id="total-gpa" class="gpa-display">0.00</div>
+            <p id="total-credits" style="color: #94a3b8; font-size: 0.95rem;">Total Credits: 0</p>
+        </div>
+
+        <footer class="calc-footer">
+            <span class="animated-credit">Dir. By Mohamed Adel</span>
+        </footer>
+    </div>
+
+    <script>
+        let semestersData = [];
+        let currentDeptKey = 'custom';
+        let currentUniKey = 'cu';
+
+        const freshmanYearData = [
+        { id: 'fresh_1', courses: [
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'fresh_2', courses: [
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity and Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
+        ]}
+        ];
+
+        // Systems & Biomedical Engineering (SBE) Full 8-Semester Plan
+        const sbeFullPlan = [
+        { id: 'sbe_1', courses: [
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' },
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (AMTG005)', credits: '3', grade: '' },
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'sbe_2', courses: [
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' },
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity & Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Intro to Computer Architecture (ELEG102)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'sbe_3', courses: [
+        { name: 'Selected Topics 1 (GENG111)', credits: '2', grade: '' },
+        { name: 'Linear Algebra & Multivariable (MTHG102)', credits: '3', grade: '' },
+        { name: 'Electrical Circuits (ELEG101)', credits: '3', grade: '' },
+        { name: 'Programming Principles (SBEG107)', credits: '3', grade: '' },
+        { name: 'Medical Physics (SBEG101)', credits: '3', grade: '' },
+        { name: 'Systems Physiology (SBEG103)', credits: '3', grade: '' },
+        { name: 'Intro to Imaging & Anatomy (SBEG105)', credits: '2', grade: '' }
+        ]},
+        { id: 'sbe_4', courses: [
+        { name: 'Differential Equations (MTHG103)', credits: '2', grade: '' },
+        { name: 'Biochemistry & Molecular Biology (SBEG206)', credits: '2', grade: '' },
+        { name: 'Power and Machines (EPEG130)', credits: '3', grade: '' },
+        { name: 'Intro to Medical Equipment (SBEG102)', credits: '2', grade: '' },
+        { name: 'Medical Data Structure (SBEG104)', credits: '3', grade: '' },
+        { name: 'Intro to Biomechanics (SBEG106)', credits: '3', grade: '' },
+        { name: 'Numerical Methods in BME (SBEG108)', credits: '3', grade: '' }
+        ]},
+        { id: 'sbe_5', courses: [
+        { name: 'Restricted Elective 1 (GENG1XX)', credits: '2', grade: '' },
+        { name: 'Special Functions & PDE (MTHG202)', credits: '2', grade: '' },
+        { name: 'Analog & Digital Electronics (ELEG103)', credits: '3', grade: '' },
+        { name: 'Biotransport (SBEG201)', credits: '3', grade: '' },
+        { name: 'Bio-Measurements (SBEG204)', credits: '3', grade: '' },
+        { name: 'Biostatistics (SBEG209)', credits: '3', grade: '' },
+        { name: 'Algorithms in BME (SBEG207)', credits: '3', grade: '' }
+        ]},
+        { id: 'sbe_6', courses: [
+        { name: 'Restricted Elective 2 (GENG2XX)', credits: '2', grade: '' },
+        { name: 'Clinical Engineering (SBEG202)', credits: '3', grade: '' },
+        { name: 'Bio-Sensors (SBEG203)', credits: '3', grade: '' },
+        { name: 'Biological Signal Processing (SBEG205)', credits: '3', grade: '' },
+        { name: 'DISCIPLINE Elective 1 (SBEG3XX)', credits: '2', grade: '' },
+        { name: 'DISCIPLINE Elective 2 (SBEG3XX)', credits: '2', grade: '' },
+        { name: 'DISCIPLINE Elective 3 (SBEG3XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'sbe_7', courses: [
+        { name: 'Free Elective (GENG2XX)', credits: '2', grade: '' },
+        { name: 'DISCIPLINE Elective 4 (SBEG3XX)', credits: '2', grade: '' },
+        { name: 'DISCIPLINE Elective 5 (SBEG3XX)', credits: '2', grade: '' },
+        { name: 'PROGRAM Elective 1 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'PROGRAM Elective 2 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'PROGRAM Elective 3 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 1 (SBEG380)', credits: '2', grade: '' }
+        ]},
+        { id: 'sbe_8', courses: [
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' },
+        { name: 'PROGRAM Elective 4 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'PROGRAM Elective 5 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'PROGRAM Elective 6 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'PROGRAM Elective 7 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'PROGRAM Elective 8 (SBEG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 2 (SBEG480)', credits: '3', grade: '' }
+        ]}
+        ];
+
+        // Mechanical Power & Energy Engineering (MEP) Full 10-Semester Plan
+        const mepFullPlan = [
+        { id: 'mep_1', courses: [
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' },
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'mep_2', courses: [
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' },
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity & Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'mep_3', courses: [
+        { name: 'Entrepreneurship & Marketing (GENG119)', credits: '2', grade: '' },
+        { name: 'Linear Algebra & Multivariable (MTHG102)', credits: '3', grade: '' },
+        { name: 'Dynamics of Rigid Bodies (EMCG101)', credits: '3', grade: '' },
+        { name: 'Computer-Aided Mechanical Drafting (MDPG111)', credits: '3', grade: '' },
+        { name: 'Materials Science (MDPG121)', credits: '3', grade: '' },
+        { name: 'Electrical & Electronics Eng (EPEG113)', credits: '3', grade: '' }
+        ]},
+        { id: 'mep_4', courses: [
+        { name: 'Selected Topics 1 (GENG111)', credits: '2', grade: '' },
+        { name: 'Differential Equations (MTHG104)', credits: '3', grade: '' },
+        { name: 'Probability and Statistics (MTHG113)', credits: '2', grade: '' },
+        { name: 'Stress Analysis (MDPG151)', credits: '3', grade: '' },
+        { name: 'Engineering Materials (MDPG122)', credits: '3', grade: '' },
+        { name: 'Fluid Mechanics 1 (MEPG121)', credits: '3', grade: '' }
+        ]},
+        { id: 'mep_5', courses: [
+        { name: 'Engineering Thermodynamics 1 (MEPG211)', credits: '3', grade: '' },
+        { name: 'Kinematics & Dynamics of Machines (MDPG241)', credits: '3', grade: '' },
+        { name: 'Structural Mechanics (MDPG251)', credits: '3', grade: '' },
+        { name: 'Manufacturing Processes 1 (MDPG221)', credits: '3', grade: '' },
+        { name: 'Fluid Mechanics 2 (MEPG221)', credits: '3', grade: '' }
+        ]},
+        { id: 'mep_6', courses: [
+        { name: 'Engineering Thermodynamics 2 (MEPG212)', credits: '3', grade: '' },
+        { name: 'Intro to Numerical Analysis (MTHG110)', credits: '2', grade: '' },
+        { name: 'Electric Machines & Control (EPEG215)', credits: '3', grade: '' },
+        { name: 'Manufacturing Processes 2 (MDPG222)', credits: '3', grade: '' },
+        { name: 'Machine Design 1 (MDPG211)', credits: '4', grade: '' }
+        ]},
+        { id: 'mep_7', courses: [
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' },
+        { name: 'Engineering Project Planning & Economics (MECG301)', credits: '2', grade: '' },
+        { name: 'System Dynamics & Controls (MDPG341)', credits: '3', grade: '' },
+        { name: 'Renewable Energy & Storage (MEPG341)', credits: '3', grade: '' },
+        { name: 'Heat Transfer (MEPG331)', credits: '3', grade: '' },
+        { name: 'Machine Design 2 (MDPG311)', credits: '3', grade: '' }
+        ]},
+        { id: 'mep_8', courses: [
+        { name: 'Restricted Elective 2 (GENG2XX)', credits: '2', grade: '' },
+        { name: 'Thermo-Fluid Measurements (MEPG342)', credits: '2', grade: '' },
+        { name: 'Intro to Power Plants (MEPG332)', credits: '3', grade: '' },
+        { name: 'Combustion Fundamentals (MEPG311)', credits: '3', grade: '' },
+        { name: 'Fluid Mechanics 3 (MEPG321)', credits: '3', grade: '' },
+        { name: 'Mechanical Vibrations (MDPG342)', credits: '3', grade: '' }
+        ]},
+        { id: 'mep_9', courses: [
+        { name: 'Mech Power Engineering Labs (MEPG443)', credits: '1', grade: '' },
+        { name: 'Elective 3CR MEP1 (MEPG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 3CR MEP1 (MEPG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 3CR MEP1 (MEPG4XX)', credits: '3', grade: '' },
+        { name: 'Free Elective (GENG2XX)', credits: '2', grade: '' },
+        { name: 'Graduation Project 1 (MEPG481)', credits: '1', grade: '' }
+        ]},
+        { id: 'mep_10', courses: [
+        { name: 'Free Elective Non-Specialized (G-XXX3XXX)', credits: '2', grade: '' },
+        { name: 'Elective 3CR MEP2 (MEPG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 3CR MEP2 (MEPG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 3CR MEP2 (MEPG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 2 (MEPG482)', credits: '3', grade: '' }
+        ]}
+        ];
+
+        // Architectural Engineering (ARC) Full Plan
+        const arcFullPlan = [
+        { id: 'arc_1', courses: [
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_2', courses: [
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity and Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' },
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_3', courses: [
+        { name: 'Intro to ARCH Design & Presentation (ARCG111)', credits: '3', grade: '' },
+        { name: 'Theories of Architecture 1 (ARCG121)', credits: '2', grade: '' },
+        { name: 'Descriptive Geometry (MTHG105)', credits: '3', grade: '' },
+        { name: 'Building Construction 1 & Materials (ARCG112)', credits: '2', grade: '' },
+        { name: 'Selected Topics 1 (GENG111)', credits: '2', grade: '' },
+        { name: 'Surveying for Architects (CVEG117)', credits: '2', grade: '' },
+        { name: 'Restricted Elective 1 (GENG1XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_4', courses: [
+        { name: 'Architectural Design 1 (ARCG113)', credits: '3', grade: '' },
+        { name: 'History of Architecture 1 (ARCG122)', credits: '2', grade: '' },
+        { name: 'Architectural Graphics 1 (ARCG114)', credits: '2', grade: '' },
+        { name: 'Building Construction 2 & Materials (ARCG115)', credits: '2', grade: '' },
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' },
+        { name: 'Theory of Structures (CVEG112)', credits: '2', grade: '' },
+        { name: 'Restricted Elective 2 (GENG2XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_5', courses: [
+        { name: 'Architectural Design 2 (ARCG211)', credits: '3', grade: '' },
+        { name: 'Theories of Architecture 2 (ARCG221)', credits: '2', grade: '' },
+        { name: 'Architectural Graphics 2 (ARCG212)', credits: '2', grade: '' },
+        { name: 'Building Construction 3 & Materials (ARCG213)', credits: '2', grade: '' },
+        { name: 'History & Theories of Urban Planning (ARCG251)', credits: '2', grade: '' },
+        { name: 'Concrete Structures & Foundations (CVEG271)', credits: '2', grade: '' },
+        { name: 'Environmental Design (ARCG241)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_6', courses: [
+        { name: 'Architectural Design 3 (ARCG214)', credits: '3', grade: '' },
+        { name: 'History of Architecture 2 (ARCG222)', credits: '2', grade: '' },
+        { name: 'Theories & Human Studies in Arch (ARCG223)', credits: '2', grade: '' },
+        { name: 'Building Technical Installations (ARCG215)', credits: '2', grade: '' },
+        { name: 'Intro to Urban Design & Landscape (ARCG252)', credits: '1', grade: '' },
+        { name: 'Department Free Elective (ARCG2XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_7', courses: [
+        { name: 'Architectural Design 4 (ARCG311)', credits: '3', grade: '' },
+        { name: 'Free Elective (GENG21X/GENG23X)', credits: '2', grade: '' },
+        { name: 'Working Drawings 1 (ARCG312)', credits: '2', grade: '' },
+        { name: 'Urban Planning 1 (ARCG351)', credits: '1', grade: '' },
+        { name: 'Working Drawing Regulations (ARCG313)', credits: '2', grade: '' },
+        { name: 'Department Free Elective (ARCG3XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_8', courses: [
+        { name: 'Architectural Design 5 (ARCG314)', credits: '3', grade: '' },
+        { name: 'Department Restricted Elective (ARCG3XX)', credits: '2', grade: '' },
+        { name: 'Working Drawings 2 (ARCG315)', credits: '2', grade: '' },
+        { name: 'Housing (ARCG352)', credits: '2', grade: '' },
+        { name: 'Concentration Elective 1 (ARCG4XX)', credits: '2', grade: '' },
+        { name: 'Industrial Training 1 (ARCG381)', credits: '1', grade: '' }
+        ]},
+        { id: 'arc_9', courses: [
+        { name: 'Architectural Design 6 (ARCG411)', credits: '3', grade: '' },
+        { name: 'Graduation Project 1 (ARCG481)', credits: '1', grade: '' },
+        { name: 'Urban Design (ARCG451)', credits: '2', grade: '' },
+        { name: 'Urban Planning 2 (ARCG452)', credits: '1', grade: '' },
+        { name: 'Concentration Elective 2 (ARCG4XX)', credits: '2', grade: '' },
+        { name: 'Concentration Elective 3 (ARCG4XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'arc_10', courses: [
+        { name: 'Graduation Project 2 (ARCG482)', credits: '3', grade: '' },
+        { name: 'Execution Designs & Prof Practice (ARCG412)', credits: '2', grade: '' },
+        { name: 'Concentration Elective 4 (ARCG4XX)', credits: '2', grade: '' },
+        { name: 'Concentration Elective 5 (ARCG4XX)', credits: '2', grade: '' }
+        ]}
+        ];
+
+        // Electronics & Communication (EEC) Full Plan
+        const eecFullPlan = [
+        { id: 'eec_1', courses: [
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' },
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_2', courses: [
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity and Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_3', courses: [
+        { name: 'Fundamental of Circuits (EECG111)', credits: '3', grade: '' },
+        { name: 'Measurements and Lab 1 (EECG171)', credits: '2', grade: '' },
+        { name: 'Logic Circuits (EECG141)', credits: '3', grade: '' },
+        { name: 'Principles of Economics (GENG118)', credits: '2', grade: '' },
+        { name: 'Linear Algebra & Multivariable (MTHG102)', credits: '3', grade: '' },
+        { name: 'Modern Physics (PHYG102)', credits: '3', grade: '' },
+        { name: 'Writing and Presentation Skills (GENG005)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_4', courses: [
+        { name: 'Resonant and Coupled Circuits (EECG112)', credits: '4', grade: '' },
+        { name: 'Intro to Electronic Circuits (EECG122)', credits: '3', grade: '' },
+        { name: 'Data Structures (EECG142)', credits: '3', grade: '' },
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' },
+        { name: 'Ordinary Differential Equations (MTHG103)', credits: '2', grade: '' },
+        { name: 'Physical Optics (PHYG101)', credits: '3', grade: '' },
+        { name: 'Probability and Statistics (MTHG113)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_5', courses: [
+        { name: 'Circuits Synthesis and Analysis (EECG211)', credits: '3', grade: '' },
+        { name: 'Basic Electronic Circuits (EECG221)', credits: '4', grade: '' },
+        { name: 'Analysis of Continuous & Discrete Signals (EECG231)', credits: '4', grade: '' },
+        { name: 'Processor Architecture (EECG341)', credits: '3', grade: '' },
+        { name: 'Measurements and Lab 2 (EECG271)', credits: '2', grade: '' },
+        { name: 'Special Functions and PDE (MTHG202)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_6', courses: [
+        { name: 'Digital Integrated Circuits (EECG222)', credits: '3', grade: '' },
+        { name: 'Intro to Communication Systems (EECG232)', credits: '3', grade: '' },
+        { name: 'Embedded Systems (EECG242)', credits: '3', grade: '' },
+        { name: 'Fields and Wave Propagation (EECG252)', credits: '4', grade: '' },
+        { name: 'Elective: Power Eng / Heat Transfer (EPEG130/MEPG175)', credits: '3', grade: '' },
+        { name: 'Code of Ethics (GENG116)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_7', courses: [
+        { name: 'Analog Integrated Circuits (EECG321)', credits: '4', grade: '' },
+        { name: 'Advanced Communication Systems (EECG331)', credits: '4', grade: '' },
+        { name: 'Advanced Processor Architecture (EECG341)', credits: '3', grade: '' },
+        { name: 'Transmission Lines & Matching (EECG351)', credits: '3', grade: '' },
+        { name: 'Linear Systems (EECG361)', credits: '3', grade: '' }
+        ]},
+        { id: 'eec_8', courses: [
+        { name: 'Communication Networks (EECG342)', credits: '3', grade: '' },
+        { name: 'Waveguides and Antennas (EECG352)', credits: '3', grade: '' },
+        { name: 'Control System Design (EECG362)', credits: '3', grade: '' },
+        { name: 'Elective 2 (EECG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 3 (EECG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 1 (EECG481)', credits: '1', grade: '' },
+        { name: 'Selected Topics 1 (GENG111)', credits: '2', grade: '' }
+        ]},
+        { id: 'eec_9', courses: [
+        { name: 'Modern Control Engineering (EECG461)', credits: '3', grade: '' },
+        { name: 'Graduation Project 2 (EECG482)', credits: '3', grade: '' },
+        { name: 'Elective 4 (EECG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 5 (EECG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 6 (EECG4XX)', credits: '3', grade: '' }
+        ]}
+        ];
+
+        // Electrical Power (EPE) Full Plan
+        const epeFullPlan = [
+        { id: 'epe_1', courses: [
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'epe_2', courses: [
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity and Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
+        ]},
+        { id: 'epe_3', courses: [
+        { name: 'Electrical Circuits 1 (EPEG101)', credits: '3', grade: '' },
+        { name: 'Principles of Energy Conversion (EPEG102)', credits: '2', grade: '' },
+        { name: 'Computer Applications in Power Systems (EPEG103)', credits: '3', grade: '' },
+        { name: 'Electronics (EECG118)', credits: '3', grade: '' },
+        { name: 'Differential Equations (MTHG104)', credits: '3', grade: '' },
+        { name: 'Dynamics of Rigid Bodies (EMCG101)', credits: '3', grade: '' }
+        ]},
+        { id: 'epe_4', courses: [
+        { name: 'Electric Materials (INTG118)', credits: '2', grade: '' },
+        { name: 'Electrical Circuits 2 (EPEG105)', credits: '3', grade: '' },
+        { name: 'Logic Circuits and Microprocessors (EPEG106)', credits: '3', grade: '' },
+        { name: 'Linear Algebra & Multivariable (MTHG102)', credits: '3', grade: '' },
+        { name: 'Electromagnetic Fields (EPEG104)', credits: '4', grade: '' },
+        { name: 'Selected Topics 2 (GENGXXX)', credits: '2', grade: '' }
+        ]},
+        { id: 'epe_5', courses: [
+        { name: 'Signals and Systems (EPEG204)', credits: '3', grade: '' },
+        { name: 'Engineering Thermodynamics (MEPG173)', credits: '3', grade: '' },
+        { name: 'Fundamentals of Mechanical Design (MDPG102)', credits: '2', grade: '' },
+        { name: 'Intro to Numerical Analysis (MTHG110)', credits: '2', grade: '' },
+        { name: 'Civil Engineering (CVEG118)', credits: '2', grade: '' },
+        { name: 'Electrical Machines 1 (EPEG202)', credits: '3', grade: '' }
+        ]},
+        { id: 'epe_6', courses: [
+        { name: 'Data Structures (CMPG218)', credits: '2', grade: '' },
+        { name: 'Electric and Electronic Measurements (EPEG203)', credits: '3', grade: '' },
+        { name: 'Electrical Machines 2 (EPEG205)', credits: '3', grade: '' },
+        { name: 'Probability and Statistics (MTHG113)', credits: '2', grade: '' },
+        { name: 'Automatic Control Systems (EPEG207)', credits: '3', grade: '' },
+        { name: 'Power Systems 1 (EPEG201)', credits: '3', grade: '' }
+        ]},
+        { id: 'epe_7', courses: [
+        { name: 'Power Systems 2 (EPEG301)', credits: '3', grade: '' },
+        { name: 'Electrical Machines 3 (EPEG303)', credits: '3', grade: '' },
+        { name: 'Power Electronics 1 (EPEG302)', credits: '3', grade: '' },
+        { name: 'Switchgear and Protection Systems (EPEG304)', credits: '3', grade: '' },
+        { name: 'Electrical Power Generation (EPEG206)', credits: '3', grade: '' },
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' }
+        ]},
+        { id: 'epe_8', courses: [
+        { name: 'Power Electronics 2 (EPEG306)', credits: '3', grade: '' },
+        { name: 'High Voltage Engineering (EPEG305)', credits: '3', grade: '' },
+        { name: 'Digital Control Systems (EPEG307)', credits: '3', grade: '' },
+        { name: 'Electrical Communications Systems (EECG318)', credits: '2', grade: '' },
+        { name: 'Restricted Elective 1 (GENG1XX)', credits: '2', grade: '' },
+        { name: 'Restricted Elective 2 (GENG22X)', credits: '2', grade: '' }
+        ]},
+        { id: 'epe_9', courses: [
+        { name: 'Electrical Energy Utilization & Mgmt (EPEG401)', credits: '3', grade: '' },
+        { name: 'Elective Course 1 (EPEG4XX)', credits: '3', grade: '' },
+        { name: 'Elective Course 2 (EPEG4XX)', credits: '3', grade: '' },
+        { name: 'Elective Course 3 (EPEG4XX)', credits: '3', grade: '' },
+        { name: 'Free Elective (GENG21X/23X)', credits: '2', grade: '' },
+        { name: 'Graduation Project 1 (EPEG480)', credits: '1', grade: '' }
+        ]},
+        { id: 'epe_10', courses: [
+        { name: 'Electrical Installations (EPEG402)', credits: '2', grade: '' },
+        { name: 'Elective Course 4 (EPEG4XX)', credits: '3', grade: '' },
+        { name: 'Elective Course 5 (EPEG4XX)', credits: '3', grade: '' },
+        { name: 'Elective Course 6 (EPEG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 2 (EPEG481)', credits: '3', grade: '' }
+        ]}
+        ];
+
+        // Mechanical Production (MDP) Full Plan
+        const mdpFullPlan = [
+        { id: 'mdp_1', courses: [
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'mdp_2', courses: [
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity and Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' },
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
+        ]},
+        { id: 'mdp_3', courses: [
+        { name: 'Selected Topics 1 (GENG111)', credits: '2', grade: '' },
+        { name: 'Linear Algebra & Multivariable (MTHG102)', credits: '3', grade: '' },
+        { name: 'Dynamics of Rigid Bodies (EMCG101)', credits: '3', grade: '' },
+        { name: 'Computer-Aided Mechanical Drafting (MDPG111)', credits: '3', grade: '' },
+        { name: 'Materials Science (MDPG121)', credits: '3', grade: '' },
+        { name: 'Electrical & Electronics Eng (EPEG113)', credits: '3', grade: '' }
+        ]},
+        { id: 'mdp_4', courses: [
+        { name: 'Restricted Elective 1 (GENG1XX)', credits: '2', grade: '' },
+        { name: 'Differential Equations (MTHG104)', credits: '3', grade: '' },
+        { name: 'Probability and Statistics (MTHG113)', credits: '2', grade: '' },
+        { name: 'Stress Analysis (MDPG151)', credits: '3', grade: '' },
+        { name: 'Engineering Materials (MDPG122)', credits: '3', grade: '' },
+        { name: 'Fluid Mechanics 1 (MEPG121)', credits: '3', grade: '' }
+        ]},
+        { id: 'mdp_5', courses: [
+        { name: 'Engineering Thermodynamics 1 (MEPG211)', credits: '3', grade: '' },
+        { name: 'Kinematics & Dynamics of Machines (MDPG241)', credits: '3', grade: '' },
+        { name: 'Structural Mechanics (MDPG251)', credits: '3', grade: '' },
+        { name: 'Manufacturing Processes 1 (MDPG221)', credits: '3', grade: '' },
+        { name: 'Fluid Mechanics 2 (MEPG221)', credits: '3', grade: '' }
+        ]},
+        { id: 'mdp_6', courses: [
+        { name: 'Engineering Thermodynamics 2 (MEPG212)', credits: '3', grade: '' },
+        { name: 'Intro to Numerical Analysis (MTHG110)', credits: '2', grade: '' },
+        { name: 'Electric Machines & Control (EPEG215)', credits: '3', grade: '' },
+        { name: 'Manufacturing Processes 2 (MDPG222)', credits: '3', grade: '' },
+        { name: 'Machine Design 1 (MDPG211)', credits: '4', grade: '' }
+        ]},
+        { id: 'mdp_7', courses: [
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' },
+        { name: 'Engineering Project Planning & Economics (MECG301)', credits: '2', grade: '' },
+        { name: 'System Dynamics and Controls (MDPG341)', credits: '3', grade: '' },
+        { name: 'Renewable Energy & Storage (MEPG341)', credits: '3', grade: '' },
+        { name: 'Heat Transfer (MEPG331)', credits: '3', grade: '' },
+        { name: 'Machine Design 2 (MDPG311)', credits: '3', grade: '' }
+        ]},
+        { id: 'mdp_8', courses: [
+        { name: 'Restricted Elective 2 (GENG2XX)', credits: '2', grade: '' },
+        { name: 'Operations Management (MECG311)', credits: '2', grade: '' },
+        { name: 'Engineering Solid Mechanics (MDPG351)', credits: '3', grade: '' },
+        { name: 'Mechanical Vibrations (MDPG342)', credits: '3', grade: '' },
+        { name: 'Engineering Measurements (MDPG303)', credits: '2', grade: '' },
+        { name: 'Free Elective 1 (GENG2XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'mdp_9', courses: [
+        { name: 'Elective 1 (MDPG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 2 (MDPG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 1 (MDPG481)', credits: '1', grade: '' },
+        { name: 'Modern Manufacturing Processes (MDPG421)', credits: '3', grade: '' },
+        { name: 'Mechanical Engineering Lab (MEPG443)', credits: '1', grade: '' },
+        { name: 'Free Elective 1 (XXXG4XX)', credits: '2', grade: '' }
+        ]},
+        { id: 'mdp_10', courses: [
+        { name: 'Elective 3 (MDPG4XX)', credits: '3', grade: '' },
+        { name: 'Elective 4 (MDPG4XX)', credits: '3', grade: '' },
+        { name: 'Graduation Project 2 (MDPG482)', credits: '3', grade: '' },
+        { name: 'Maintenance Management (MDPG431)', credits: '2', grade: '' },
+        { name: 'Free Elective 2 (XXXG4XX)', credits: '2', grade: '' }
+        ]}
+        ];
+
+        // Civil Engineering (CVE) Full Plan
+        const cveFullPlan = [
+        { id: 'cve_1', courses: [
+        { name: 'Calculus 1 (MTHG002)', credits: '3', grade: '' },
+        { name: 'Mechanical Properties & Thermo (PHYG001)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Statics (EMCG001)', credits: '2', grade: '' },
+        { name: 'Intro to Computer Science (INTG005)', credits: '3', grade: '' },
+        { name: 'Technical Drawing (INTG001)', credits: '2', grade: '' },
+        { name: 'Algebra (MTHG001)', credits: '2', grade: '' },
+        { name: 'Critical & Creative Thinking (GENG001)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_2', courses: [
+        { name: 'Calculus 2 (MTHG003)', credits: '3', grade: '' },
+        { name: 'Electricity and Magnetism (PHYG002)', credits: '3', grade: '' },
+        { name: 'Engineering Mechanics - Dynamics (EMCG002)', credits: '3', grade: '' },
+        { name: 'Applied & Modern Manufacturing (ENGG001)', credits: '3', grade: '' },
+        { name: 'Chemistry for Engineers (CHEG001)', credits: '2', grade: '' },
+        { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_3', courses: [
+        { name: 'Linear Algebra & Multivariable (MTHG102)', credits: '3', grade: '' },
+        { name: 'Structural Analysis 1 (STRG111)', credits: '3', grade: '' },
+        { name: 'Properties & Strength of Materials (STRG121)', credits: '2', grade: '' },
+        { name: 'Civil Engineering Drawings (INHG111)', credits: '2', grade: '' },
+        { name: 'Basic Science Elective (MTHG103/PHYG101)', credits: '2', grade: '' },
+        { name: 'Selected Topics 1 (GENG111)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_4', courses: [
+        { name: 'Intro to Numerical Analysis (MTHG110)', credits: '2', grade: '' },
+        { name: 'Structural Mechanics & Elasticity (STRG112)', credits: '3', grade: '' },
+        { name: 'Technology of Construction Materials (STRG122)', credits: '2', grade: '' },
+        { name: 'Intro to Water Resources & Irrigation (INHG112)', credits: '2', grade: '' },
+        { name: 'Probability and Statistics (MTHG113)', credits: '2', grade: '' },
+        { name: 'Restricted Elective 1 (GENG11X)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_5', courses: [
+        { name: 'Structural Analysis 2 (STRG211)', credits: '3', grade: '' },
+        { name: 'Reinforced Concrete 1 (STRG212)', credits: '3', grade: '' },
+        { name: 'Fluid Mechanics (INHG211)', credits: '2', grade: '' },
+        { name: 'Planning, Building & Arch Specs (ARCG217)', credits: '2', grade: '' },
+        { name: 'Surveying (PBWG211)', credits: '2', grade: '' },
+        { name: 'Selected Current Local Issues (GENG351)', credits: '1', grade: '' }
+        ]},
+        { id: 'cve_6', courses: [
+        { name: 'Structural Analysis 3 (STRG213)', credits: '3', grade: '' },
+        { name: 'Reinforced Concrete 2 (STRG214)', credits: '3', grade: '' },
+        { name: 'Hydraulics of Pipelines & Pumps (INHG212)', credits: '2', grade: '' },
+        { name: 'Open Channels & Groundwater (INHG214)', credits: '2', grade: '' },
+        { name: 'Geomatics (PBWG214)', credits: '2', grade: '' },
+        { name: 'Construction Project Management (CVEG251)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_7', courses: [
+        { name: 'Structural Analysis 4 (STRG311)', credits: '3', grade: '' },
+        { name: 'Reinforced Concrete 3 (STRG312)', credits: '3', grade: '' },
+        { name: 'Steel Structures 1 (STRG313)', credits: '3', grade: '' },
+        { name: 'Irrigation & Drainage Engineering (INHG311)', credits: '2', grade: '' },
+        { name: 'Transport Planning & Traffic Eng (PBWG321)', credits: '2', grade: '' },
+        { name: 'Free Elective 1 (INTG30X)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_8', courses: [
+        { name: 'Structural Mechanics Elective (STRG31X)', credits: '2', grade: '' },
+        { name: 'Reinforced Concrete 4 (STRG314)', credits: '3', grade: '' },
+        { name: 'Steel Structures 2 (STRG315)', credits: '3', grade: '' },
+        { name: 'Design of Irrigation Works (INHG312)', credits: '2', grade: '' },
+        { name: 'Soil Mechanics (PBWG311)', credits: '3', grade: '' },
+        { name: 'Free Elective (GENG21X-23X)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_9', courses: [
+        { name: 'Free Elective 2 (CVEG401)', credits: '2', grade: '' },
+        { name: 'IWRM Elective (INHG41X)', credits: '2', grade: '' },
+        { name: 'Intro to Sanitary & Env Eng (PBWG411)', credits: '2', grade: '' },
+        { name: 'Graduation Project 1 (CVEG481)', credits: '1', grade: '' },
+        { name: 'Foundations (PBWG412)', credits: '3', grade: '' },
+        { name: 'Restricted Elective 2 (GENG24X)', credits: '2', grade: '' }
+        ]},
+        { id: 'cve_10', courses: [
+        { name: 'Intro to Highway & Airport Eng (PBWG421)', credits: '3', grade: '' },
+        { name: 'PBW Elective (PBWG4XX)', credits: '2', grade: '' },
+        { name: 'Restricted Elective for GP (CVEG4XX)', credits: '2', grade: '' },
+        { name: 'Graduation Project 2 (CVEG482)', credits: '3', grade: '' },
+        { name: 'Quantity Surveying & Cost Control (STRG462)', credits: '2', grade: '' },
+        { name: 'Free Elective 3 (CVEG40X)', credits: '2', grade: '' }
+        ]}
+        ];
+
+        const departmentRoadmaps = {
+        sbe: sbeFullPlan,
+        mep: mepFullPlan,
+        arc: arcFullPlan,
+        eec: eecFullPlan,
+        epe: epeFullPlan,
+        mdp: mdpFullPlan,
+        cve: cveFullPlan
+        };
+
+        function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const isDark = document.body.classList.contains('dark-theme');
+        document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
+        document.getElementById('theme-text').innerText = isDark ? 'Light Mode' : 'Dark Mode';
+        localStorage.setItem('gpa_theme', isDark ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+        const savedTheme = localStorage.getItem('gpa_theme');
+        if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.getElementById('theme-icon').innerText = '☀️';
+        document.getElementById('theme-text').innerText = 'Light Mode';
+        }
+        }
+
+        function selectUniversity(uniKey) {
+        currentUniKey = uniKey;
+        document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
+        document.getElementById(`card-${uniKey}`).classList.add('active');
+
+        const deptWrapper = document.getElementById('dept-wrapper');
+        if (uniKey === 'cu') {
+        deptWrapper.style.display = 'block';
+        } else {
+        deptWrapper.style.display = 'none';
+        alert("🔒 Coming Soon! Send your university roadmap PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.");
+        }
+        }
+
+        function selectDepartment(deptKey, evt) {
+        currentDeptKey = deptKey;
+        document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected'));
+        if (evt && evt.target) evt.target.classList.add('selected');
+
+        applyCurrentRoadmap();
+        }
+
+        function applyCurrentRoadmap() {
+        if (currentDeptKey === 'custom') return;
+
+        let combinedData = [];
+
+        if (currentDeptKey === 'freshman') {
+        combinedData = JSON.parse(JSON.stringify(freshmanYearData));
+        } else if (departmentRoadmaps[currentDeptKey]) {
+        combinedData = JSON.parse(JSON.stringify(departmentRoadmaps[currentDeptKey]));
+        } else {
+        alert("🔒 Roadmap for this department is being processed! Send your Study Map PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.");
+        return;
+        }
+
+        if (combinedData.length > 0) {
+        semestersData = combinedData;
+        renderAll();
+        saveData();
+        }
+        }
+
+        function goToCalculator() {
+        const cover = document.getElementById('cover-page');
+        const calc = document.getElementById('calculator-page');
+        cover.style.opacity = '0';
+        cover.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+        cover.style.display = 'none';
+        calc.style.display = 'block';
+        calc.classList.add('page-active');
+        }, 350);
+        }
+
+        function goToCover() {
+        const cover = document.getElementById('cover-page');
+        const calc = document.getElementById('calculator-page');
+        calc.classList.remove('page-active');
+        calc.style.display = 'none';
+        cover.style.display = 'flex';
+        setTimeout(() => {
+        cover.style.opacity = '1';
+        cover.style.transform = 'scale(1)';
+        }, 50);
+        }
+
+        function saveData() {
+        localStorage.setItem('gpa_data_v17', JSON.stringify(semestersData));
+        }
+
+        function loadData() {
+        loadTheme();
+        const saved = localStorage.getItem('gpa_data_v17');
+        if (saved) {
+        try { semestersData = JSON.parse(saved); } catch (e) { semestersData = []; }
+        }
+        if (!semestersData || semestersData.length === 0) {
+        semestersData = [];
+        addSemesterData();
+        } else {
+        renderAll();
+        }
+        }
+
+        function resetAllData() {
+        if (confirm("Are you sure you want to reset all saved data?")) {
+        localStorage.removeItem('gpa_data_v17');
+        semestersData = [];
+        addSemesterData();
+        }
+        }
+
+        function addSemesterData() {
+        semestersData.push({ id: Date.now(), courses: [{ name: '', credits: '', grade: '' }] });
+        renderAll();
+        saveData();
+        }
+
+        function removeSemester(semId) {
+        const semCard = document.getElementById(`sem-card-${semId}`);
+        if (semCard) {
+        semCard.style.animation = 'fadeOutSlideDown 0.3s forwards';
+        setTimeout(() => {
+        semestersData = semestersData.filter(s => s.id !== semId);
+        if (semestersData.length === 0) addSemesterData();
+        else { renderAll(); saveData(); }
+        }, 300);
+        }
+        }
+
+        function addCourse(semId) {
+        const sem = semestersData.find(s => s.id === semId);
+        if (sem) {
+        sem.courses.push({ name: '', credits: '', grade: '' });
+        renderAll();
+        saveData();
+        }
+        }
+
+        function removeCourse(semId, courseIdx) {
+        const courseRow = document.getElementById(`course-row-${semId}-${courseIdx}`);
+        if (courseRow) {
+        courseRow.style.animation = 'fadeOutSlideDown 0.25s forwards';
+        setTimeout(() => {
+        const sem = semestersData.find(s => s.id === semId);
+        if (sem) {
+        sem.courses.splice(courseIdx, 1);
+        renderAll();
+        saveData();
+        }
+        }, 250);
+        }
+        }
+
+        function updateCourse(semId, courseIdx, field, value) {
+        const sem = semestersData.find(s => s.id === semId);
+        if (sem) {
+        sem.courses[courseIdx][field] = value;
+        calculateAndDisplay();
+        saveData();
+        }
+        }
+
+        function renderAll() {
+        const container = document.getElementById('semesters-container');
+        container.innerHTML = '';
+
+        semestersData.forEach((sem, semIdx) => {
+        const semDiv = document.createElement('div');
+        semDiv.className = 'semester-card';
+        semDiv.id = `sem-card-${sem.id}`;
+
+        let coursesHTML = '';
+        sem.courses.forEach((c, cIdx) => {
+        coursesHTML += `
+        <div class="course-row" id="course-row-${sem.id}-${cIdx}">
+        <input type="text" class="course-name" placeholder="Course Name" value="${c.name || ''}" oninput="updateCourse('${sem.id}', ${cIdx}, 'name', this.value)">
+        <input type="number" class="course-credit" placeholder="Credits" min="1" value="${c.credits || ''}" oninput="updateCourse('${sem.id}', ${cIdx}, 'credits', this.value)">
+        <select class="course-grade" onchange="updateCourse('${sem.id}', ${cIdx}, 'grade', this.value)">
+        <option value="" ${c.grade === '' ? 'selected' : ''}>-- None --</option>
+        <option value="4.0" ${c.grade === '4.0' ? 'selected' : ''}>A / A+ (4.0)</option>
+        <option value="3.7" ${c.grade === '3.7' ? 'selected' : ''}>A- (3.7)</option>
+        <option value="3.3" ${c.grade === '3.3' ? 'selected' : ''}>B+ (3.3)</option>
+        <option value="3.0" ${c.grade === '3.0' ? 'selected' : ''}>B (3.0)</option>
+        <option value="2.7" ${c.grade === '2.7' ? 'selected' : ''}>B- (2.7)</option>
+        <option value="2.3" ${c.grade === '2.3' ? 'selected' : ''}>C+ (2.3)</option>
+        <option value="2.0" ${c.grade === '2.0' ? 'selected' : ''}>C (2.0)</option>
+        <option value="1.7" ${c.grade === '1.7' ? 'selected' : ''}>C- (1.7)</option>
+        <option value="1.3" ${c.grade === '1.3' ? 'selected' : ''}>D+ (1.3)</option>
+        <option value="1.0" ${c.grade === '1.0' ? 'selected' : ''}>D (1.0)</option>
+        <option value="0.0" ${c.grade === '0.0' ? 'selected' : ''}>F (0.0)</option>
+        </select>
+        <button class="btn-delete" onclick="removeCourse('${sem.id}', ${cIdx})">✕</button>
+        </div>`;
+        });
+
+        semDiv.innerHTML = `
+        <div class="semester-header">
+        <h3>Semester ${semIdx + 1}</h3>
+        <button class="btn-delete" onclick="removeSemester('${sem.id}')">Remove Semester</button>
+        </div>
+        <div>${coursesHTML}</div>
+        <button class="btn-add-course" onclick="addCourse('${sem.id}')">+ Add Course</button>`;
+
+        container.appendChild(semDiv);
+        });
+
+        calculateAndDisplay();
+        }
+
+        function addSemester() { addSemesterData(); }
+
+        function calculateAndDisplay() {
+        let totalPoints = 0, totalCredits = 0;
+        semestersData.forEach(sem => {
+        sem.courses.forEach(c => {
+        const credits = parseFloat(c.credits);
+        const gradePoint = parseFloat(c.grade);
+
+        if (!isNaN(credits) && credits > 0 && c.grade !== '' && !isNaN(gradePoint)) {
+        totalCredits += credits;
+        totalPoints += credits * gradePoint;
+        }
+        });
+        });
+
+        const cgpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
+        const gpaNum = parseFloat(cgpa);
+
+        const maxGPA = 4.0;
+        const percentage = Math.min(Math.max(gpaNum / maxGPA, 0), 1);
+        const angle = -90 + (percentage * 180);
+
+        const needle = document.getElementById('needle');
+        if (needle) { needle.style.transform = `translateX(-50%) rotate(${angle}deg)`; }
+
+        const gaugeProgress = document.getElementById('gauge-progress');
+        if (gaugeProgress) {
+        const maxOffset = 283;
+        const targetOffset = maxOffset - (percentage * 126);
+        gaugeProgress.style.strokeDashoffset = targetOffset;
+        }
+
+        const gpaElem = document.getElementById('total-gpa');
+        if (gpaElem) { gpaElem.innerText = cgpa; }
+
+        document.getElementById('total-credits').innerText = `Total Graded Credits: ${totalCredits}`;
+        }
+
+        window.onload = function() { loadData(); };
+    </script>
+</body>
+</html>
