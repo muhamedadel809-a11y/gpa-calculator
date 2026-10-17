@@ -578,7 +578,7 @@
                 </div>
             </div>
 
-            <div class="department-selector-wrapper" id="dept-wrapper" style="display: block;">
+            <div class="department-selector-wrapper" id="dept-wrapper-cu" style="display: block;">
                 <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">📐 Choose Engineering Department:</div>
                 <div class="dept-grid">
                     <div class="dept-card" onclick="selectDepartment('freshman', event)">🌱 Freshman Year (إعدادي فقط)</div>
@@ -593,6 +593,21 @@
                     <div class="dept-card" onclick="selectDepartment('aer', event)">🚀 Aerospace Eng (AER)</div>
                     <div class="dept-card" onclick="selectDepartment('che', event)">🧪 Chemical Eng (CHE)</div>
                     <div class="dept-card" onclick="selectDepartment('met', event)">⚒️ Metallurgy Eng (MET)</div>
+                </div>
+            </div>
+            <!-- قسم أزرار أقسام جامعة العاصمة / حلوان -->
+            <div class="department-selector-wrapper" id="dept-wrapper-helwan" style="display: none;">
+                <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">🏛️ Capital University (Helwan) Departments:</div>
+                <div class="dept-grid">
+                    <div class="dept-card" onclick="selectDepartment('helwan_freshman', event)">🌱 Freshman Year (إعدادي حلوان/العاصمة)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_epme', event)">⚡ Electrical Power & Machines (EPME)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_cse', event)">💻 Computer & Systems Eng (CSE)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_pe', event)">⚙️ Production Engineering (PE)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_me', event)">🤖 Mechatronics Engineering (ME/MRE)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_ece', event)">📡 Electronics & Comm Eng (ECE/CCE)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_bme', event)">🧬 Biomedical Engineering (BME)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_ie', event)">⚙️ Industrial Engineering (IE)</div>
+                    <div class="dept-card" onclick="selectDepartment('helwan_epsge', event)">⚡ Power & Smart Grid Eng (EPSGE)</div>
                 </div>
             </div>
 
@@ -665,7 +680,547 @@
         { name: 'Societal Issues (GENG002)', credits: '2', grade: '' }
         ]}
         ];
+        // إعدادي جامعة العاصمة / حلوان الموحدة
+const helwanFreshmanData = [
+  { id: 'helwan_f1', courses: [
+    { name: 'Mathematics 1 (GEN111)', credits: '3', grade: '' },
+    { name: 'Physics 1 (GEN121)', credits: '3', grade: '' },
+    { name: 'Mechanics (GEN131)', credits: '3', grade: '' },
+    { name: 'Chemistry (GEN141)', credits: '2', grade: '' },
+    { name: 'Computer Techniques (CSE111)', credits: '3', grade: '' },
+    { name: 'Engineering Drawing & Projection (MEC111)', credits: '3', grade: '' },
+    { name: 'English Language (GEN101)', credits: '1', grade: '' }
+  ]},
+  { id: 'helwan_f2', courses: [
+    { name: 'Mathematics 2 (GEN112)', credits: '3', grade: '' },
+    { name: 'Physics 2 (GEN122)', credits: '3', grade: '' },
+    { name: 'Circuit Theory (EPM111)', credits: '3', grade: '' },
+    { name: 'Computer Programming (CSE112)', credits: '3', grade: '' },
+    { name: 'Principles of Manufacturing Eng (MEC112)', credits: '3', grade: '' },
+    { name: 'Communication & Presentation Skills (GEN102)', credits: '1', grade: '' },
+    { name: 'HU Elective Course 1', credits: '2', grade: '' }
+  ]}
+];
 
+// برنامج هندسة القوى والآلات الكهربية (EPME) - جامعة حلوان/العاصمة
+const epmeFullPlan = [
+  ...helwanFreshmanData,
+  { id: 'epme_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'Electronic Devices (ECE211)', credits: '3', grade: '' },
+    { name: 'Electrical Circuits (EPM211)', credits: '3', grade: '' },
+    { name: 'Electromagnetics (ECE212)', credits: '3', grade: '' },
+    { name: 'Practice in Electronics & Electrical Practicum', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' }
+  ]},
+  { id: 'epme_4', courses: [
+    { name: 'Modeling and Simulation (EPM242)', credits: '3', grade: '' },
+    { name: 'Basic Electronics (ECE216)', credits: '3', grade: '' },
+    { name: 'Logic Circuits Design (ECE213)', credits: '3', grade: '' },
+    { name: 'Energy Conversion (EPM214)', credits: '3', grade: '' },
+    { name: 'Civil Eng for Electrical Construction (EPM213)', credits: '2', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+  { id: 'epme_5', courses: [
+    { name: 'Electrical Measurements (EPM311)', credits: '3', grade: '' },
+    { name: 'Microprocessors and Microcontrollers (CSE342)', credits: '3', grade: '' },
+    { name: 'Electrical Power Systems 1 (EPM312)', credits: '3', grade: '' },
+    { name: 'Electrical Machines 1 (EPM313)', credits: '3', grade: '' },
+    { name: 'Power Electronics 1 (EPM315)', credits: '3', grade: '' },
+    { name: 'Electrical Safety (EPM317)', credits: '2', grade: '' },
+    { name: 'Standard Specifications (EPM318)', credits: '1', grade: '' }
+  ]},
+  { id: 'epme_6', courses: [
+    { name: 'Power Electronics 2 (EPM319)', credits: '3', grade: '' },
+    { name: 'Electrical Machines 2 (EPM320)', credits: '3', grade: '' },
+    { name: 'Electrical Power Stations (EPM314)', credits: '3', grade: '' },
+    { name: 'Basics of Electrical Protection (EPM341)', credits: '3', grade: '' },
+    { name: 'Automatic Control Engineering (EPM321)', credits: '3', grade: '' },
+    { name: 'Elective in Electrical Power & Renewable', credits: '2', grade: '' },
+    { name: 'HU Elective Course 4', credits: '1', grade: '' }
+  ]},
+  { id: 'epme_7', courses: [
+    { name: 'Electric Drives 1 (EPM411)', credits: '3', grade: '' },
+    { name: 'Electrical Power Systems 2 (EPM412)', credits: '3', grade: '' },
+    { name: 'High Voltage Engineering (EPM413)', credits: '3', grade: '' },
+    { name: 'Elective in Intelligent Techniques', credits: '3', grade: '' },
+    { name: 'EPME Elective Course 1', credits: '3', grade: '' },
+    { name: 'EPME Elective Course 2', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (EPM410)', credits: '1', grade: '' }
+  ]},
+  { id: 'epme_8', courses: [
+    { name: 'Power Systems Analysis (EPM421)', credits: '3', grade: '' },
+    { name: 'Power Systems Control (EPM422)', credits: '3', grade: '' },
+    { name: 'Power Systems Protection (EPM423)', credits: '3', grade: '' },
+    { name: 'Electric Drives 2 (EPM424)', credits: '3', grade: '' },
+    { name: 'EPME Elective Course 3', credits: '3', grade: '' },
+    { name: 'EPME Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (EPM420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج هندسة الحاسبات والنظم (CSE) - جامعة حلوان/العاصمة
+const cseFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'cse_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Electronic Devices (ECE211)', credits: '3', grade: '' },
+    { name: 'Logic Circuits Design (ECE213)', credits: '3', grade: '' },
+    { name: 'Signals and Systems (ECE212)', credits: '3', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'Elective in Electromagnetics', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'cse_4', courses: [
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'Numerical Analysis (GEN214)', credits: '2', grade: '' },
+    { name: 'Basic Electronics (ECE216)', credits: '3', grade: '' },
+    { name: 'Fundamentals of Cybersecurity (CSE241)', credits: '3', grade: '' },
+    { name: 'Advanced Programming (CSE211)', credits: '3', grade: '' },
+    { name: 'Electrical Power and Renewable Energy (EPE213)', credits: '3', grade: '' },
+    { name: 'Elective in Electronics and Electrical Practicum', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'cse_5', courses: [
+    { name: 'Microprocessors and Microcontrollers (CSE342)', credits: '3', grade: '' },
+    { name: 'Computer Organization and Architecture (CSE311)', credits: '3', grade: '' },
+    { name: 'Data Communication Systems (CSE321)', credits: '3', grade: '' },
+    { name: 'Data Structures and Algorithms (CSE312)', credits: '3', grade: '' },
+    { name: 'Elective in Economics and Biomedical Measurements', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' },
+    { name: 'HU Elective Course 4', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'cse_6', courses: [
+    { name: 'Software Engineering (CSE322)', credits: '3', grade: '' },
+    { name: 'Operating Systems (CSE313)', credits: '3', grade: '' },
+    { name: 'Artificial Intelligence (CSE331)', credits: '3', grade: '' },
+    { name: 'Database Management Systems (CSE314)', credits: '3', grade: '' },
+    { name: 'Embedded Systems (CSE315)', credits: '3', grade: '' },
+    { name: 'Computer Networks (CSE323)', credits: '3', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'cse_7', courses: [
+    { name: 'Digital Signal Processing (CSE411)', credits: '3', grade: '' },
+    { name: 'Machine Learning (CSE431)', credits: '3', grade: '' },
+    { name: 'Computer and Network Security (CSE421)', credits: '3', grade: '' },
+    { name: 'Automatic Control Engineering (EPM321)', credits: '3', grade: '' },
+    { name: 'CSE Elective Course 1', credits: '3', grade: '' },
+    { name: 'CSE Elective Course 2', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (CSE410)', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'cse_8', courses: [
+    { name: 'Compiler Design (CSE412)', credits: '3', grade: '' },
+    { name: 'Parallel and Distributed Systems (CSE413)', credits: '3', grade: '' },
+    { name: 'Applied Digital Control (CSE441)', credits: '3', grade: '' },
+    { name: 'Computer Vision (CSE432)', credits: '3', grade: '' },
+    { name: 'CSE Elective Course 3', credits: '3', grade: '' },
+    { name: 'CSE Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (CSE420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج هندسة الإنتاج (PE) - جامعة حلوان/العاصمة
+const peFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'pe_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'Mechanical Drawing (MEC211)', credits: '3', grade: '' },
+    { name: 'Materials Engineering 1 (MEC221)', credits: '3', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'pe_4', courses: [
+    { name: 'Computer Aided Drawing (MEC212)', credits: '3', grade: '' },
+    { name: 'Machine Elements (MEC213)', credits: '3', grade: '' },
+    { name: 'Thermodynamics (MEC231)', credits: '3', grade: '' },
+    { name: 'Instrumentation and Measurements (MEC214)', credits: '3', grade: '' },
+    { name: 'Fluid Mechanics (MEC232)', credits: '3', grade: '' },
+    { name: 'Electronics (ECE213)', credits: '3', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'pe_5', courses: [
+    { name: 'Quality Control (MEC341)', credits: '3', grade: '' },
+    { name: 'Production Systems (MEC342)', credits: '3', grade: '' },
+    { name: 'Modeling and Simulation Engineering (MEC343)', credits: '3', grade: '' },
+    { name: 'Metal Machining (MEC321)', credits: '3', grade: '' },
+    { name: 'OR Elective Course 1', credits: '3', grade: '' },
+    { name: 'HU Elective Course 4', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'pe_6', courses: [
+    { name: 'Introduction to Robotics (MEC311)', credits: '3', grade: '' },
+    { name: 'Control Systems (MEC344)', credits: '3', grade: '' },
+    { name: 'Elasticity and Plasticity (MEC322)', credits: '3', grade: '' },
+    { name: 'Mechanical Vibrations (MEC312)', credits: '3', grade: '' },
+    { name: 'OR Elective Course 2', credits: '3', grade: '' },
+    { name: 'PE Elective Course 1', credits: '2', grade: '' },
+    { name: 'PE Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'pe_7', courses: [
+    { name: 'Machine Design (MEC411)', credits: '3', grade: '' },
+    { name: 'New and Renewable Energy Systems (MEC431)', credits: '3', grade: '' },
+    { name: 'Materials Engineering 2 (MEC421)', credits: '3', grade: '' },
+    { name: 'Pneumatic and Hydraulic Systems (MEC441)', credits: '3', grade: '' },
+    { name: 'Electrical Machines (EPE413)', credits: '2', grade: '' },
+    { name: 'PE Elective Course 3', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (MEC410)', credits: '1', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'pe_8', courses: [
+    { name: 'Material Engineering 3 (MEC422)', credits: '3', grade: '' },
+    { name: 'Metal Forming (MEC423)', credits: '3', grade: '' },
+    { name: 'Material Handling (MEC424)', credits: '3', grade: '' },
+    { name: 'Advanced Machining Operations (MEC425)', credits: '3', grade: '' },
+    { name: 'Environmental Engineering Systems (MEC432)', credits: '2', grade: '' },
+    { name: 'PE Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (MEC420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج هندسة الميكاترونيات (ME/MRE) - جامعة حلوان/العاصمة
+const meFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'me_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'Mechanical Drawing (MEC211)', credits: '3', grade: '' },
+    { name: 'Material Engineering 1 (MEC221)', credits: '3', grade: '' },
+    { name: 'OR Elective Course 1', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'me_4', courses: [
+    { name: 'Computer Aided Drawing (MEC212)', credits: '3', grade: '' },
+    { name: 'Machine Elements (MEC213)', credits: '3', grade: '' },
+    { name: 'Thermodynamics (MEC231)', credits: '3', grade: '' },
+    { name: 'Instrumentation and Measurements (MEC214)', credits: '3', grade: '' },
+    { name: 'Fluid Mechanics (MEC232)', credits: '3', grade: '' },
+    { name: 'Electronics (ECE213)', credits: '3', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'me_5', courses: [
+    { name: 'Basics of Mechatronics (MEC311)', credits: '3', grade: '' },
+    { name: 'Quality Control (MEC341)', credits: '3', grade: '' },
+    { name: 'Modeling and Simulation Engineering (MEC343)', credits: '3', grade: '' },
+    { name: 'Logic Circuits (ECE213)', credits: '3', grade: '' },
+    { name: 'OR Elective Course 2', credits: '2', grade: '' },
+    { name: 'ME Elective Course 1', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'me_6', courses: [
+    { name: 'Introduction to Robotics (MEC312)', credits: '3', grade: '' },
+    { name: 'Control Systems (MEC344)', credits: '3', grade: '' },
+    { name: 'Microcontroller and PLC (CSE314)', credits: '3', grade: '' },
+    { name: 'Mechanical Vibrations (MEC313)', credits: '3', grade: '' },
+    { name: 'Actuators and Drives (MEC345)', credits: '3', grade: '' },
+    { name: 'ME Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'me_7', courses: [
+    { name: 'Smart Sensors and Actuators (MEC411)', credits: '3', grade: '' },
+    { name: 'Condition Monitoring of Mechatronic Systems (MEC412)', credits: '3', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'Pneumatic and Hydraulic Systems (MEC441)', credits: '3', grade: '' },
+    { name: 'ME Elective Course 3', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (MEC410)', credits: '1', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'me_8', courses: [
+    { name: 'Mechatronic Systems Design (MEC413)', credits: '3', grade: '' },
+    { name: 'Robot Dynamics and Control (MEC414)', credits: '3', grade: '' },
+    { name: 'Motion Control and Servo Systems (MEC415)', credits: '3', grade: '' },
+    { name: 'PR/HU Elective Course', credits: '2', grade: '' },
+    { name: 'ME Elective Course 4', credits: '3', grade: '' },
+    { name: 'ME Elective Course 5', credits: '2', grade: '' },
+    { name: 'Graduation Project 2 (MEC420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج هندسة الإلكترونيات والاتصالات (ECE/CCE) - جامعة حلوان/العاصمة
+const eceFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'ece_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Probability and Random Variables (GEN232)', credits: '2', grade: '' },
+    { name: 'Electronic Devices (ECE211)', credits: '3', grade: '' },
+    { name: 'Signals and Systems (ECE212)', credits: '3', grade: '' },
+    { name: 'Logic Circuits Design (ECE213)', credits: '3', grade: '' },
+    { name: 'Practice in Electronics Practicum', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'ece_4', courses: [
+    { name: 'Electromagnetics 1 (ECE214)', credits: '3', grade: '' },
+    { name: 'Basic Electronics (ECE216)', credits: '3', grade: '' },
+    { name: 'Analog Communications (ECE221)', credits: '3', grade: '' },
+    { name: 'Circuit Theory 2 (EPM211)', credits: '3', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'ece_5', courses: [
+    { name: 'Electromagnetics 2 (ECE311)', credits: '3', grade: '' },
+    { name: 'Digital Communications (ECE321)', credits: '3', grade: '' },
+    { name: 'Analog Integrated Circuits (ECE312)', credits: '3', grade: '' },
+    { name: 'Microprocessors and Microcontrollers (CSE342)', credits: '3', grade: '' },
+    { name: 'Automatic Control Engineering (EPM321)', credits: '3', grade: '' },
+    { name: 'HU Elective Course 4', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'ece_6', courses: [
+    { name: 'Antennas and Wave Propagation (ECE313)', credits: '3', grade: '' },
+    { name: 'Digital Integrated Circuits (ECE314)', credits: '3', grade: '' },
+    { name: 'Information Theory and Coding (ECE322)', credits: '3', grade: '' },
+    { name: 'Digital Signal Processing (ECE323)', credits: '3', grade: '' },
+    { name: 'Computer Networks (CSE323)', credits: '3', grade: '' },
+    { name: 'ECE Elective Course 1', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'ece_7', courses: [
+    { name: 'Microwave Engineering (ECE411)', credits: '3', grade: '' },
+    { name: 'Wireless Communications Systems (ECE421)', credits: '3', grade: '' },
+    { name: 'VLSI Design (ECE412)', credits: '3', grade: '' },
+    { name: 'Optical Communications (ECE422)', credits: '3', grade: '' },
+    { name: 'ECE Elective Course 2', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (ECE410)', credits: '1', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'ece_8', courses: [
+    { name: 'Mobile Communications (ECE423)', credits: '3', grade: '' },
+    { name: 'Embedded Systems Design (ECE413)', credits: '3', grade: '' },
+    { name: 'Satellite Communications (ECE424)', credits: '3', grade: '' },
+    { name: 'ECE Elective Course 3', credits: '3', grade: '' },
+    { name: 'ECE Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (ECE420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج الهندسة الطبية الحيوية (BME) - جامعة حلوان/العاصمة
+const bmeFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'bme_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Human Anatomy and Physiology 1 (BME211)', credits: '3', grade: '' },
+    { name: 'Electronic Devices (ECE211)', credits: '3', grade: '' },
+    { name: 'Electrical Circuits (EPM211)', credits: '3', grade: '' },
+    { name: 'Biochemistry for Engineers (BME212)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'bme_4', courses: [
+    { name: 'Human Anatomy and Physiology 2 (BME213)', credits: '3', grade: '' },
+    { name: 'Basic Electronics (ECE216)', credits: '3', grade: '' },
+    { name: 'Signals and Systems (ECE212)', credits: '3', grade: '' },
+    { name: 'Biomaterials (BME214)', credits: '3', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'bme_5', courses: [
+    { name: 'Bio-Sensors and Transducers (BME311)', credits: '3', grade: '' },
+    { name: 'Medical Physics (BME312)', credits: '3', grade: '' },
+    { name: 'Biomechanics (BME313)', credits: '3', grade: '' },
+    { name: 'Microprocessors in Medical Equipment (CSE342)', credits: '3', grade: '' },
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 4', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'bme_6', courses: [
+    { name: 'Biomedical Instrumentation 1 (BME321)', credits: '3', grade: '' },
+    { name: 'Biomedical Signal Processing (BME322)', credits: '3', grade: '' },
+    { name: 'Clinical Engineering (BME323)', credits: '3', grade: '' },
+    { name: 'Fluid Mechanics in Biological Systems (BME324)', credits: '3', grade: '' },
+    { name: 'Automatic Control in Biological Systems (EPM321)', credits: '3', grade: '' },
+    { name: 'BME Elective Course 1', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'bme_7', courses: [
+    { name: 'Biomedical Instrumentation 2 (BME411)', credits: '3', grade: '' },
+    { name: 'Medical Imaging Systems (BME412)', credits: '3', grade: '' },
+    { name: 'Artificial Organs and Rehabilitation (BME413)', credits: '3', grade: '' },
+    { name: 'Hospital Safety and Standards (BME414)', credits: '2', grade: '' },
+    { name: 'BME Elective Course 2', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (BME410)', credits: '1', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'bme_8', courses: [
+    { name: 'Medical Image Processing (BME421)', credits: '3', grade: '' },
+    { name: 'Bio-MEMS and Nanotechnology (BME422)', credits: '3', grade: '' },
+    { name: 'Healthcare Information Systems (BME423)', credits: '3', grade: '' },
+    { name: 'BME Elective Course 3', credits: '3', grade: '' },
+    { name: 'BME Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (BME420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج الهندسة الصناعية (IE) - جامعة حلوان/العاصمة
+const ieFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'ie_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'Materials Engineering 1 (MEC221)', credits: '3', grade: '' },
+    { name: 'Work Design and Measurement (IND211)', credits: '3', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'ie_4', courses: [
+    { name: 'Operations Research 1 (IND221)', credits: '3', grade: '' },
+    { name: 'Quality Control and Assurance (IND231)', credits: '3', grade: '' },
+    { name: 'Manufacturing Processes (IND241)', credits: '3', grade: '' },
+    { name: 'Thermodynamics and Fluid Mechanics (MEC233)', credits: '3', grade: '' },
+    { name: 'Computer Aided Engineering Drawing (MEC212)', credits: '3', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'ie_5', courses: [
+    { name: 'Operations Research 2 (IND322)', credits: '3', grade: '' },
+    { name: 'Facility Layout and Location (IND311)', credits: '3', grade: '' },
+    { name: 'Production Planning and Inventory Control (IND321)', credits: '3', grade: '' },
+    { name: 'Ergonomics and Human Factors (IND312)', credits: '3', grade: '' },
+    { name: 'Statistical Quality Engineering (IND332)', credits: '3', grade: '' },
+    { name: 'HU Elective Course 4', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'ie_6', courses: [
+    { name: 'Simulation Modeling and Analysis (IND323)', credits: '3', grade: '' },
+    { name: 'Supply Chain Engineering (IND324)', credits: '3', grade: '' },
+    { name: 'Safety Engineering and Risk Management (IND313)', credits: '3', grade: '' },
+    { name: 'Cost Analysis and Control (IND341)', credits: '2', grade: '' },
+    { name: 'Automation and Computer Integrated Manufacturing (IND351)', credits: '3', grade: '' },
+    { name: 'IE Elective Course 1', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'ie_7', courses: [
+    { name: 'Lean Manufacturing Systems (IND411)', credits: '3', grade: '' },
+    { name: 'Project Management Engineering (IND421)', credits: '3', grade: '' },
+    { name: 'Maintenance Engineering and Management (IND431)', credits: '3', grade: '' },
+    { name: 'Design of Experiments (IND441)', credits: '3', grade: '' },
+    { name: 'IE Elective Course 2', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (IND410)', credits: '1', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'ie_8', courses: [
+    { name: 'Six Sigma and Total Quality Management (IND432)', credits: '3', grade: '' },
+    { name: 'Enterprise Resource Planning Systems (IND451)', credits: '3', grade: '' },
+    { name: 'Decision Support Systems (IND422)', credits: '3', grade: '' },
+    { name: 'IE Elective Course 3', credits: '3', grade: '' },
+    { name: 'IE Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (IND420)', credits: '3', grade: '' }
+  ]}
+];
+        // برنامج هندسة القوى والشبكات الذكية (EPSGE) - جامعة حلوان/العاصمة
+const epsgeFullPlan = [
+  ...helwanFreshmanData, // Level 1 (إعدادي)
+  
+  // Level 2 - Semester 1
+  { id: 'epsge_3', courses: [
+    { name: 'Mathematics 3 (GEN211)', credits: '3', grade: '' },
+    { name: 'Probability and Statistics (GEN232)', credits: '2', grade: '' },
+    { name: 'Electronic Devices (ECE211)', credits: '3', grade: '' },
+    { name: 'Electrical Circuits (EPM211)', credits: '3', grade: '' },
+    { name: 'Electromagnetics (ECE212)', credits: '3', grade: '' },
+    { name: 'Practice in Electronics & Electrical Practicum', credits: '2', grade: '' },
+    { name: 'HU Elective Course 2', credits: '2', grade: '' }
+  ]},
+
+  // Level 2 - Semester 2
+  { id: 'epsge_4', courses: [
+    { name: 'Fundamentals of Smart Grids (EPM215)', credits: '3', grade: '' },
+    { name: 'Basic Electronics (ECE216)', credits: '3', grade: '' },
+    { name: 'Logic Circuits Design (ECE213)', credits: '3', grade: '' },
+    { name: 'Energy Conversion & Storage (EPM216)', credits: '3', grade: '' },
+    { name: 'Engineering Economy (MEC241)', credits: '2', grade: '' },
+    { name: 'HU Elective Course 3', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 1
+  { id: 'epsge_5', courses: [
+    { name: 'Smart Measurements & AMI (EPM316)', credits: '3', grade: '' },
+    { name: 'Microprocessors and Microcontrollers (CSE342)', credits: '3', grade: '' },
+    { name: 'Electrical Power Systems 1 (EPM312)', credits: '3', grade: '' },
+    { name: 'Electrical Machines (EPM313)', credits: '3', grade: '' },
+    { name: 'Power Electronics for Smart Grids (EPM325)', credits: '3', grade: '' },
+    { name: 'HU Elective Course 4', credits: '2', grade: '' }
+  ]},
+
+  // Level 3 - Semester 2
+  { id: 'epsge_6', courses: [
+    { name: 'Renewable Energy Systems Integration (EPM326)', credits: '3', grade: '' },
+    { name: 'Smart Power Distribution Systems (EPM327)', credits: '3', grade: '' },
+    { name: 'IoT and Communication Protocols in Smart Grids (CSE325)', credits: '3', grade: '' },
+    { name: 'Protection of Smart Grids (EPM342)', credits: '3', grade: '' },
+    { name: 'Automatic Control Engineering (EPM321)', credits: '3', grade: '' },
+    { name: 'EPSGE Elective Course 1', credits: '2', grade: '' }
+  ]},
+
+  // Level 4 - Semester 1
+  { id: 'epsge_7', courses: [
+    { name: 'Smart Grid Microgrids (EPM415)', credits: '3', grade: '' },
+    { name: 'Electric Vehicles Integration (EPM416)', credits: '3', grade: '' },
+    { name: 'Power Quality in Smart Grids (EPM417)', credits: '3', grade: '' },
+    { name: 'Cybersecurity for Smart Power Grids (CSE425)', credits: '3', grade: '' },
+    { name: 'EPSGE Elective Course 2', credits: '3', grade: '' },
+    { name: 'Graduation Project 1 (EPM410)', credits: '1', grade: '' }
+  ]},
+
+  // Level 4 - Semester 2
+  { id: 'epsge_8', courses: [
+    { name: 'Smart Grid Automation & SCADA (EPM425)', credits: '3', grade: '' },
+    { name: 'Energy Management Systems (EPM426)', credits: '3', grade: '' },
+    { name: 'AI Applications in Power Systems (CSE435)', credits: '3', grade: '' },
+    { name: 'EPSGE Elective Course 3', credits: '3', grade: '' },
+    { name: 'EPSGE Elective Course 4', credits: '3', grade: '' },
+    { name: 'Graduation Project 2 (EPM420)', credits: '3', grade: '' }
+  ]}
+];
         // Systems & Biomedical Engineering (SBE) Full 8-Semester Plan
         const sbeFullPlan = [
         { id: 'sbe_1', courses: [
@@ -1240,6 +1795,15 @@
         ];
 
         const departmentRoadmaps = {
+        helwan_epsge: epsgeFullPlan,
+        helwan_ie: ieFullPlan,
+        helwan_bme: bmeFullPlan,
+        helwan_ece: eceFullPlan,
+        helwan_me: meFullPlan,
+        helwan_pe: peFullPlan,
+        helwan_cse: cseFullPlan,
+        helwan_freshman: helwanFreshmanData,
+  helwan_epme: epmeFullPlan,
         sbe: sbeFullPlan,
         mep: mepFullPlan,
         arc: arcFullPlan,
