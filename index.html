@@ -1983,17 +1983,17 @@
         <div class="course-row" id="course-row-${sem.id}-${cIdx}">
         <input type="text" class="course-name" placeholder="Course Name" value="${c.name || ''}" oninput="updateCourse('${sem.id}', ${cIdx}, 'name', this.value)">
         <input type="number" class="course-credit" placeholder="Credits" min="1" value="${c.credits || ''}" oninput="updateCourse('${sem.id}', ${cIdx}, 'credits', this.value)">
-        <select class="course-grade" onchange="updateCourse('${sem.id}', ${cIdx}, 'grade', this.value)">
-    <option value="" ${c.grade === '' ? 'selected' : ''}>-- None --</option>
-    <option value="4.0" ${c.grade === '4.0' ? 'selected' : ''}>A / A+ (4.0) - ممتاز مرتفع</option>
-    <option value="3.7" ${c.grade === '3.7' ? 'selected' : ''}>A- (3.7) - ممتاز</option>
-    <option value="3.3" ${c.grade === '3.3' ? 'selected' : ''}>B+ (3.3) - جيد جداً مرتفع</option>
-    <option value="3.0" ${c.grade === '3.0' ? 'selected' : ''}>B (3.0) - جيد جداً</option>
-    <option value="2.7" ${c.grade === '2.7' ? 'selected' : ''}>B- (2.7) - جيد جداً منخفض</option>
-    <option value="2.3" ${c.grade === '2.3' ? 'selected' : ''}>C+ (2.3) - جيد مرتفع</option>
-    <option value="2.0" ${c.grade === '2.0' ? 'selected' : ''}>C (2.0) - جيد</option>
-    <option value="1.0" ${c.grade === '1.0' ? 'selected' : ''}>D (1.0) - مقبول</option>
-    <option value="0.0" ${c.grade === '0.0' ? 'selected' : ''}>F (0.0) - راسب</option>
+   <select class="course-grade" onchange="updateCourse('${sem.id}', ${cIdx}, 'grade', this.value)">
+    <option value="" ${c.grade === '' ? 'selected' : ''}>Grade</option>
+    <option value="4.0" ${c.grade === '4.0' ? 'selected' : ''}>A / A+</option>
+    <option value="3.7" ${c.grade === '3.7' ? 'selected' : ''}>A-</option>
+    <option value="3.3" ${c.grade === '3.3' ? 'selected' : ''}>B+</option>
+    <option value="3.0" ${c.grade === '3.0' ? 'selected' : ''}>B</option>
+    <option value="2.7" ${c.grade === '2.7' ? 'selected' : ''}>B-</option>
+    <option value="2.3" ${c.grade === '2.3' ? 'selected' : ''}>C+</option>
+    <option value="2.0" ${c.grade === '2.0' ? 'selected' : ''}>C</option>
+    <option value="1.0" ${c.grade === '1.0' ? 'selected' : ''}>D</option>
+    <option value="0.0" ${c.grade === '0.0' ? 'selected' : ''}>F</option>
 </select>
         <button class="btn-delete" onclick="removeCourse('${sem.id}', ${cIdx})">✕</button>
         </div>`;
