@@ -4,832 +4,834 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Mohamed Adel - mohamed.abdefattah07@eng-st.cu.edu.eg">
     <title>GPA & Cumulative Calculator</title>
     <style>
-        <!--
-        Meta Tags & Keywords for Google Search (SEO) -->
-        <meta name="description" content="GPA and Cumulative Calculator for Engineering Students. Created by Mohamed Adel." >
-        <meta name="keywords" content="GPA Calc, GPA Calculator, Cairo University Engineering, Capital University GPA, Mohamed Adel GPA" >
-        <meta name="author" content="Mohamed Adel" >
-        <!-- Favicon (أيقونة الموقع في المتصفح من فوق) -->
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>" >
-        <!-- Social Media Preview Image (صورة المعاينة عند المشاركة على الواتساب والفيسبوك) -->
-        <meta property="og:title" content="GPA & Cumulative Calculator - Engineering" >
-        <meta property="og:description" content="Calculate your semester and cumulative GPA easily for Cairo & Capital Universities." >
-        <meta property="og:image" content="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop" >
-        <meta property="og:type" content="website" >
-        /* Announcement Banner */
-        .announcement-banner {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
-            padding: 16px 20px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
-            flex-wrap: wrap;
-        }
-
-        .announcement-text {
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .btn-get-now {
-            background: #ffffff;
-            color: #2563eb;
-            font-weight: 800;
-            padding: 10px 22px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-            .btn-get-now:hover {
-                background: #f8fafc;
-                transform: translateY(-2px) scale(1.04);
-                box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-            }
-        :root {
-            --bg-body: #f0f2f5;
-            --text-main: #1e293b;
-            --card-bg: #ffffff;
-            --border-color: #cbd5e1;
-            --banner-overlay: rgba(15, 23, 42, 0.85);
-            --input-border: #cbd5e1;
-            --input-bg: #ffffff;
-            --accent-color: #2563eb;
-        }
-
-        body.dark-theme {
-            --bg-body: #0f172a;
-            --text-main: #f8fafc;
-            --card-bg: #1e293b;
-            --border-color: #334155;
-            --banner-overlay: rgba(15, 23, 42, 0.92);
-            --input-border: #475569;
-            --input-bg: #0f172a;
-            --accent-color: #3b82f6;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: var(--bg-body);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        @keyframes fadeInSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulseGlow {
-            0% {
-                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5);
-            }
-
-            70% {
-                box-shadow: 0 0 0 15px rgba(37, 99, 235, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
-            }
-        }
-
-        @keyframes neonGlow {
-            0%, 100% {
-                text-shadow: 0 0 5px rgba(59,130,246,0.6), 0 0 15px rgba(59,130,246,0.4);
-            }
-
-            50% {
-                text-shadow: 0 0 15px rgba(168,85,247,0.8), 0 0 25px rgba(168,85,247,0.6);
-            }
-        }
-
-        /* Cover Page */
-        #cover-page {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(rgba(15,23,42,0.82), rgba(15,23,42,0.82)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1600&auto=format&fit=crop') center/cover;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-        }
-
-            #cover-page h1 {
-                font-size: 3.2rem;
-                margin-bottom: 15px;
-                font-weight: 800;
-                animation: fadeInSlideUp 0.8s ease;
-            }
-
-            #cover-page p {
-                font-size: 1.25rem;
-                margin-bottom: 35px;
-                color: #e2e8f0;
-                max-width: 600px;
-                animation: fadeInSlideUp 1s ease;
-            }
-
-        .btn-start {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
-            padding: 18px 40px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(37,99,235,0.4);
-            animation: fadeInSlideUp 1.2s ease, pulseGlow 2.5s infinite;
-            transition: transform 0.2s ease;
-        }
-
-            .btn-start:hover {
-                transform: translateY(-3px) scale(1.03);
-            }
-
-        /* Calculator Page */
-        #calculator-page {
-            display: none;
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-            flex: 1;
-        }
-
-        .page-active {
-            animation: fadeInSlideUp 0.5s ease forwards;
-        }
-
-        .header-banner {
-            background: linear-gradient(var(--banner-overlay), var(--banner-overlay)), url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop') center/cover;
-            color: white;
-            padding: 28px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .preset-panel {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-
-        .preset-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .universities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .uni-card {
-            background: var(--input-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.25s ease;
-        }
-
-            .uni-card:hover {
-                border-color: var(--accent-color);
-                transform: translateY(-2px);
-            }
-
-            .uni-card.active {
-                border-color: var(--accent-color);
-                background: rgba(37, 99, 235, 0.08);
-            }
-
-        .uni-icon-svg {
-            width: 36px;
-            height: 36px;
-            flex-shrink: 0;
-        }
-
-        .uni-details h4 {
-            font-size: 0.92rem;
-            font-weight: 700;
-        }
-
-        .uni-details p {
-            font-size: 0.78rem;
-            opacity: 0.7;
-        }
-
-        .department-selector-wrapper {
-            display: none;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--border-color);
-            animation: fadeInSlideUp 0.3s ease;
-        }
-
-        .dept-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .dept-card {
-            padding: 12px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--input-bg);
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-            .dept-card:hover, .dept-card.selected {
-                background: var(--accent-color);
-                color: white;
-                border-color: var(--accent-color);
-            }
-
-        /* Contact Box */
-        .contact-notice-box {
-            background: rgba(37, 99, 235, 0.06);
-            border: 1px dashed var(--accent-color);
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-top: 15px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .contact-email-link {
-            color: var(--accent-color);
-            font-weight: 700;
-            text-decoration: none;
-            background: var(--card-bg);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease;
-        }
-
-            .contact-email-link:hover {
-                background: var(--accent-color);
-                color: white;
-            }
-
-        .semester-card {
-            background: var(--card-bg);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            border: 1px solid var(--border-color);
-            animation: fadeInSlideUp 0.4s ease;
-        }
-
-        .semester-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
-        }
-
-        .course-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-            animation: fadeInSlideUp 0.35s ease;
-        }
-
-            .course-row input, .course-row select {
-                padding: 11px;
-                border: 1px solid var(--input-border);
-                background: var(--input-bg);
-                color: var(--text-main);
-                border-radius: 8px;
-                font-size: 14px;
-                outline: none;
-            }
-
-        .course-name {
-            flex: 3;
-        }
-
-        .course-credit, .course-grade {
-            flex: 1.5;
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .theme-toggle-btn {
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 9px 16px;
-            font-size: 0.9rem;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-add-course {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 1px dashed #22c55e;
-            width: 100%;
-            margin-top: 10px;
-            padding: 12px;
-        }
-
-        .btn-delete {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-
-        .btn-add-semester {
-            background: #2563eb;
-            color: white;
-            width: 100%;
-            padding: 16px;
-            font-size: 1rem;
-            margin-bottom: 25px;
-            border-radius: 12px;
-        }
-
-        .result-card {
-            background: #0f172a;
-            color: white;
-            text-align: center;
-            padding: 28px 20px 20px 20px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-        }
-
-        .speedometer-wrapper {
-            position: relative;
-            width: 260px;
-            height: 140px;
-            margin: 15px auto 0 auto;
-            overflow: hidden;
-        }
-
-        .gauge-svg {
-            width: 260px;
-            height: 260px;
-        }
-
-        .gauge-bg {
-            fill: none;
-            stroke: #1e293b;
-            stroke-width: 18;
-            stroke-linecap: round;
-        }
-
-        .gauge-progress {
-            fill: none;
-            stroke: url(#gauge-gradient);
-            stroke-width: 18;
-            stroke-linecap: round;
-            stroke-dasharray: 283;
-            stroke-dashoffset: 283;
-            transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .needle {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            width: 4px;
-            height: 85px;
-            background: #ef4444;
-            border-radius: 4px;
-            transform-origin: bottom center;
-            transform: translateX(-50%) rotate(-90deg);
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
-            z-index: 5;
-        }
-
-        .needle-hub {
-            position: absolute;
-            bottom: 2px;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            background: #f8fafc;
-            border: 3px solid #ef4444;
-            border-radius: 50%;
-            transform: translateX(-50%);
-            z-index: 6;
-        }
-
-        .gpa-display {
-            font-size: 3.2rem;
-            font-weight: 800;
-            color: #4ade80;
-            margin-top: -10px;
-        }
-
-        .gauge-labels {
-            display: flex;
-            justify-content: space-between;
-            width: 240px;
-            margin: 0 auto;
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .btn-back {
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-reset {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px 15px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-        }
-
-        .animated-credit {
-            display: inline-block;
-            color: #3b82f6;
-            animation: neonGlow 3s infinite ease-in-out;
-            background: linear-gradient(90deg, #3b82f6, #a855f7, #3b82f6);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: transform 0.3s ease;
-        }
-
-            .animated-credit:hover {
-                transform: scale(1.08) letter-spacing(3.5px);
-            }
-
-        .cover-footer {
-            position: absolute;
-            bottom: 25px;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-top: 15px;
-            width: 80%;
-            max-width: 400px;
-        }
-
-        .calc-footer {
-            margin-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-        /* Styling Cover Email */
-        .cover-email {
-            margin-top: 8px;
-            font-size: 0.88rem;
-            opacity: 0.85;
-            transition: all 0.3s ease;
-        }
-
-            .cover-email a {
-                color: #38bdf8;
-                text-decoration: none;
-                font-weight: 500;
-            }
-
-                .cover-email a:hover {
-                    text-decoration: underline;
-                    color: #60a5fa;
-                }
-
-        /* Luxurious University Cards & Selects */
-        .university-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
-            margin: 20px 0;
-        }
-
-        .uni-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-            .uni-card:hover {
-                transform: translateY(-4px);
-                border-color: rgba(99, 102, 241, 0.5);
-                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-            }
-
-            .uni-card.active {
-                background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.25));
-                border: 2px solid #6366f1;
-                box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-            }
-
-        /* Inline SVG Emblem Adjustments */
-        .uni-logo-wrapper {
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .uni-logo-inline {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .uni-card:hover .uni-logo-inline {
-            transform: scale(1.08) rotate(3deg);
-        }
-
-        .uni-card.active .uni-logo-inline {
-            filter: drop-shadow(0 4px 16px rgba(59, 130, 246, 0.5));
-        }
-
-        .uni-info h3, .uni-details h4 {
-            margin: 0;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #f8fafc;
-        }
-
-        .uni-info p, .uni-details p {
-            margin: 4px 0 0;
-            font-size: 0.82rem;
-            color: #94a3b8;
-        }
-
-        /* Luxurious Dropdown Select Styling */
-        select.course-grade, select.dept-select {
-            background-color: #1e293b;
-            color: #f8fafc;
-            border: 1.5px solid #334155;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.92rem;
-            font-weight: 600;
-            outline: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-            select.course-grade:hover, select.dept-select:hover {
-                border-color: #6366f1;
-            }
-
-            select.course-grade:focus, select.dept-select:focus {
-                border-color: #818cf8;
-                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-            }
-        /* Premium Footer & Email Styling */
-        .cover-footer {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .footer-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 10px 22px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.15);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-            .footer-badge:hover {
-                border-color: rgba(56, 189, 248, 0.4);
-                box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.3);
-                transform: translateY(-2px);
-            }
-
-        .animated-credit {
-            font-size: 0.88rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
-
-        .footer-divider {
-            width: 1px;
-            height: 16px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .cover-email-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #e2e8f0;
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-            transition: all 0.25s ease;
-        }
-
-        .email-icon {
-            width: 16px;
-            height: 16px;
-            color: #38bdf8;
-            transition: transform 0.25s ease;
-        }
-
-        .cover-email-btn:hover {
-            color: #38bdf8;
-        }
-
-            .cover-email-btn:hover .email-icon {
-                transform: scale(1.15) rotate(-5deg);
-            }
-        /* =========================================================
-   Luxurious & Dynamic Grade Select & Department Grid Animations
-   ========================================================= */
-
-        /* 1. Enhanced Grade Dropdown */
-        select.course-grade {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
-            color: #f8fafc;
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-            padding: 10px 16px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            outline: none;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-            select.course-grade:hover {
-                transform: translateY(-2px) scale(1.03);
-                border-color: #38bdf8;
-                box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
-                background: linear-gradient(135deg, rgba(30, 41, 59, 1), rgba(30, 58, 138, 0.5));
-            }
-
-            select.course-grade:focus {
-                border-color: #818cf8;
-                box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.3), 0 8px 25px rgba(99, 102, 241, 0.4);
-            }
-
-        /* 2. Ultra-Luxurious Department Buttons Grid */
-        .dept-btn, .dept-card, [class*="dept-"] {
-            background: rgba(30, 41, 59, 0.6) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: 14px !important;
-            padding: 14px 20px !important;
-            font-weight: 700 !important;
-            color: #cbd5e1 !important;
-            cursor: pointer !important;
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-            position: relative !important;
-            overflow: hidden !important;
-        }
-
-            /* Hover Effect for Department Cards */
-            .dept-btn:hover, .dept-card:hover, [class*="dept-"]:hover {
-                transform: translateY(-5px) scale(1.02) !important;
-                color: #ffffff !important;
-                border-color: rgba(56, 189, 248, 0.6) !important;
-                box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.25) !important;
-                background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(14, 165, 233, 0.2)) !important;
-            }
-
-            /* Active Selected Department Styling & Motion */
-            .dept-btn.active, .dept-card.active, [class*="dept-"].active {
-                background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
-                color: #ffffff !important;
-                border-color: #a78bfa !important;
-                transform: translateY(-3px) scale(1.03) !important;
-                box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45), 0 0 25px rgba(124, 58, 237, 0.4) !important;
-                animation: pulseSelected 2s infinite ease-in-out;
-            }
-
-        @keyframes pulseSelected {
-            0% {
-                box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45), 0 0 20px rgba(124, 58, 237, 0.3);
-            }
-
-            50% {
-                box-shadow: 0 16px 36px rgba(37, 99, 235, 0.65), 0 0 32px rgba(124, 58, 237, 0.6);
-            }
-
-            100% {
-                box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45), 0 0 20px rgba(124, 58, 237, 0.3);
-            }
-        }
-        /* Dark Theme for Dropdown Options */
-        select.course-grade option {
-            background-color: #0f172a !important;
-            color: #f8fafc !important;
-            padding: 10px !important;
-        }
-
-            select.course-grade option:hover,
-            select.course-grade option:checked {
-                background-color: #2563eb !important;
-                color: #ffffff !important;
-            }
+             <!--
+             Meta Tags & Keywords for Google Search (SEO) -->
+             <meta name="description" content="GPA and Cumulative Calculator for Engineering Students. Created by Mohamed Adel." >
+             <meta name="keywords" content="GPA Calc, GPA Calculator, Cairo University Engineering, Capital University GPA, Mohamed Adel GPA" >
+             <meta name="author" content="Mohamed Adel" >
+             <!-- Favicon (أيقونة الموقع في المتصفح من فوق) -->
+             <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>" >
+             <!-- Social Media Preview Image (صورة المعاينة عند المشاركة على الواتساب والفيسبوك) -->
+             <meta property="og:title" content="GPA & Cumulative Calculator - Engineering" >
+             <meta property="og:description" content="Calculate your semester and cumulative GPA easily for Cairo & Capital Universities." >
+             <meta property="og:image" content="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop" >
+             <meta property="og:type" content="website" >
+             /* Announcement Banner */
+             .announcement-banner {
+                 background: linear-gradient(135deg, #2563eb, #7c3aed);
+                 color: white;
+                 padding: 16px 20px;
+                 border-radius: 14px;
+                 margin-bottom: 20px;
+                 display: flex;
+                 align-items: center;
+                 justify-content: space-between;
+                 gap: 15px;
+                 box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+                 flex-wrap: wrap;
+             }
+
+             .announcement-text {
+                 font-size: 0.95rem;
+                 font-weight: 600;
+             }
+
+             .btn-get-now {
+                 background: #ffffff;
+                 color: #2563eb;
+                 font-weight: 800;
+                 padding: 10px 22px;
+                 border-radius: 30px;
+                 border: none;
+                 cursor: pointer;
+                 transition: all 0.25s ease;
+                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+             }
+
+                 .btn-get-now:hover {
+                     background: #f8fafc;
+                     transform: translateY(-2px) scale(1.04);
+                     box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+                 }
+
+             :root {
+                 --bg-body: #f0f2f5;
+                 --text-main: #1e293b;
+                 --card-bg: #ffffff;
+                 --border-color: #cbd5e1;
+                 --banner-overlay: rgba(15, 23, 42, 0.85);
+                 --input-border: #cbd5e1;
+                 --input-bg: #ffffff;
+                 --accent-color: #2563eb;
+             }
+
+             body.dark-theme {
+                 --bg-body: #0f172a;
+                 --text-main: #f8fafc;
+                 --card-bg: #1e293b;
+                 --border-color: #334155;
+                 --banner-overlay: rgba(15, 23, 42, 0.92);
+                 --input-border: #475569;
+                 --input-bg: #0f172a;
+                 --accent-color: #3b82f6;
+             }
+
+             * {
+                 box-sizing: border-box;
+                 margin: 0;
+                 padding: 0;
+                 font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+             }
+
+             body {
+                 background: var(--bg-body);
+                 color: var(--text-main);
+                 min-height: 100vh;
+                 display: flex;
+                 flex-direction: column;
+                 transition: background 0.3s ease, color 0.3s ease;
+             }
+
+             @keyframes fadeInSlideUp {
+                 from {
+                     opacity: 0;
+                     transform: translateY(20px);
+                 }
+
+                 to {
+                     opacity: 1;
+                     transform: translateY(0);
+                 }
+             }
+
+             @keyframes pulseGlow {
+                 0% {
+                     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5);
+                 }
+
+                 70% {
+                     box-shadow: 0 0 0 15px rgba(37, 99, 235, 0);
+                 }
+
+                 100% {
+                     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+                 }
+             }
+
+             @keyframes neonGlow {
+                 0%, 100% {
+                     text-shadow: 0 0 5px rgba(59,130,246,0.6), 0 0 15px rgba(59,130,246,0.4);
+                 }
+
+                 50% {
+                     text-shadow: 0 0 15px rgba(168,85,247,0.8), 0 0 25px rgba(168,85,247,0.6);
+                 }
+             }
+
+             /* Cover Page */
+             #cover-page {
+                 display: flex;
+                 flex-direction: column;
+                 justify-content: center;
+                 align-items: center;
+                 min-height: 100vh;
+                 background: linear-gradient(rgba(15,23,42,0.82), rgba(15,23,42,0.82)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1600&auto=format&fit=crop') center/cover;
+                 color: white;
+                 text-align: center;
+                 padding: 20px;
+                 position: relative;
+             }
+
+                 #cover-page h1 {
+                     font-size: 3.2rem;
+                     margin-bottom: 15px;
+                     font-weight: 800;
+                     animation: fadeInSlideUp 0.8s ease;
+                 }
+
+                 #cover-page p {
+                     font-size: 1.25rem;
+                     margin-bottom: 35px;
+                     color: #e2e8f0;
+                     max-width: 600px;
+                     animation: fadeInSlideUp 1s ease;
+                 }
+
+             .btn-start {
+                 background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                 color: white;
+                 padding: 18px 40px;
+                 font-size: 1.15rem;
+                 font-weight: 700;
+                 border: none;
+                 border-radius: 50px;
+                 cursor: pointer;
+                 box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+                 animation: fadeInSlideUp 1.2s ease, pulseGlow 2.5s infinite;
+                 transition: transform 0.2s ease;
+             }
+
+                 .btn-start:hover {
+                     transform: translateY(-3px) scale(1.03);
+                 }
+
+             /* Calculator Page */
+             #calculator-page {
+                 display: none;
+                 max-width: 900px;
+                 margin: 30px auto;
+                 padding: 0 20px;
+                 flex: 1;
+             }
+
+             .page-active {
+                 animation: fadeInSlideUp 0.5s ease forwards;
+             }
+
+             .header-banner {
+                 background: linear-gradient(var(--banner-overlay), var(--banner-overlay)), url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop') center/cover;
+                 color: white;
+                 padding: 28px;
+                 border-radius: 16px;
+                 text-align: center;
+                 margin-bottom: 20px;
+             }
+
+             .preset-panel {
+                 background: var(--card-bg);
+                 border: 1px solid var(--border-color);
+                 border-radius: 16px;
+                 padding: 20px;
+                 margin-bottom: 25px;
+                 box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+             }
+
+             .preset-title {
+                 font-size: 1.05rem;
+                 font-weight: 700;
+                 margin-bottom: 15px;
+                 display: flex;
+                 align-items: center;
+                 gap: 10px;
+             }
+
+             .universities-grid {
+                 display: grid;
+                 grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                 gap: 12px;
+                 margin-bottom: 15px;
+             }
+
+             .uni-card {
+                 background: var(--input-bg);
+                 border: 2px solid var(--border-color);
+                 border-radius: 12px;
+                 padding: 14px;
+                 cursor: pointer;
+                 display: flex;
+                 align-items: center;
+                 gap: 12px;
+                 transition: all 0.25s ease;
+             }
+
+                 .uni-card:hover {
+                     border-color: var(--accent-color);
+                     transform: translateY(-2px);
+                 }
+
+                 .uni-card.active {
+                     border-color: var(--accent-color);
+                     background: rgba(37, 99, 235, 0.08);
+                 }
+
+             .uni-icon-svg {
+                 width: 36px;
+                 height: 36px;
+                 flex-shrink: 0;
+             }
+
+             .uni-details h4 {
+                 font-size: 0.92rem;
+                 font-weight: 700;
+             }
+
+             .uni-details p {
+                 font-size: 0.78rem;
+                 opacity: 0.7;
+             }
+
+             .department-selector-wrapper {
+                 display: none;
+                 margin-top: 15px;
+                 padding-top: 15px;
+                 border-top: 1px dashed var(--border-color);
+                 animation: fadeInSlideUp 0.3s ease;
+             }
+
+             .dept-grid {
+                 display: grid;
+                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                 gap: 10px;
+                 margin-top: 10px;
+             }
+
+             .dept-card {
+                 padding: 12px 14px;
+                 border: 1px solid var(--border-color);
+                 border-radius: 8px;
+                 background: var(--input-bg);
+                 font-size: 0.88rem;
+                 font-weight: 600;
+                 cursor: pointer;
+                 text-align: center;
+                 transition: all 0.2s ease;
+             }
+
+                 .dept-card:hover, .dept-card.selected {
+                     background: var(--accent-color);
+                     color: white;
+                     border-color: var(--accent-color);
+                 }
+
+             /* Contact Box */
+             .contact-notice-box {
+                 background: rgba(37, 99, 235, 0.06);
+                 border: 1px dashed var(--accent-color);
+                 border-radius: 12px;
+                 padding: 12px 16px;
+                 margin-top: 15px;
+                 font-size: 0.85rem;
+                 display: flex;
+                 align-items: center;
+                 justify-content: space-between;
+                 gap: 10px;
+                 flex-wrap: wrap;
+             }
+
+             .contact-email-link {
+                 color: var(--accent-color);
+                 font-weight: 700;
+                 text-decoration: none;
+                 background: var(--card-bg);
+                 padding: 6px 12px;
+                 border-radius: 20px;
+                 border: 1px solid var(--border-color);
+                 transition: all 0.2s ease;
+             }
+
+                 .contact-email-link:hover {
+                     background: var(--accent-color);
+                     color: white;
+                 }
+
+             .semester-card {
+                 background: var(--card-bg);
+                 border-radius: 14px;
+                 padding: 20px;
+                 margin-bottom: 20px;
+                 box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+                 border: 1px solid var(--border-color);
+                 animation: fadeInSlideUp 0.4s ease;
+             }
+
+             .semester-header {
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+                 border-bottom: 2px solid var(--border-color);
+                 padding-bottom: 12px;
+                 margin-bottom: 15px;
+             }
+
+             .course-row {
+                 display: flex;
+                 gap: 10px;
+                 margin-bottom: 12px;
+                 animation: fadeInSlideUp 0.35s ease;
+             }
+
+                 .course-row input, .course-row select {
+                     padding: 11px;
+                     border: 1px solid var(--input-border);
+                     background: var(--input-bg);
+                     color: var(--text-main);
+                     border-radius: 8px;
+                     font-size: 14px;
+                     outline: none;
+                 }
+
+             .course-name {
+                 flex: 3;
+             }
+
+             .course-credit, .course-grade {
+                 flex: 1.5;
+             }
+
+             button {
+                 cursor: pointer;
+                 border: none;
+                 border-radius: 8px;
+                 padding: 10px 15px;
+                 font-weight: 600;
+                 transition: all 0.2s ease;
+             }
+
+             .theme-toggle-btn {
+                 background: var(--card-bg);
+                 color: var(--text-main);
+                 border: 1px solid var(--border-color);
+                 padding: 9px 16px;
+                 font-size: 0.9rem;
+                 border-radius: 30px;
+                 display: flex;
+                 align-items: center;
+                 gap: 8px;
+             }
+
+             .btn-add-course {
+                 background: rgba(34, 197, 94, 0.1);
+                 color: #22c55e;
+                 border: 1px dashed #22c55e;
+                 width: 100%;
+                 margin-top: 10px;
+                 padding: 12px;
+             }
+
+             .btn-delete {
+                 background: rgba(239, 68, 68, 0.1);
+                 color: #ef4444;
+                 border: 1px solid rgba(239, 68, 68, 0.2);
+             }
+
+             .btn-add-semester {
+                 background: #2563eb;
+                 color: white;
+                 width: 100%;
+                 padding: 16px;
+                 font-size: 1rem;
+                 margin-bottom: 25px;
+                 border-radius: 12px;
+             }
+
+             .result-card {
+                 background: #0f172a;
+                 color: white;
+                 text-align: center;
+                 padding: 28px 20px 20px 20px;
+                 border-radius: 20px;
+                 margin-bottom: 30px;
+                 box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+             }
+
+             .speedometer-wrapper {
+                 position: relative;
+                 width: 260px;
+                 height: 140px;
+                 margin: 15px auto 0 auto;
+                 overflow: hidden;
+             }
+
+             .gauge-svg {
+                 width: 260px;
+                 height: 260px;
+             }
+
+             .gauge-bg {
+                 fill: none;
+                 stroke: #1e293b;
+                 stroke-width: 18;
+                 stroke-linecap: round;
+             }
+
+             .gauge-progress {
+                 fill: none;
+                 stroke: url(#gauge-gradient);
+                 stroke-width: 18;
+                 stroke-linecap: round;
+                 stroke-dasharray: 283;
+                 stroke-dashoffset: 283;
+                 transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+             }
+
+             .needle {
+                 position: absolute;
+                 bottom: 10px;
+                 left: 50%;
+                 width: 4px;
+                 height: 85px;
+                 background: #ef4444;
+                 border-radius: 4px;
+                 transform-origin: bottom center;
+                 transform: translateX(-50%) rotate(-90deg);
+                 transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+                 box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+                 z-index: 5;
+             }
+
+             .needle-hub {
+                 position: absolute;
+                 bottom: 2px;
+                 left: 50%;
+                 width: 20px;
+                 height: 20px;
+                 background: #f8fafc;
+                 border: 3px solid #ef4444;
+                 border-radius: 50%;
+                 transform: translateX(-50%);
+                 z-index: 6;
+             }
+
+             .gpa-display {
+                 font-size: 3.2rem;
+                 font-weight: 800;
+                 color: #4ade80;
+                 margin-top: -10px;
+             }
+
+             .gauge-labels {
+                 display: flex;
+                 justify-content: space-between;
+                 width: 240px;
+                 margin: 0 auto;
+                 font-size: 0.85rem;
+                 color: #64748b;
+                 font-weight: 600;
+             }
+
+             .top-nav {
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+                 margin-bottom: 15px;
+             }
+
+             .btn-back {
+                 background: var(--card-bg);
+                 color: var(--text-main);
+                 border: 1px solid var(--border-color);
+             }
+
+             .btn-reset {
+                 background: rgba(239, 68, 68, 0.1);
+                 color: #ef4444;
+             }
+
+             footer {
+                 text-align: center;
+                 padding: 25px 15px;
+                 font-size: 0.95rem;
+                 font-weight: 800;
+                 letter-spacing: 2.5px;
+                 text-transform: uppercase;
+             }
+
+             .animated-credit {
+                 display: inline-block;
+                 color: #3b82f6;
+                 animation: neonGlow 3s infinite ease-in-out;
+                 background: linear-gradient(90deg, #3b82f6, #a855f7, #3b82f6);
+                 background-size: 200% auto;
+                 -webkit-background-clip: text;
+                 -webkit-text-fill-color: transparent;
+                 transition: transform 0.3s ease;
+             }
+
+                 .animated-credit:hover {
+                     transform: scale(1.08) letter-spacing(3.5px);
+                 }
+
+             .cover-footer {
+                 position: absolute;
+                 bottom: 25px;
+                 border-top: 1px solid rgba(255,255,255,0.15);
+                 padding-top: 15px;
+                 width: 80%;
+                 max-width: 400px;
+             }
+
+             .calc-footer {
+                 margin-top: 20px;
+                 border-top: 1px solid var(--border-color);
+             }
+             /* Styling Cover Email */
+             .cover-email {
+                 margin-top: 8px;
+                 font-size: 0.88rem;
+                 opacity: 0.85;
+                 transition: all 0.3s ease;
+             }
+
+                 .cover-email a {
+                     color: #38bdf8;
+                     text-decoration: none;
+                     font-weight: 500;
+                 }
+
+                     .cover-email a:hover {
+                         text-decoration: underline;
+                         color: #60a5fa;
+                     }
+
+             /* Luxurious University Cards & Selects */
+             .university-cards {
+                 display: grid;
+                 grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                 gap: 18px;
+                 margin: 20px 0;
+             }
+
+             .uni-card {
+                 background: rgba(30, 41, 59, 0.7);
+                 backdrop-filter: blur(12px);
+                 border: 1px solid rgba(255, 255, 255, 0.1);
+                 border-radius: 16px;
+                 padding: 18px;
+                 display: flex;
+                 align-items: center;
+                 gap: 16px;
+                 cursor: pointer;
+                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                 position: relative;
+                 overflow: hidden;
+             }
+
+                 .uni-card:hover {
+                     transform: translateY(-4px);
+                     border-color: rgba(99, 102, 241, 0.5);
+                     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+                 }
+
+                 .uni-card.active {
+                     background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.25));
+                     border: 2px solid #6366f1;
+                     box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+                 }
+
+             /* Inline SVG Emblem Adjustments */
+             .uni-logo-wrapper {
+                 width: 52px;
+                 height: 52px;
+                 display: flex;
+                 align-items: center;
+                 justify-content: center;
+                 flex-shrink: 0;
+             }
+
+             .uni-logo-inline {
+                 width: 100%;
+                 height: 100%;
+                 filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+             }
+
+             .uni-card:hover .uni-logo-inline {
+                 transform: scale(1.08) rotate(3deg);
+             }
+
+             .uni-card.active .uni-logo-inline {
+                 filter: drop-shadow(0 4px 16px rgba(59, 130, 246, 0.5));
+             }
+
+             .uni-info h3, .uni-details h4 {
+                 margin: 0;
+                 font-size: 1.05rem;
+                 font-weight: 700;
+                 color: #f8fafc;
+             }
+
+             .uni-info p, .uni-details p {
+                 margin: 4px 0 0;
+                 font-size: 0.82rem;
+                 color: #94a3b8;
+             }
+
+             /* Luxurious Dropdown Select Styling */
+             select.course-grade, select.dept-select {
+                 background-color: #1e293b;
+                 color: #f8fafc;
+                 border: 1.5px solid #334155;
+                 border-radius: 10px;
+                 padding: 10px 14px;
+                 font-size: 0.92rem;
+                 font-weight: 600;
+                 outline: none;
+                 cursor: pointer;
+                 transition: all 0.25s ease;
+                 box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+             }
+
+                 select.course-grade:hover, select.dept-select:hover {
+                     border-color: #6366f1;
+                 }
+
+                 select.course-grade:focus, select.dept-select:focus {
+                     border-color: #818cf8;
+                     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+                 }
+             /* Premium Footer & Email Styling */
+             .cover-footer {
+                 margin-top: 40px;
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+             }
+
+             .footer-badge {
+                 display: inline-flex;
+                 align-items: center;
+                 gap: 14px;
+                 background: rgba(15, 23, 42, 0.65);
+                 backdrop-filter: blur(16px);
+                 -webkit-backdrop-filter: blur(16px);
+                 border: 1px solid rgba(255, 255, 255, 0.12);
+                 padding: 10px 22px;
+                 border-radius: 50px;
+                 box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.15);
+                 transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+             }
+
+                 .footer-badge:hover {
+                     border-color: rgba(56, 189, 248, 0.4);
+                     box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.3);
+                     transform: translateY(-2px);
+                 }
+
+             .animated-credit {
+                 font-size: 0.88rem;
+                 font-weight: 700;
+                 letter-spacing: 0.5px;
+                 background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+                 -webkit-background-clip: text;
+                 -webkit-text-fill-color: transparent;
+                 text-transform: uppercase;
+             }
+
+             .footer-divider {
+                 width: 1px;
+                 height: 16px;
+                 background: rgba(255, 255, 255, 0.2);
+             }
+
+             .cover-email-btn {
+                 display: flex;
+                 align-items: center;
+                 gap: 8px;
+                 color: #e2e8f0;
+                 text-decoration: none;
+                 font-size: 0.88rem;
+                 font-weight: 600;
+                 transition: all 0.25s ease;
+             }
+
+             .email-icon {
+                 width: 16px;
+                 height: 16px;
+                 color: #38bdf8;
+                 transition: transform 0.25s ease;
+             }
+
+             .cover-email-btn:hover {
+                 color: #38bdf8;
+             }
+
+                 .cover-email-btn:hover .email-icon {
+                     transform: scale(1.15) rotate(-5deg);
+                 }
+             /* =========================================================
+        Luxurious & Dynamic Grade Select & Department Grid Animations
+        ========================================================= */
+
+             /* 1. Enhanced Grade Dropdown */
+             select.course-grade {
+                 background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+                 color: #f8fafc;
+                 border: 1.5px solid rgba(255, 255, 255, 0.12);
+                 border-radius: 12px;
+                 padding: 10px 16px;
+                 font-size: 0.95rem;
+                 font-weight: 700;
+                 outline: none;
+                 cursor: pointer;
+                 transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+             }
+
+                 select.course-grade:hover {
+                     transform: translateY(-2px) scale(1.03);
+                     border-color: #38bdf8;
+                     box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+                     background: linear-gradient(135deg, rgba(30, 41, 59, 1), rgba(30, 58, 138, 0.5));
+                 }
+
+                 select.course-grade:focus {
+                     border-color: #818cf8;
+                     box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.3), 0 8px 25px rgba(99, 102, 241, 0.4);
+                 }
+
+             /* 2. Ultra-Luxurious Department Buttons Grid */
+             .dept-btn, .dept-card, [class*="dept-"] {
+                 background: rgba(30, 41, 59, 0.6) !important;
+                 backdrop-filter: blur(12px) !important;
+                 -webkit-backdrop-filter: blur(12px) !important;
+                 border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                 border-radius: 14px !important;
+                 padding: 14px 20px !important;
+                 font-weight: 700 !important;
+                 color: #cbd5e1 !important;
+                 cursor: pointer !important;
+                 transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+                 position: relative !important;
+                 overflow: hidden !important;
+             }
+
+                 /* Hover Effect for Department Cards */
+                 .dept-btn:hover, .dept-card:hover, [class*="dept-"]:hover {
+                     transform: translateY(-5px) scale(1.02) !important;
+                     color: #ffffff !important;
+                     border-color: rgba(56, 189, 248, 0.6) !important;
+                     box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.25) !important;
+                     background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(14, 165, 233, 0.2)) !important;
+                 }
+
+                 /* Active Selected Department Styling & Motion */
+                 .dept-btn.active, .dept-card.active, [class*="dept-"].active {
+                     background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+                     color: #ffffff !important;
+                     border-color: #a78bfa !important;
+                     transform: translateY(-3px) scale(1.03) !important;
+                     box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45), 0 0 25px rgba(124, 58, 237, 0.4) !important;
+                     animation: pulseSelected 2s infinite ease-in-out;
+                 }
+
+             @keyframes pulseSelected {
+                 0% {
+                     box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45), 0 0 20px rgba(124, 58, 237, 0.3);
+                 }
+
+                 50% {
+                     box-shadow: 0 16px 36px rgba(37, 99, 235, 0.65), 0 0 32px rgba(124, 58, 237, 0.6);
+                 }
+
+                 100% {
+                     box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45), 0 0 20px rgba(124, 58, 237, 0.3);
+                 }
+             }
+             /* Dark Theme for Dropdown Options */
+             select.course-grade option {
+                 background-color: #0f172a !important;
+                 color: #f8fafc !important;
+                 padding: 10px !important;
+             }
+
+                 select.course-grade option:hover,
+                 select.course-grade option:checked {
+                     background-color: #2563eb !important;
+                     color: #ffffff !important;
+                 }
     </style>
 </head>
 <body>
@@ -844,7 +846,7 @@
             <div class="footer-badge">
                 <span class="animated-credit">Dir. By Mohamed Adel</span>
                 <div class="footer-divider"></div>
-                <a href="mohamed.abdefattah07@eng-st.cu.edu.eg" class="cover-email-btn">
+                <a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" class="cover-email-btn">
                     <svg class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
