@@ -1041,6 +1041,116 @@
             vertical-align: -0.2em;
             display: inline-block;
         }
+        /* تأثيرات الحركة والتوهج لجميع الإدخالات وأزرار الحذف */
+        .course-row input,
+        .course-row select,
+        .course-row button,
+        .btn-remove-semester {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* حركة قائمة Grade والحقول عند الوقوف عليها بالماوس */
+        .course-grade-select:hover,
+        .course-hours-input:hover,
+        .course-name-input:hover {
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.25) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* حركة أزرار الحذف عند الوقوف عليها */
+        .btn-remove-course:hover {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4) !important;
+            transform: translateY(-2px) scale(1.05) !important;
+        }
+
+        .btn-remove-semester:hover {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.3) !important;
+            transform: translateY(-2px) !important;
+        }
+        /* Disclaimer Banner Style */
+        .disclaimer-banner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-left: 4px solid #38bdf8;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin: 20px auto;
+            max-width: 1000px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+            .disclaimer-banner:hover {
+                border-color: rgba(56, 189, 248, 0.45);
+                box-shadow: 0 6px 24px rgba(56, 189, 248, 0.15);
+                transform: translateY(-2px);
+            }
+
+        .disclaimer-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: rgba(56, 189, 248, 0.12);
+            border-radius: 50%;
+        }
+
+        .disclaimer-content p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .disclaimer-content strong {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+        /* Cover Disclaimer Styles (Resizing & Anti-Overlap) */
+        .cover-disclaimer {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border: 1px solid rgba(56, 189, 248, 0.2) !important;
+            border-left: 4px solid #38bdf8 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+            padding: 12px 18px !important;
+            border-radius: 10px !important;
+            position: relative !important;
+            z-index: 5 !important;
+        }
+
+            .cover-disclaimer .disclaimer-icon {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 1.1rem !important;
+            }
+
+            .cover-disclaimer .disclaimer-content p {
+                font-size: 0.82rem !important; /* تصغير الخط قليلاً لمنع التضخم */
+                line-height: 1.5 !important;
+                color: #cbd5e1 !important;
+            }
+
+        /* ضبط الهامش العلوي لصندوق التوقيع لمنع التداخل */
+        .cover-container .signature,
+        div[style*="DIR. BY MOHAMED ADEL"] || .signature-container {
+            margin-top: 40px !important; /* دفع صندوق التوقيع لأسفل بمسافة كافية */
+            position: relative !important;
+            z-index: 2 !important;
+        }
     </style>
 </head>
 <body>
@@ -1050,6 +1160,15 @@
         <h1>GPA Calculator</h1>
         <p>Track your academic progress and calculate your semester and cumulative GPA easily.</p>
         <button class="btn-start" onclick="goToCalculator()">Go to Calculate Your GPA</button>
+        <!-- Wrapper to prevent overlapping in Cover -->
+        <div class="cover-disclaimer-wrapper" style="margin-top: 30px; margin-bottom: 25px; width: 100%; display: flex; justify-content: center; z-index: 10; position: relative;">
+            <div class="disclaimer-banner cover-disclaimer" style="margin: 0; max-width: 750px; width: 90%;">
+                <div class="disclaimer-icon">💡</div>
+                <div class="disclaimer-content">
+                    <p><strong>Important Note:</strong> When using university course roadmaps, minor discrepancies in credit hours may occur based on your specific college regulations. Please always consult your official faculty handbook or academic advisor to verify details. Thank you!</p>
+                </div>
+            </div>
+        </div>
 
         <footer class="cover-footer">
             <div class="footer-badge">
@@ -1082,24 +1201,34 @@
             <h2>Semester & Cumulative Calculator</h2>
             <p>Your inputs are saved automatically in your browser.</p>
         </div>
-        <!-- Announcement Banner -->
-        <div class="announcement-banner">
-            <div class="announcement-text">
-                🚀 <strong>NEW UPDATE:</strong> Capital University (Helwan) Engineering Programs & Roadmaps have been added!
+        <!-- Main Banner (Helwan) -->
+        <div class="update-banner main-banner">
+            <div class="banner-content">
+                <span class="banner-icon">🚀</span>
+                <p><strong>NEW UPDATE:</strong> Capital University (Helwan) Engineering Programs & Roadmaps have been added!</p>
             </div>
-            <button class="btn-get-now" onclick="switchToHelwan()">Get Now</button>
+            <button class="btn-get-now" onclick="selectUniversity('helwan')">Get Now</button>
         </div>
-        <!-- بداية كود الإعلان -->
+
+        <!-- Nile University Banner -->
         <div class="update-banner nile-banner">
             <div class="banner-badge">NEW</div>
             <div class="banner-content">
                 <span class="banner-icon">🏛️</span>
                 <p>Added <strong>Nile University (NU)</strong> Engineering Programs & Curricula!</p>
-            </div> <!-- قفلة banner-content -->
-            <!-- الكود اللي هتأكد وجوده هنا (بعد القفلة اللي فوق وقبل القفلة اللي تحت) -->
+            </div>
             <button class="btn-get-now" onclick="selectUniversity('nu')">Get Now</button>
+        </div>
 
-        </div> <!-- قفلة update-banner -->
+        <!-- Ain Shams University Banner -->
+        <div class="update-banner asu-banner">
+            <div class="banner-badge">NEW</div>
+            <div class="banner-content">
+                <span class="banner-icon">🏛️</span>
+                <p>Added <strong>Ain Shams University (ASU)</strong> All Programs & Curricula!</p>
+            </div>
+            <button class="btn-get-now" onclick="selectUniversity('asu')">Get Now</button>
+        </div>
         <!-- Banner 2: Smart Prerequisite Dependency System -->
         <div class="update-banner prereq-banner">
             <div class="banner-badge feature">FEATURE</div>
@@ -1294,7 +1423,59 @@
                 <div class="dept-card" onclick="selectDepartment('nu_sse', event)">🏢 Smart Structural Eng (SSE)</div>
             </div>
         </div>
-
+        <!-- Disclaimer Note for University Cards -->
+        <div class="disclaimer-banner">
+            <div class="disclaimer-icon">💡</div>
+            <div class="disclaimer-content">
+                <p><strong>Important Note:</strong> When using university course roadmaps, minor discrepancies in credit hours may occur based on your specific college regulations. Please always consult your official faculty handbook or academic advisor to verify details. Thank you!</p>
+            </div>
+        </div>
+        <!-- Ain Shams University Departments Wrapper -->
+        <div id="dept-wrapper-asu" class="dept-wrapper" style="display: none;">
+            <h3 class="dept-title">🏛️ Ain Shams University (ASU) Departments:</h3>
+            <div class="departments-grid">
+                <div class="dept-card" onclick="loadASUProgram('mdp_dpe')">
+                    <span class="dept-icon">⚙️</span>
+                    <h4>Design & Production (DPE)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('mep_mpe')">
+                    <span class="dept-icon">🔥</span>
+                    <h4>Mechanical Power (MPE)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('mea_auto')">
+                    <span class="dept-icon">🏎️</span>
+                    <h4>Automotive Engineering (AUTO)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('mct_robotics')">
+                    <span class="dept-icon">🤖</span>
+                    <h4>Mechatronics & Robotics (MCTR)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('arc_arch')">
+                    <span class="dept-icon">🏛️</span>
+                    <h4>Architecture (ARCH)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('arc_bt')">
+                    <span class="dept-icon">🏗️</span>
+                    <h4>Building Technology (BT)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('arc_ud')">
+                    <span class="dept-icon">🏙️</span>
+                    <h4>Urban Design (UD)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('epm_power')">
+                    <span class="dept-icon">⚡</span>
+                    <h4>Electrical Power (EPME)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('ece_comm')">
+                    <span class="dept-icon">📡</span>
+                    <h4>Electronics & Comm (ECE)</h4>
+                </div>
+                <div class="dept-card" onclick="loadASUProgram('cse_systems')">
+                    <span class="dept-icon">💻</span>
+                    <h4>Computer & Systems (CSE)</h4>
+                </div>
+            </div>
+        </div>
         <div id="semesters-container"></div>
 
         <button type="button" class="btn-add-semester" onclick="addSemester()">+ Add New Semester</button>
@@ -3079,38 +3260,37 @@
         document.getElementById('theme-text').innerText = 'Light Mode';
         }
         }
-function selectUniversity(uniKey) {
-    // 1. نشل التفعيل من كل الكروت القديمة
-    document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
-    
-    // 2. نحدد الكارت المختار ونفصله وننزل الشاشة عنده تلقائياً (Scroll)
-    const selectedCard = document.getElementById(`card-${uniKey}`);
-    if (selectedCard) {
+        function selectUniversity(uniKey) {
+        // 1. إزالة حالة التفعيل من جميع كروت الجامعات
+        document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
+
+        // 2. تفعيل كارت الجامعة المختارة وعمل Scroll سلس إليها
+        const selectedCard = document.getElementById(`card-${uniKey}`);
+        if (selectedCard) {
         selectedCard.classList.add('active');
-        // السطر ده هو اللي بياخد الصفحة وينزل بيها لكارت الجامعة فوراً
         selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+        }
 
-    // 3. نخفي كل قوائم الأقسام التانية
-    const allWrappers = document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]');
-    allWrappers.forEach(w => w.style.display = 'none');
+        // 3. إخفاء جميع قوائم الأقسام
+        const allWrappers = document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]');
+        allWrappers.forEach(w => w.style.display = 'none');
 
-    // 4. نظهر أقسام الجامعة المختارة
-    const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
-    if (targetWrapper) {
+        // 4. إظهار أقسام الجامعة المطلوبة إن وجدت أو فتح المودال
+        const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
+        if (targetWrapper) {
         targetWrapper.style.display = 'block';
-    } else {
+        } else {
         showCustomModal({
-            title: 'Coming Soon!',
-            icon: '🔒',
-            message: 'Send your university roadmap PDF to add it instantly:',
-            subtext: '<a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" style="color:#38bdf8; font-weight:bold;">mohamed.abdefattah07@eng-st.cu.edu.eg</a>',
-            confirmText: 'Got It',
-            showCancel: false,
-            isWarning: false
+        title: 'Coming Soon!',
+        icon: '🔒',
+        message: 'Send your university roadmap PDF to add it instantly:',
+        subtext: '<a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" style="color:#38bdf8; font-weight:bold;">mohamed.abdefattah07@eng-st.cu.edu.eg</a>',
+        confirmText: 'Got It',
+        showCancel: false,
+        isWarning: false
         });
-    }
-}
+        }
+        }
 
         // دالة اختيار القسم
         function selectDepartment(deptKey, evt) {
@@ -3295,72 +3475,72 @@ function selectUniversity(uniKey) {
         }
         }
 
-     // Generic Smart Custom Modal Trigger
-function showCustomModal({ title, icon, message, subtext, depList = [], confirmText = 'Got It', showCancel = false, isWarning = false, onConfirm = null }) {
-    const modal = document.getElementById('custom-alert-modal');
-    const titleEl = document.getElementById('modal-title');
-    const iconEl = document.getElementById('modal-icon');
-    const msgEl = document.getElementById('modal-prereq-msg');
-    const listEl = document.getElementById('modal-dep-list');
-    const subtextEl = document.getElementById('modal-subtext');
-    const btnCancel = document.getElementById('modal-btn-cancel');
-    const btnConfirm = document.getElementById('modal-btn-confirm');
+        // Generic Smart Custom Modal Trigger
+        function showCustomModal({ title, icon, message, subtext, depList = [], confirmText = 'Got It', showCancel = false, isWarning = false, onConfirm = null }) {
+        const modal = document.getElementById('custom-alert-modal');
+        const titleEl = document.getElementById('modal-title');
+        const iconEl = document.getElementById('modal-icon');
+        const msgEl = document.getElementById('modal-prereq-msg');
+        const listEl = document.getElementById('modal-dep-list');
+        const subtextEl = document.getElementById('modal-subtext');
+        const btnCancel = document.getElementById('modal-btn-cancel');
+        const btnConfirm = document.getElementById('modal-btn-confirm');
 
-    if (!modal) return;
+        if (!modal) return;
 
-    // 1. Reset Text Content
-    titleEl.innerText = title || 'Notification';
-    iconEl.innerText = icon || 'ℹ️';
-    msgEl.innerHTML = message || '';
-    
-    // 2. Dependent Courses List
-    if (depList && depList.length > 0) {
+        // 1. Reset Text Content
+        titleEl.innerText = title || 'Notification';
+        iconEl.innerText = icon || 'ℹ️';
+        msgEl.innerHTML = message || '';
+
+        // 2. Dependent Courses List
+        if (depList && depList.length > 0) {
         listEl.style.display = 'block';
         listEl.innerHTML = depList.map(d => `• [${d.code}] ${d.name} (${d.semName})`).join('<br>');
-    } else {
+        } else {
         listEl.style.display = 'none';
         listEl.innerHTML = '';
-    }
+        }
 
-    // 3. Subtext Control
-    if (subtext) {
+        // 3. Subtext Control
+        if (subtext) {
         subtextEl.style.display = 'block';
         subtextEl.innerHTML = subtext;
-    } else {
+        } else {
         subtextEl.style.display = 'none';
         subtextEl.innerHTML = '';
-    }
+        }
 
-    btnConfirm.innerText = confirmText;
-    btnCancel.style.display = showCancel ? 'inline-block' : 'none';
+        btnConfirm.innerText = confirmText;
+        btnCancel.style.display = showCancel ? 'inline-block' : 'none';
 
-    // 4. Styling based on Modal Type
-if (isWarning) {
+        // 4. Styling based on Modal Type
+        if (isWarning) {
         btnConfirm.style.background = '#ef4444';
         btnConfirm.style.boxShadow = '0 4px 14px rgba(239, 68, 68, 0.4)';
         iconEl.style.borderColor = 'rgba(239, 68, 68, 0.4)';
         iconEl.style.background = 'rgba(239, 68, 68, 0.15)';
-    } else {
+        } else {
         btnConfirm.style.background = '#0284c7';
         btnConfirm.style.boxShadow = '0 4px 14px rgba(56, 189, 248, 0.4)';
         iconEl.style.borderColor = 'rgba(56, 189, 248, 0.4)';
         iconEl.style.background = 'rgba(56, 189, 248, 0.15)';
-    }
+        }
 
-    modal.classList.add('active');
+        modal.classList.add('active');
 
-    const closeModal = () => modal.classList.remove('active');
+        const closeModal = () => modal.classList.remove('active');
 
-    btnCancel.onclick = () => closeModal();
-    btnConfirm.onclick = () => {
+        btnCancel.onclick = () => closeModal();
+        btnConfirm.onclick = () => {
         closeModal();
         if (typeof onConfirm === 'function') onConfirm();
-    };
-}
+        };
+        }
 
-// Wrapper for Prerequisite Deletion Warning
-function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
-    showCustomModal({
+        // Wrapper for Prerequisite Deletion Warning
+        function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
+        showCustomModal({
         title: 'Prerequisite Warning',
         icon: '⚠️',
         message: `The course <strong>[${targetCourse.code}] ${targetCourse.name}</strong> is a prerequisite for:`,
@@ -3370,8 +3550,8 @@ function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
         showCancel: true,
         isWarning: true,
         onConfirm: onConfirm
-    });
-}
+        });
+        }
 
         // Wrapper for Prerequisite Deletion Warning
         function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
@@ -3530,6 +3710,1252 @@ function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
 
         // تشغيل التحويل فور تحميل الصفحة
         document.addEventListener("DOMContentLoaded", parseiOSEmojis);
+        // ==========================================
+        // ASU Programs Data & Loader System
+        // ==========================================
+        const asuProgramsData = {
+        'mdp_dpe': {
+        name: 'Design and Production Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'MEP211', name: 'Thermal Physics', ch: 4 },
+        { code: 'MDP212', name: 'Mechanics of Materials', ch: 3 },
+        { code: 'MDP211', name: 'Machine Construction', ch: 3 },
+        { code: 'MDP201', name: 'Manufacturing Technology', ch: 4 },
+        { code: 'MDP251', name: 'Structure and Properties of Materials', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'MDP213', name: 'Mechanics of Machines', ch: 4 },
+        { code: 'MEP212', name: 'Fluid Mechanics', ch: 4 },
+        { code: 'EPM214', name: 'Electrical Circuits and Machines', ch: 4 },
+        { code: 'MDP252', name: 'Metallurgy and Material Testing', ch: 3 },
+        { code: 'CSE232', name: 'Fundamentals of Computer Programming', ch: 2 },
+        { code: 'ASUx3_2', name: 'ASU Elective (3)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'MDP312', name: 'Mechanical Vibrations', ch: 3 },
+        { code: 'ECE312', name: 'Introduction to Electronics', ch: 2 },
+        { code: 'MDP311', name: 'Machine Elements Design', ch: 4 },
+        { code: 'MCT331', name: 'Mechatronic Systems Integration', ch: 2 },
+        { code: 'MEP311', name: 'Heat Transfer', ch: 4 },
+        { code: 'MDP_E1', name: 'Measurements and Sensors Elective Course', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'MDP302', name: 'Theory of Metal Forming and Cutting', ch: 4 },
+        { code: 'MDP331', name: 'Operations Research', ch: 2 },
+        { code: 'MDP313', name: 'Mechanical System Design', ch: 3 },
+        { code: 'MDPE1', name: 'MDPE Elective (1)', ch: 2 },
+        { code: 'MCT411', name: 'Hydraulics and Pneumatics Control', ch: 2 },
+        { code: 'MDP_E2', name: 'General Mechanics Elective Course', ch: 3 },
+        { code: 'MDP391', name: 'Graduation Project (1) MDP', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'MDP431', name: 'Operations Management', ch: 4 },
+        { code: 'MDP435', name: 'Work Study and Ergonomics', ch: 2 },
+        { code: 'MDP406', name: 'Metal Cutting Machines and Technology', ch: 4 },
+        { code: 'MDPE2', name: 'MDPE Elective (2)', ch: 3 },
+        { code: 'MDP491', name: 'Graduation Project (2) MDP', ch: 2 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'MDP492', name: 'Graduation Project (3) MDP', ch: 3 },
+        { code: 'MDP471', name: 'Quality Control', ch: 3 },
+        { code: 'MDP451', name: 'Design of Tools and Production Facilities', ch: 2 },
+        { code: 'MDP404', name: 'Materials Processing', ch: 2 },
+        { code: 'MDPE3', name: 'MDPE Elective (3)', ch: 3 },
+        { code: 'MDP_E3', name: 'Mechanical Control Elective Course', ch: 3 },
+        { code: 'MDP432', name: 'Engineering Economy', ch: 2 }
+        ]
+        }
+        ]
+        },
+        'mep_mpe': {
+        name: 'Mechanical Power Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'MEP211', name: 'Thermal Physics', ch: 4 },
+        { code: 'MDP212', name: 'Mechanics of Materials', ch: 3 },
+        { code: 'MDP211', name: 'Machine Construction', ch: 3 },
+        { code: 'MDP201', name: 'Manufacturing Technology', ch: 4 },
+        { code: 'MDP251', name: 'Structure and Properties of Materials', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'MEP213', name: 'Mechanics of Machines', ch: 4 },
+        { code: 'MEP212', name: 'Fluid Mechanics', ch: 4 },
+        { code: 'EPM214', name: 'Electrical Circuits and Machines', ch: 4 },
+        { code: 'MDP252', name: 'Metallurgy and Material Testing', ch: 3 },
+        { code: 'CSE232', name: 'Fundamentals of Computer Programming', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'MDP312', name: 'Mechanical Vibrations', ch: 3 },
+        { code: 'ECE312', name: 'Introduction to Electronics', ch: 2 },
+        { code: 'MDP311', name: 'Machine Elements Design', ch: 4 },
+        { code: 'MCT331', name: 'Mechatronic Systems Integration', ch: 2 },
+        { code: 'MEP311', name: 'Heat Transfer', ch: 4 },
+        { code: 'MEP_E1', name: 'Measurements and Sensors Elective Course', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'MEP312', name: 'Combustion', ch: 3 },
+        { code: 'MEP321', name: 'Incompressible Fluid Machines', ch: 3 },
+        { code: 'MEP331', name: 'Automatic Control', ch: 3 },
+        { code: 'MEP313', name: 'Applied Thermodynamics', ch: 3 },
+        { code: 'MCT411', name: 'Hydraulics and Pneumatics Control', ch: 2 },
+        { code: 'MEP391', name: 'Graduation Project (1) MEPE', ch: 1 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'MEP411', name: 'Thermal Power Plants', ch: 3 },
+        { code: 'MEP421', name: 'Compressible Fluid Machines', ch: 3 },
+        { code: 'MEP412', name: 'Internal Combustion Engines', ch: 3 },
+        { code: 'MEPE1', name: 'MEPE Elective (1)', ch: 3 },
+        { code: 'MEP491', name: 'Graduation Project (2) MEPE', ch: 2 },
+        { code: 'MEP431', name: 'Refrigeration', ch: 3 },
+        { code: 'MEP441', name: 'Project Management and Engineering Economy', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'MEPE2', name: 'MEPE Elective (2)', ch: 3 },
+        { code: 'MEP432', name: 'Fundamentals of Computational Fluid Dynamics', ch: 3 },
+        { code: 'MEP421_S', name: 'Sustainable Energy Systems and Technology', ch: 4 },
+        { code: 'MEP433', name: 'Air Conditioning', ch: 3 },
+        { code: 'MEP492', name: 'Graduation Project (3) MEPE', ch: 3 },
+        { code: 'MEP434', name: 'Digital and Process Control', ch: 4 }
+        ]
+        }
+        ]
+        },
+        'mea_auto': {
+        name: 'Automotive Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'MEP211', name: 'Thermal Physics', ch: 4 },
+        { code: 'MDP212', name: 'Mechanics of Materials', ch: 2 },
+        { code: 'MDP211', name: 'Machine Construction', ch: 3 },
+        { code: 'MDP201', name: 'Manufacturing Technology', ch: 4 },
+        { code: 'MDP251', name: 'Structure and Properties of Materials', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'MDP213', name: 'Mechanics of Machines', ch: 4 },
+        { code: 'MEP212', name: 'Fluid Mechanics', ch: 4 },
+        { code: 'EPM214', name: 'Electrical Circuits and Machines', ch: 4 },
+        { code: 'MDP252', name: 'Metallurgy and Material Testing', ch: 3 },
+        { code: 'CSE232', name: 'Fundamentals of Computer Programming', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'MDP312', name: 'Mechanical Vibrations', ch: 3 },
+        { code: 'ECE312', name: 'Introduction to Electronics', ch: 2 },
+        { code: 'MDP311', name: 'Machine Elements Design', ch: 4 },
+        { code: 'MCT331', name: 'Mechatronic Systems Integration', ch: 2 },
+        { code: 'MEP311', name: 'Heat Transfer', ch: 4 },
+        { code: 'MEA_E1', name: 'Measurements and Sensors Elective Course', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'MEA_E2', name: 'Mechanical Control Elective Course', ch: 3 },
+        { code: 'MEA341', name: 'Automotive Engines and Fuel Systems', ch: 4 },
+        { code: 'MEA321', name: 'Vehicle Design and Simulation (1)', ch: 2 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 },
+        { code: 'MCT411', name: 'Hydraulics and Pneumatics Control', ch: 2 },
+        { code: 'MEA311', name: 'Automotive Engineering', ch: 3 },
+        { code: 'MEA391', name: 'Graduation Project (1) AUTO', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'MEA412', name: 'Road Vehicle Dynamics', ch: 3 },
+        { code: 'AUTO_E1', name: 'AUTO Elective (1)', ch: 3 },
+        { code: 'MEA421', name: 'Vehicle Design and Simulation (2)', ch: 3 },
+        { code: 'MEA401', name: 'Automotive Maintenance Engineering', ch: 3 },
+        { code: 'MEA491', name: 'Graduation Project (2) AUTO', ch: 2 },
+        { code: 'MEA411', name: 'Electric Vehicles Technology', ch: 3 },
+        { code: 'AUTO_E2', name: 'AUTO Elective (2)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'MEA492', name: 'Graduation Project (3) AUTO', ch: 3 },
+        { code: 'MEA431', name: 'Automotive Mechatronics Systems', ch: 3 },
+        { code: 'AUTO_E3', name: 'AUTO Elective (3)', ch: 2 },
+        { code: 'MEA402', name: 'Vehicle Safety Systems and Accident Analysis', ch: 3 },
+        { code: 'MEA403', name: 'Automotive After Sales Services', ch: 2 },
+        { code: 'MEA442', name: 'Computer-Aided Design of Automotive Engines', ch: 3 },
+        { code: 'MEA432', name: 'Project Management for Mechanical Engineering', ch: 3 }
+        ]
+        }
+        ]
+        },
+        'mct_robotics': {
+        name: 'Mechatronics and Robotics Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'MEP211', name: 'Thermal Physics', ch: 4 },
+        { code: 'MDP212', name: 'Mechanics of Materials', ch: 2 },
+        { code: 'MDP211', name: 'Machine Construction', ch: 3 },
+        { code: 'MDP201', name: 'Manufacturing Technology', ch: 4 },
+        { code: 'MDP251', name: 'Structure and Properties of Materials', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'MDP213', name: 'Mechanics of Machines', ch: 4 },
+        { code: 'MEP212', name: 'Fluid Mechanics', ch: 4 },
+        { code: 'EPM214', name: 'Electrical Circuits and Machines', ch: 4 },
+        { code: 'MDP252', name: 'Metallurgy and Material Testing', ch: 3 },
+        { code: 'CSE232', name: 'Fundamentals of Computer Programming', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'MDP312', name: 'Mechanical Vibrations', ch: 3 },
+        { code: 'ECE312', name: 'Introduction to Electronics', ch: 2 },
+        { code: 'MDP311', name: 'Machine Elements Design', ch: 4 },
+        { code: 'MCT331', name: 'Mechatronic Systems Integration', ch: 2 },
+        { code: 'CSE201', name: 'Signals and Systems Fundamentals', ch: 3 },
+        { code: 'CSE235', name: 'Advanced Programming', ch: 2 },
+        { code: 'MCT_E1', name: 'Measurements and Sensors Elective Course', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'MCT342', name: 'Industrial Robotics', ch: 3 },
+        { code: 'MCT344', name: 'Mechatronic Systems Design', ch: 3 },
+        { code: 'ECE313', name: 'Electronics for Instrumentation', ch: 2 },
+        { code: 'MEP311', name: 'Heat Transfer', ch: 4 },
+        { code: 'CSE311', name: 'Logic Circuits', ch: 3 },
+        { code: 'MCT371', name: 'Control Systems Design (1)', ch: 3 },
+        { code: 'MCT391', name: 'Graduation Project (1) MCTR', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'MCT411', name: 'Hydraulics and Pneumatics Control', ch: 2 },
+        { code: 'MCT412', name: 'Industrial Automation and Networks', ch: 3 },
+        { code: 'EPM444', name: 'Power Electronics and Electrical Drive Systems', ch: 4 },
+        { code: 'CSE412', name: 'Embedded Systems', ch: 3 },
+        { code: 'MCT491', name: 'Graduation Project (2) MCTR', ch: 2 },
+        { code: 'CSE476', name: 'Machine Vision', ch: 3 },
+        { code: 'MCT413', name: 'Control Systems Design (2)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'MCT_E2', name: 'General Mechanics Elective Course', ch: 3 },
+        { code: 'MDP332', name: 'Industrial Project Management', ch: 2 },
+        { code: 'MCTR1', name: 'MCTR Elective (1)', ch: 3 },
+        { code: 'MCTR2', name: 'MCTR Elective (2)', ch: 3 },
+        { code: 'MCT492', name: 'Graduation Project (3) MCTR', ch: 3 },
+        { code: 'CSE474', name: 'Fundamentals of Artificial Intelligence', ch: 2 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 }
+        ]
+        }
+        ]
+        },
+        'arc_arch': {
+        name: 'Architectural Engineering Program - Architecture Concentration',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'ARC212', name: 'Principles of Visual Design and Design Methods', ch: 3 },
+        { code: 'ARC211', name: 'Principles of Architectural Design Studio', ch: 3 },
+        { code: 'ARC261', name: 'Visual Communication in Architecture', ch: 3 },
+        { code: 'CEP215', name: 'Structural Analysis for Architects', ch: 2 },
+        { code: 'ARC251', name: 'Building (1): Conventional Construction Systems', ch: 3 },
+        { code: 'CES263', name: 'Soil Mechanics and Properties of Construction Materials', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'ARC213', name: 'Creativity Design Studio', ch: 3 },
+        { code: 'ARC231', name: 'History of Arts and Architecture (1) Ancient Civilizations', ch: 2 },
+        { code: 'ARC262', name: 'Modeling of the Built Environment', ch: 2 },
+        { code: 'ARC252', name: 'Building (2): Finishing Works', ch: 3 },
+        { code: 'CEP213', name: 'Surveying and Site Visibility', ch: 2 },
+        { code: 'UPL211', name: 'Principles of Urban Design and Landscape', ch: 3 },
+        { code: 'ARCH1', name: 'ARCH Elective (1)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'ARC311', name: 'Building Type and Legislations Design Studio', ch: 3 },
+        { code: 'ARC331', name: 'History of Arts and Architecture (2) Islamic and Western Architecture', ch: 2 },
+        { code: 'UPL311', name: 'Context and Place Design Studio', ch: 3 },
+        { code: 'CES355', name: 'Concrete and Steel Structures', ch: 2 },
+        { code: 'ARC351', name: 'Building (3): Advanced Construction and Working Drawing Standards', ch: 3 },
+        { code: 'MEP341', name: 'Technical Installations', ch: 2 },
+        { code: 'ARCH2', name: 'ARCH Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'ARC312', name: 'Architectural Technology Design Studio', ch: 3 },
+        { code: 'ARC301', name: 'Daylighting and Control of Thermal Environment', ch: 3 },
+        { code: 'UPL312', name: 'Urban and Landscape Design Studio', ch: 3 },
+        { code: 'ARC371', name: 'Architectural Projects Management and Economics', ch: 2 },
+        { code: 'ARC352', name: 'Working Design (1): Systems Coordination and Building', ch: 3 },
+        { code: 'UPL321', name: 'History and Theory of Urbanism', ch: 2 },
+        { code: 'ARC391', name: 'Graduation Project (1) ARCH', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'ARC412', name: 'Thematic Design Studio', ch: 3 },
+        { code: 'ARC421', name: 'Theory and Philosophy of Contemporary Architecture', ch: 2 },
+        { code: 'ARC411', name: 'Architecture and Dwelling Studio', ch: 3 },
+        { code: 'ARC451', name: 'Interior Design and Technical Drawings Studio', ch: 4 },
+        { code: 'ARCH1_AD', name: 'ARCH Elective (1) AD and ST', ch: 2 },
+        { code: 'ARC491', name: 'Graduation Project (2) ARCH AD and ST', ch: 3 },
+        { code: 'ASUx01', name: 'Dissertation-Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'ARC401', name: 'Acoustics in Architecture', ch: 2 },
+        { code: 'ARC402', name: 'Human Aspects in Architecture', ch: 2 },
+        { code: 'ARC461', name: 'Computational Design in Architecture', ch: 3 },
+        { code: 'ARCH2_AD', name: 'ARCH Elective (2) AD and ST', ch: 3 },
+        { code: 'ARCH3_AD', name: 'ARCH Elective (3) AD and ST', ch: 2 },
+        { code: 'ARC492', name: 'Graduation Project (3) ARCH AD and ST', ch: 3 }
+        ]
+        }
+        ]
+        },
+        'arc_bt': {
+        name: 'Architectural Engineering Program – Building Technology Concentration',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'ARC212', name: 'Principles of Visual Design and Design Methods', ch: 3 },
+        { code: 'ARC211', name: 'Principles of Architectural Design Studio', ch: 3 },
+        { code: 'ARC261', name: 'Visual Communication in Architecture', ch: 3 },
+        { code: 'CEP215', name: 'Structural Analysis for Architects', ch: 2 },
+        { code: 'ARC251', name: 'Building (1): Conventional Construction Systems', ch: 3 },
+        { code: 'CES263', name: 'Soil Mechanics and Properties of Construction Materials', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'ARC213', name: 'Creativity Design Studio', ch: 3 },
+        { code: 'ARC231', name: 'History of Arts and Architecture (1) Ancient Civilizations', ch: 2 },
+        { code: 'ARC262', name: 'Modeling of the Built Environment', ch: 2 },
+        { code: 'ARC252', name: 'Building (2): Finishing Works', ch: 3 },
+        { code: 'CEP213', name: 'Surveying and Site Visibility', ch: 2 },
+        { code: 'UPL211', name: 'Principles of Urban Design and Landscape', ch: 3 },
+        { code: 'ARCH1', name: 'ARCH Elective (1)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'ARC311', name: 'Building Type and Legislations Design Studio', ch: 3 },
+        { code: 'ARC331', name: 'History of Arts and Architecture (2) Islamic and Western Architecture', ch: 2 },
+        { code: 'UPL311', name: 'Context and Place Design Studio', ch: 3 },
+        { code: 'CES355', name: 'Concrete and Steel Structures', ch: 2 },
+        { code: 'ARC351', name: 'Building (3): Advanced Construction and Working Drawing Standards', ch: 3 },
+        { code: 'MEP341', name: 'Technical Installations', ch: 2 },
+        { code: 'ARCH2', name: 'ARCH Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'ARC312', name: 'Architectural Technology Design Studio', ch: 3 },
+        { code: 'ARC301', name: 'Daylighting and Control of Thermal Environment', ch: 3 },
+        { code: 'UPL312', name: 'Urban and Landscape Design Studio', ch: 3 },
+        { code: 'ARC371', name: 'Architectural Projects Management and Economics', ch: 2 },
+        { code: 'ARC352', name: 'Working Design (1): Systems Coordination and Building', ch: 3 },
+        { code: 'UPL321', name: 'History and Theory of Urbanism', ch: 2 },
+        { code: 'ARC391', name: 'Graduation Project (1) ARCH', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'ARC413', name: 'Architectural Sustainable Rehabilitation', ch: 4 },
+        { code: 'ARC421', name: 'Theory and Philosophy of Contemporary Architecture', ch: 2 },
+        { code: 'ARC452', name: 'Working Design (2): Bids Specs Detailing and BOQs', ch: 3 },
+        { code: 'ARC453', name: 'Advanced Technical Installation', ch: 2 },
+        { code: 'ARCH1_BT', name: 'ARCH Elective (1) AD and BT', ch: 2 },
+        { code: 'ARC491_BT', name: 'Graduation Project (2) ARCH AD and BT', ch: 3 },
+        { code: 'ASUx01', name: 'Dissertation-Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'ARC401', name: 'Acoustics in Architecture', ch: 2 },
+        { code: 'ARC431', name: 'Principles of Residential Development', ch: 2 },
+        { code: 'ARC463', name: 'Building Performance Simulation', ch: 3 },
+        { code: 'ARCH2_BT', name: 'ARCH Elective (2) AD and BT', ch: 3 },
+        { code: 'ARCH3_BT', name: 'ARCH Elective (3) AD and BT', ch: 3 },
+        { code: 'ARC492_BT', name: 'Graduation Project (3) ARCH AD and BT', ch: 3 }
+        ]
+        }
+        ]
+        },
+        'arc_ud': {
+        name: 'Architectural Engineering Program – Urban Design Concentration',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'ARC212', name: 'Principles of Visual Design and Design Methods', ch: 3 },
+        { code: 'ARC211', name: 'Principles of Architectural Design Studio', ch: 3 },
+        { code: 'ARC261', name: 'Visual Communication in Architecture', ch: 3 },
+        { code: 'CEP213', name: 'Structural Analysis for Architects', ch: 2 },
+        { code: 'ARC251', name: 'Building (1): Conventional Construction Systems', ch: 3 },
+        { code: 'CES263', name: 'Soil Mechanics and Properties of Construction Materials', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'ARC213', name: 'Creativity Design Studio', ch: 3 },
+        { code: 'ARC231', name: 'History of Arts and Architecture (1) Ancient Civilizations', ch: 2 },
+        { code: 'ARC262', name: 'Modeling of the Built Environment', ch: 2 },
+        { code: 'ARC252', name: 'Building (2): Finishing Works', ch: 3 },
+        { code: 'CEP213_S', name: 'Surveying and Site Visibility', ch: 2 },
+        { code: 'UPL211', name: 'Principles of Urban Design and Landscape', ch: 3 },
+        { code: 'ARCH1', name: 'ARCH Elective (1)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'ARC311', name: 'Building Type and Legislations Design Studio', ch: 3 },
+        { code: 'ARC331', name: 'History of Arts and Architecture (2) Islamic and Western Architecture', ch: 2 },
+        { code: 'UPL311', name: 'Context and Place Design Studio', ch: 3 },
+        { code: 'CES355', name: 'Concrete and Steel Structures', ch: 2 },
+        { code: 'ARC351', name: 'Building (3): Advanced Construction and Working Drawing Standards', ch: 3 },
+        { code: 'MEP341', name: 'Technical Installations', ch: 2 },
+        { code: 'ARCH2', name: 'ARCH Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'ARC312', name: 'Architectural Technology Design Studio', ch: 3 },
+        { code: 'ARC301', name: 'Daylighting and Control of Thermal Environment', ch: 3 },
+        { code: 'UPL312', name: 'Urban and Landscape Design Studio', ch: 3 },
+        { code: 'ARC371', name: 'Architectural Projects Management and Economics', ch: 2 },
+        { code: 'ARC352', name: 'Working Design (1): Systems Coordination and Building', ch: 3 },
+        { code: 'UPL321', name: 'History and Theory of Urbanism', ch: 2 },
+        { code: 'ARC391', name: 'Graduation Project (1) ARCH', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'UPL411', name: 'Urban Design Studio (3)', ch: 4 },
+        { code: 'UPL451', name: 'Housing Neighborhood Design Studio', ch: 3 },
+        { code: 'UPL402', name: 'Contemporary Environmental Issues', ch: 2 },
+        { code: 'UPL471', name: 'Urban Economics', ch: 2 },
+        { code: 'UPL421', name: 'Theories and Approaches in Landscape Design', ch: 2 },
+        { code: 'UPL491', name: 'Graduation Project (2) ARCH UD', ch: 3 },
+        { code: 'ASUx01', name: 'Dissertation-Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'UPL432', name: 'Urban and Architectural Heritage', ch: 3 },
+        { code: 'UPL492', name: 'Graduation Project (3) ARCH UD', ch: 3 },
+        { code: 'ARCH1_UD', name: 'ARCH Elective (1) UD & UP', ch: 2 },
+        { code: 'ARCH2_UD', name: 'ARCH Elective (2) UD & UP', ch: 3 },
+        { code: 'ARCH3_UD', name: 'ARCH Elective (3) UD', ch: 2 },
+        { code: 'ARCH4_UD', name: 'ARCH Elective (4) UD', ch: 3 }
+        ]
+        }
+        ]
+        },
+        'epm_power': {
+        name: 'Electrical Power and Machines Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'PHM221', name: 'Quantum Physics', ch: 3 },
+        { code: 'EPM211', name: 'Electric Circuits (1)', ch: 3 },
+        { code: 'EPM212', name: 'Electromagnetic Fields', ch: 3 },
+        { code: 'CSE211', name: 'Logic Design', ch: 3 },
+        { code: 'CSE231', name: 'Computer Programming', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'ECE251', name: 'Signals and Systems Fundamentals', ch: 3 },
+        { code: 'PHM224', name: 'Physics of Semiconductors and Dielectrics', ch: 3 },
+        { code: 'EPM213', name: 'Electrical Measurements', ch: 3 },
+        { code: 'EPM221', name: 'Energy Conversion and Renewable Energy', ch: 3 },
+        { code: 'ECE211', name: 'Electronics', ch: 3 },
+        { code: 'CSE271', name: 'System Dynamics and Control Components', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'EPM311', name: 'Electric Circuits (2)', ch: 3 },
+        { code: 'EPM331', name: 'Electrical Power Transmission Systems', ch: 3 },
+        { code: 'EPM321', name: 'Electrical Machines (1)', ch: 3 },
+        { code: 'EPM341', name: 'High Voltage Engineering', ch: 3 },
+        { code: 'EPM351', name: 'Power Electronics (1)', ch: 3 },
+        { code: 'EPM_E1', name: 'Elective Course for Control', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'EPM333', name: 'Electrical Distribution Networks', ch: 3 },
+        { code: 'EPM332', name: 'Power Systems Analysis (1)', ch: 3 },
+        { code: 'EPM322', name: 'Electrical Machines (2)', ch: 3 },
+        { code: 'EPM342', name: 'Switchgear and Substation Engineering', ch: 3 },
+        { code: 'EPM352', name: 'Power Electronics (2)', ch: 3 },
+        { code: 'EPM_E2', name: 'Elec. Elective Course for Project Management', ch: 2 },
+        { code: 'EPME391', name: 'EPME Graduation Project (1)', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'EPM431', name: 'Operation and Control of Power Systems', ch: 3 },
+        { code: 'EPM434', name: 'Power Systems Analysis (2)', ch: 3 },
+        { code: 'EPM421', name: 'Electrical Drives', ch: 3 },
+        { code: 'EPM441', name: 'Power Systems Protection', ch: 2 },
+        { code: 'EPM_E3', name: 'Elective Course for Embedded Systems', ch: 2 },
+        { code: 'EPM491', name: 'EPME Graduation Project (2)', ch: 2 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'EPM432', name: 'Electrical Energy Utilization', ch: 3 },
+        { code: 'EPM_E4', name: 'Elective Course for Automation and Organization', ch: 3 },
+        { code: 'EPM_E5', name: 'Elective Course for Advanced Mathematics', ch: 3 },
+        { code: 'EPM442', name: 'Digital Protection', ch: 3 },
+        { code: 'EPME1', name: 'EPME Elective (1)', ch: 2 },
+        { code: 'EPME2', name: 'EPME Elective (2)', ch: 3 },
+        { code: 'EPM492', name: 'EPME Graduation Project (3)', ch: 3 }
+        ]
+        }
+        ]
+        },
+        'ece_comm': {
+        name: 'Electronics and Communication Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'PHM221', name: 'Quantum Physics', ch: 2 },
+        { code: 'EPM211', name: 'Electric Circuits (1)', ch: 3 },
+        { code: 'EPM212', name: 'Electromagnetic Fields', ch: 3 },
+        { code: 'CSE211', name: 'Logic Design', ch: 3 },
+        { code: 'CSE231', name: 'Computer Programming', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'PHM224', name: 'Physics of Semiconductors and Dielectrics', ch: 3 },
+        { code: 'EPM213', name: 'Electrical Measurements', ch: 3 },
+        { code: 'ECE211', name: 'Electronics', ch: 3 },
+        { code: 'EPM221', name: 'Energy Conversion and Renewable Energy', ch: 3 },
+        { code: 'ECE251', name: 'Signals and Systems Fundamentals', ch: 3 },
+        { code: 'CSE271', name: 'System Dynamics and Control Components', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'ECE301', name: 'Fundamentals of Electromagnetics', ch: 3 },
+        { code: 'ECE311', name: 'Digital Circuits', ch: 3 },
+        { code: 'ECE351', name: 'Fundamentals of Communication Systems', ch: 3 },
+        { code: 'PHM312', name: 'Complex Variables, Special Functions and Partial Differential Equations', ch: 3 },
+        { code: 'ECE_E1', name: 'Elec. Elective Course for Control', ch: 3 },
+        { code: 'CSE312', name: 'Computer Organization', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'ECE302', name: 'Waveguide Theory', ch: 3 },
+        { code: 'ECE312', name: 'Analog Circuits (1)', ch: 3 },
+        { code: 'ECE313', name: 'Optoelectronics', ch: 3 },
+        { code: 'ECE354', name: 'Digital Signal Processing Basics', ch: 2 },
+        { code: 'ECE352', name: 'Analog and Digital Communication Systems', ch: 3 },
+        { code: 'ECE353', name: 'Telecommunication Networks', ch: 3 },
+        { code: 'ECE391', name: 'ELCE Graduation Project (1)', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'ECE411', name: 'Analog Circuits (2)', ch: 3 },
+        { code: 'ECE401', name: 'Microwave Circuits', ch: 3 },
+        { code: 'ECE414', name: 'Advanced Semiconductor Devices', ch: 2 },
+        { code: 'ECE451', name: 'Wireless Communication Networks', ch: 3 },
+        { code: 'ECE491', name: 'ELCE Graduation Project (2)', ch: 2 },
+        { code: 'ECE_E2', name: 'Elective Course for Embedded Systems', ch: 2 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'ELCE1', name: 'ELCE Elective (1)', ch: 3 },
+        { code: 'ELCE2', name: 'ELCE Elective (2)', ch: 3 },
+        { code: 'ECE402', name: 'Antenna Theory', ch: 2 },
+        { code: 'ECE_E3', name: 'Elec. Elective Course for Project Management', ch: 2 },
+        { code: 'ELCE3', name: 'ELCE Elective (3)', ch: 2 },
+        { code: 'ELCE4', name: 'ELCE Elective (4)', ch: 3 },
+        { code: 'ECE492', name: 'ELCE Graduation Project (3)', ch: 3 }
+        ]
+        }
+        ]
+        },
+        'cse_systems': {
+        name: 'Computer and Systems Engineering Program',
+        semesters: [
+        {
+        name: 'Level 1 - Semester 1',
+        courses: [
+        { code: 'PHM111', name: 'Mathematics (1)', ch: 3 },
+        { code: 'PHM121', name: 'Vibration and Waves', ch: 3 },
+        { code: 'PHM131', name: 'Statics', ch: 3 },
+        { code: 'PHM141', name: 'Engineering Chemistry', ch: 3 },
+        { code: 'MDP111', name: 'Engineering Drawing', ch: 3 },
+        { code: 'ASUx1', name: 'ASU Elective (1)', ch: 2 },
+        { code: 'ASUx3', name: 'ASU Elective (3)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 1 - Semester 2',
+        courses: [
+        { code: 'PHM112', name: 'Mathematics (2)', ch: 3 },
+        { code: 'PHM122', name: 'Electricity and Magnetism', ch: 3 },
+        { code: 'PHM132', name: 'Dynamics', ch: 3 },
+        { code: 'PHM113', name: 'Probability and Statistics', ch: 2 },
+        { code: 'MDP101', name: 'Production Engineering', ch: 2 },
+        { code: 'CEP111', name: 'Projection and Engineering Graphics', ch: 2 },
+        { code: 'ASUx4', name: 'ASU Elective (4)', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 3',
+        courses: [
+        { code: 'PHM213', name: 'Differential Equations and Numerical Analysis', ch: 3 },
+        { code: 'PHM221', name: 'Quantum Physics', ch: 2 },
+        { code: 'EPM211', name: 'Electric Circuits (1)', ch: 3 },
+        { code: 'EPM212', name: 'Electromagnetic Fields', ch: 3 },
+        { code: 'CSE211', name: 'Logic Design', ch: 3 },
+        { code: 'CSE231', name: 'Computer Programming', ch: 2 },
+        { code: 'ASUx2', name: 'ASU Elective (2)', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 2 - Semester 4',
+        courses: [
+        { code: 'PHM224', name: 'Physics of Semiconductors and Dielectrics', ch: 3 },
+        { code: 'EPM213', name: 'Electrical Measurements', ch: 3 },
+        { code: 'ECE211', name: 'Electronics', ch: 3 },
+        { code: 'EPM221', name: 'Energy Conversion and Renewable Energy', ch: 2 },
+        { code: 'ECE251', name: 'Signals and Systems Fundamentals', ch: 3 },
+        { code: 'CSE271', name: 'System Dynamics and Control Components', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 5',
+        courses: [
+        { code: 'CSE312', name: 'Computer Organization', ch: 3 },
+        { code: 'CSE331', name: 'Advanced Computer Programming', ch: 3 },
+        { code: 'CSE332', name: 'Software Engineering', ch: 3 },
+        { code: 'CSE371', name: 'Control Engineering', ch: 3 },
+        { code: 'CSE_E1', name: 'Elec. Elective Course for Transmission and Communications', ch: 3 },
+        { code: 'CSE_E2', name: 'Elec. Elective Course for Advanced Mathematics', ch: 3 }
+        ]
+        },
+        {
+        name: 'Level 3 - Semester 6',
+        courses: [
+        { code: 'CSE313', name: 'Computer Architecture', ch: 3 },
+        { code: 'CSE333', name: 'Data Structures and Algorithms', ch: 3 },
+        { code: 'CSE334', name: 'Database Systems', ch: 3 },
+        { code: 'CSE335', name: 'Operating Systems', ch: 3 },
+        { code: 'CSE351', name: 'Computer Networks', ch: 3 },
+        { code: 'CSYE1', name: 'CSYE Elective (1)', ch: 2 },
+        { code: 'CSE391', name: 'CSYE Graduation Project (1)', ch: 1 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 7',
+        courses: [
+        { code: 'CSE411', name: 'Real-Time Embedded Systems Design', ch: 3 },
+        { code: 'CSE431', name: 'Design and Analysis of Algorithms', ch: 3 },
+        { code: 'CSE471', name: 'Artificial Intelligence', ch: 3 },
+        { code: 'CSE472', name: 'Digital Image Processing', ch: 3 },
+        { code: 'CSYE2', name: 'CSYE Elective (2)', ch: 2 },
+        { code: 'CSE491', name: 'CSYE Graduation Project (2)', ch: 2 },
+        { code: 'ASUx01', name: 'Graduation Thesis', ch: 2 }
+        ]
+        },
+        {
+        name: 'Level 4 - Semester 8',
+        courses: [
+        { code: 'CSE412', name: 'Digital Systems Testing and Verification', ch: 3 },
+        { code: 'CSE432', name: 'Parallel and Distributed Systems', ch: 3 },
+        { code: 'CSE452', name: 'Computer and Network Security', ch: 3 },
+        { code: 'CSE_E3', name: 'Elec. Elective Course for Project Management', ch: 2 },
+        { code: 'CSYE3', name: 'CSYE Elective (3)', ch: 2 },
+        { code: 'CSYE4', name: 'CSYE Elective (4)', ch: 3 },
+        { code: 'CSE492', name: 'CSYE Graduation Project (3)', ch: 3 }
+        ]
+        }
+        ]
+        }
+        };
+
+function loadASUProgram(programKey) {
+    const progData = asuProgramsData[programKey];
+    if (!progData) return;
+
+    // تفعيل كارت القسم المختار
+    document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
+    if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+    }
+
+    const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
+    if (!container) return;
+
+    let html = `
+        <div class="program-header" style="margin-bottom: 25px; text-align: center;">
+            <h2 class="program-title" style="font-size: 1.6rem; color: #f8fafc; font-weight: bold; margin-bottom: 5px;">${progData.name}</h2>
+            <p class="program-subtitle" style="color: #38bdf8; font-size: 0.95rem;">Ain Shams University - Credit Hours System</p>
+        </div>
+        <div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">
+    `;
+
+    progData.semesters.forEach((sem, semIdx) => {
+        html += `
+            <div class="semester-box" id="semester-box-${semIdx}" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+                    <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">${sem.name}</h3>
+                    <button class="btn-remove-semester" onclick="removeASUSemester(this)">Remove Semester</button>
+                </div>
+                <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
+        `;
+        
+        sem.courses.forEach(course => {
+            html += `
+                <div class="course-row" id="course-${course.code}" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                    <input type="text" class="course-name-input" value="${course.name} (${course.code})" readonly style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <input type="number" class="course-hours-input" value="${course.ch}" min="1" max="10" placeholder="CH" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
+                    <select class="course-grade-select" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
+                        <option value="">Grade</option>
+                        <option value="4.0">A</option>
+                        <option value="3.7">A-</option>
+                        <option value="3.3">B+</option>
+                        <option value="3.0">B</option>
+                        <option value="2.7">B-</option>
+                        <option value="2.3">C+</option>
+                        <option value="2.0">C</option>
+                        <option value="1.7">C-</option>
+                        <option value="1.3">D+</option>
+                        <option value="1.0">D</option>
+                        <option value="0.0">F</option>
+                    </select>
+                    <button class="btn-remove-course" onclick="handleASUCourseRemoval('${course.code}', '${course.name.replace(/'/g, "\\'")}')" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+
+    container.innerHTML = html;
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+        // ASU Master Prerequisite Tree for Cascade Deletion
+
+        const asuPrerequisites = {
+        // Basic Freshman Chains
+        'PHM111': ['PHM112', 'PHM113'],
+        'PHM121': ['PHM122'],
+        'PHM131': ['PHM132'],
+        'MDP111': ['CEP111'],
+        'PHM112': ['PHM213'],
+        'PHM122': ['MEP211', 'PHM221', 'EPM211', 'EPM212'],
+        'PHM132': ['MDP212', 'MDP211'],
+        'MDP101': ['MDP201', 'CSE211', 'CSE231'],
+
+        // Level 2 -> Level 3 Chains
+        'PHM213': ['MDP213', 'MEP213', 'ECE251', 'PHM224'],
+        'MEP211': ['MEP212'],
+        'MDP212': ['EPM214'],
+        'MDP251': ['MDP252'],
+        'MDP213': ['MDP312'],
+        'MEP213': ['MDP312'],
+        'MEP212': ['ECE312'],
+        'MDP211': ['MDP311'],
+        'MDP252': ['MCT331'],
+        'CSE232': ['MEP311', 'CSE201', 'CSE235'],
+        'PHM221': ['PHM224', 'EPM213'],
+        'EPM211': ['EPM213', 'EPM221', 'ECE211'],
+        'EPM212': ['ECE211', 'EPM221'],
+        'CSE231': ['CSE271'],
+        'ECE251': ['EPM311', 'ECE351'],
+        'EPM213': ['EPM331', 'ECE311', 'CSE331'],
+        'EPM221': ['EPM321', 'PHM312', 'CSE371'],
+        'ECE211': ['EPM341', 'ECE351', 'CSE332'],
+        'CSE271': ['EPM351', 'CSE312'],
+
+        // Level 3 -> Level 4 Chains
+        'MDP312': ['MDP302', 'MEP312', 'MEA341', 'MCT342'],
+        'MDP311': ['MDP331', 'MDP313', 'MEP321', 'MEP331', 'MEA321', 'MCT411', 'MCT344'],
+        'MEP311': ['MCT411', 'MEP313', 'MEA311'],
+        'MDP302': ['MDP431'],
+        'MDP331': ['MDP435'],
+        'MDP313': ['MDP406'],
+        'MEP312': ['MEP411'],
+        'MEP321': ['MEP421'],
+        'MEP331': ['MEP412'],
+        'MEP313': ['MEP431'],
+        'MEA341': ['MEA412'],
+        'MEA321': ['MEA421'],
+        'MEA311': ['MEA401', 'MEA411'],
+        'MEA412': ['MEA431'],
+        'MEA421': ['MEA402'],
+        'MEA401': ['MEA403'],
+        'MEA411': ['MEA442'],
+        'MEP431': ['MEP433'],
+        'CSE201': ['MEP311', 'CSE311'],
+        'CSE235': ['MCT371'],
+        'MCT342': ['MCT411'],
+        'MCT344': ['MCT412'],
+        'ECE313': ['EPM444'],
+        'CSE311': ['CSE412'],
+        'MCT371': ['CSE476', 'MCT413'],
+        'CSE412': ['CSE474'],
+
+        // Architecture Special Chains
+        'ARC212': ['ARC213'],
+        'ARC211': ['ARC231'],
+        'ARC261': ['ARC262'],
+        'CEP215': ['ARC252'],
+        'ARC251': ['CEP213'],
+        'CES263': ['UPL211'],
+        'ARC213': ['ARC311'],
+        'ARC231': ['ARC331'],
+        'ARC262': ['UPL311'],
+        'ARC252': ['CES355'],
+        'CEP213': ['ARC351'],
+        'UPL211': ['MEP341'],
+        'ARC311': ['ARC312'],
+        'UPL311': ['ARC301', 'UPL312'],
+        'ARC351': ['ARC371', 'ARC352'],
+        'MEP341': ['UPL321'],
+        'ARC312': ['ARC412', 'ARC413', 'UPL411'],
+        'ARC301': ['ARC421', 'UPL451'],
+        'UPL312': ['ARC411', 'ARC452', 'UPL402'],
+        'ARC352': ['ARC451', 'ARC453', 'UPL471'],
+        'UPL321': ['UPL421'],
+        'ARC412': ['ARC401'],
+        'ARC421': ['ARC402', 'ARC431'],
+        'ARC411': ['ARC461'],
+        'ARC413': ['ARC401'],
+        'ARC452': ['ARC463'],
+        'UPL411': ['UPL432'],
+
+        // Power, Elec & CSE Chains
+        'EPM311': ['EPM333'],
+        'EPM331': ['EPM332'],
+        'EPM321': ['EPM322'],
+        'EPM341': ['EPM342'],
+        'EPM351': ['EPM352'],
+        'EPM333': ['EPM431'],
+        'EPM332': ['EPM434'],
+        'EPM322': ['EPM421'],
+        'EPM342': ['EPM441'],
+        'EPM431': ['EPM432'],
+        'EPM441': ['EPM442'],
+        'ECE301': ['ECE302'],
+        'ECE311': ['ECE312'],
+        'ECE351': ['ECE313', 'ECE354'],
+        'PHM312': ['ECE352'],
+        'CSE312': ['ECE353', 'CSE313'],
+        'ECE302': ['ECE411'],
+        'ECE312': ['ECE401'],
+        'ECE313': ['ECE414'],
+        'ECE354': ['ECE451'],
+        'ECE401': ['ECE402'],
+        'CSE331': ['CSE333'],
+        'CSE332': ['CSE334'],
+        'CSE371': ['CSE335'],
+        'CSE313': ['CSE411'],
+        'CSE333': ['CSE431'],
+        'CSE334': ['CSE471'],
+        'CSE335': ['CSE472'],
+        'CSE411': ['CSE412'],
+        'CSE431': ['CSE432'],
+        'CSE471': ['CSE452'],
+
+        // Graduation Projects Chains
+        'MDP391': ['MDP491'], 'MDP491': ['MDP492'],
+        'MEP391': ['MEP491'], 'MEP491': ['MEP492'],
+        'MEA391': ['MEA491'], 'MEA491': ['MEA492'],
+        'MCT391': ['MCT491'], 'MCT491': ['MCT492'],
+        'ARC391': ['ARC491', 'UPL491'], 'ARC491': ['ARC492'], 'UPL491': ['UPL492'],
+        'EPME391': ['EPM491'], 'EPM491': ['EPM492'],
+        'ECE391': ['ECE491'], 'ECE491': ['ECE492'],
+        'CSE391': ['CSE491'], 'CSE491': ['CSE492']
+        };
+        // دالة حذف المادة مع تفعيل نظام التنبيه للمواد الاعتمادية Cascade Prerequisite Remover
+function handleASUCourseRemoval(courseCode, courseName) {
+    const dependentCodes = asuPrerequisites[courseCode] || [];
+    
+    // التكتيك العام: التأكد مما إذا كان هناك مواد تعتمد عليها
+    if (dependentCodes.length > 0) {
+        // إذا توفرت دالة المودال الموحدة في مشروعك
+        if (typeof showPrereqModal === 'function') {
+            const dependentList = dependentCodes.map(code => ({
+                code: code,
+                name: `Course [${code}]`,
+                semName: 'Upcoming Semester'
+            }));
+            
+            showPrereqModal(
+                { code: courseCode, name: courseName },
+                dependentList,
+                function() {
+                    removeASUCourseElement(courseCode);
+                    dependentCodes.forEach(depCode => removeASUCourseElement(depCode));
+                }
+            );
+        } else if (confirm(`Warning: Deleting ${courseName} (${courseCode}) will also remove its dependent courses: ${dependentCodes.join(', ')}. Delete anyway?`)) {
+            removeASUCourseElement(courseCode);
+            dependentCodes.forEach(depCode => removeASUCourseElement(depCode));
+        }
+    } else {
+        removeASUCourseElement(courseCode);
+    }
+}
+
+// دالة حذف عنصر المادة فوراً من الشاشة
+function removeASUCourseElement(courseCode) {
+    const courseElem = document.getElementById(`course-${courseCode}`);
+    if (courseElem) {
+        courseElem.style.transition = 'all 0.3s ease';
+        courseElem.style.opacity = '0';
+        courseElem.style.transform = 'scale(0.9)';
+        setTimeout(() => courseElem.remove(), 300);
+    }
+}
+
+// دالة حذف الترم بالكامل عند الضغط على Remove Semester
+function removeASUSemester(buttonElem) {
+    const semBox = buttonElem.closest('.semester-box');
+    if (semBox) {
+        semBox.style.transition = 'all 0.3s ease';
+        semBox.style.opacity = '0';
+        semBox.style.transform = 'translateY(-10px)';
+        setTimeout(() => semBox.remove(), 300);
+    }
+}
     </script>
     <!-- Custom Unified Modal -->
     <div id="custom-alert-modal" class="custom-modal-overlay">
