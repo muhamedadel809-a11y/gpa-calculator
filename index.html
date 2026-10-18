@@ -832,6 +832,82 @@
                      background-color: #2563eb !important;
                      color: #ffffff !important;
                  }
+        .prereq-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+        }
+        /* Update Banners Styling */
+        .update-banner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px 20px;
+            margin-top: 12px;
+            box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+            .update-banner:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.4);
+            }
+
+        .nile-banner {
+            border-color: rgba(6, 182, 212, 0.3);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(6, 182, 212, 0.15));
+        }
+
+        .prereq-banner {
+            border-color: rgba(245, 158, 11, 0.3);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(245, 158, 11, 0.15));
+        }
+
+        .banner-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #06b6d4;
+            color: #0f172a;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+            .banner-badge.feature {
+                background: #f59e0b;
+                color: #0f172a;
+            }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f8fafc;
+            font-size: 0.9rem;
+        }
+
+        .banner-icon {
+            font-size: 1.2rem;
+        }
+
+        .banner-content strong {
+            color: #38bdf8;
+        }
+
+        .prereq-banner .banner-content strong {
+            color: #fbbf24;
+        }
     </style>
 </head>
 <body>
@@ -880,7 +956,23 @@
             </div>
             <button class="btn-get-now" onclick="switchToHelwan()">Get Now</button>
         </div>
-        
+        <!-- Banner 1: Nile University Update -->
+        <div class="update-banner nile-banner">
+            <div class="banner-badge">NEW</div>
+            <div class="banner-content">
+                <span class="banner-icon">🏛️</span>
+                <p>Added <strong>Nile University (NU)</strong> Engineering Programs & Curricula!</p>
+            </div>
+        </div>
+
+        <!-- Banner 2: Smart Prerequisite Dependency System -->
+        <div class="update-banner prereq-banner">
+            <div class="banner-badge feature">FEATURE</div>
+            <div class="banner-content">
+                <span class="banner-icon">⚡</span>
+                <p>Smart Feature: <strong>Cascade Prerequisite Remover</strong> automatically alerts & handles dependent course removals!</p>
+            </div>
+        </div>
         <div class="preset-panel">
             <div class="preset-title">🏛️ Select University & Faculty Roadmap</div>
 
@@ -990,6 +1082,31 @@
                         <p>Faculty of Engineering</p>
                     </div>
                 </div>
+                <!-- Nile University -->
+                <div class="uni-card" id="card-nu" onclick="selectUniversity('nu')">
+                    <div class="uni-logo-wrapper">
+                        <svg viewBox="0 0 100 100" class="uni-logo-inline" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="46" fill="#1e293b" stroke="#e2e8f0" stroke-width="2" />
+                            <circle cx="50" cy="50" r="41" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
+                            <path d="M 25 55 Q 37.5 40 50 55 T 75 55" fill="none" stroke="#06b6d4" stroke-width="3.5" stroke-linecap="round" />
+                            <path d="M 25 63 Q 37.5 48 50 63 T 75 63" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.8" />
+                            <polygon points="50,22 35,42 65,42" fill="#06b6d4" opacity="0.9" />
+                            <circle cx="50" cy="30" r="4" fill="#f8fafc" />
+                            <path id="nu-text-path" d="M 18,50 A 32,32 0 1,1 82,50" fill="none" stroke="none" />
+                            <text font-size="7" font-family="Arial, sans-serif" fill="#f8fafc" font-weight="bold" letter-spacing="0.5">
+                                <textPath href="#nu-text-path" startOffset="50%" text-anchor="middle">NILE UNIVERSITY</textPath>
+                            </text>
+                            <path id="nu-subtext-path" d="M 82,50 A 32,32 0 0,1 18,50" fill="none" stroke="none" />
+                            <text font-size="6" font-family="Arial, sans-serif" fill="#06b6d4" font-weight="bold">
+                                <textPath href="#nu-subtext-path" startOffset="50%" text-anchor="middle">SCHOOL OF ENGINEERING</textPath>
+                            </text>
+                        </svg>
+                    </div>
+                    <div class="uni-details">
+                        <h4>Nile University</h4>
+                        <p>Faculty of Engineering</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Cairo University Departments -->
@@ -1027,6 +1144,19 @@
             <div class="contact-notice-box">
                 <span>📩 Send your faculty roadmap PDF or feedback to add it instantly:</span>
                 <a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" class="contact-email-link">mohamed.abdefattah07@eng-st.cu.edu.eg</a>
+            </div>
+        </div>
+        <!-- Nile University Departments -->
+        <div class="department-selector-wrapper" id="dept-wrapper-nu" style="display: none;">
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">🏛️ Nile University Departments:</div>
+            <div class="dept-grid">
+                <div class="dept-card" onclick="selectDepartment('nu_ie', event)">🏭 Industrial Engineering (IE)</div>
+                <div class="dept-card" onclick="selectDepartment('nu_mct', event)">⚙️ Mechatronics Engineering (MCT)</div>
+                <div class="dept-card" onclick="selectDepartment('nu_tse', event)">🔥 Thermal Sciences & Energy (TSE)</div>
+                <div class="dept-card" onclick="selectDepartment('nu_ece', event)">📡 Electronics & Comm Eng (ECE)</div>
+                <div class="dept-card" onclick="selectDepartment('nu_cpe', event)">💻 Computer Engineering (CPE)</div>
+                <div class="dept-card" onclick="selectDepartment('nu_cem', event)">🏗️ Construction Eng & Mgmt (CEM)</div>
+                <div class="dept-card" onclick="selectDepartment('nu_sse', event)">🏢 Smart Structural Eng (SSE)</div>
             </div>
         </div>
 
@@ -2137,26 +2267,667 @@
         { name: 'Free Elective 3 (CVEG40X)', credits: '2', grade: '' }
         ]}
         ];
+        const nileUniversityData = {
+    ie: {
+        name: "Industrial Engineering",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "MEC 111", name: "Mechanics I (Statics)", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities & Social Sciences Elective", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "MTH 113", name: "Probability & Statistics", hours: 3 },
+                    { code: "ECE 152", name: "Introduction to Programming", hours: 3, prereq: ["CSC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & Intro to ML", hours: 3, prereq: ["MTH 112"] }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "EGL 214", name: "Communication & Presentation Skills", hours: 3, prereq: ["EGL 213"] }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "MTH 215", name: "Differential Equations", hours: 3, prereq: ["MTH 112"] }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "MTH 216", name: "Numerical Methods", hours: 3, prereq: ["MTH 215"] }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 },
+                    { code: "EBS 111", name: "Selected Topics in Entrepreneurship", hours: 2 }
+                ]
+            }
+        ]
+    },
+    mct: {
+        name: "Mechatronics Engineering",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer & Information Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 },
+                    { code: "MEC 111", name: "Engineering Mechanics I", hours: 3 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities & Social Sciences", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "PHY 112", name: "Physics II", hours: 3, prereq: ["PHY 111"] },
+                    { code: "MTH 113", name: "Probability and Statistics", hours: 3 },
+                    { code: "ECE 151", name: "Introduction to Programming", hours: 3, prereq: ["CSC 111"] },
+                    { code: "MEC 112", name: "Engineering Mechanics II", hours: 3, prereq: ["MEC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & Machine Learning", hours: 3, prereq: ["MTH 112"] },
+                    { code: "MTH 215", name: "Differential Equations", hours: 3, prereq: ["MTH 112"] },
+                    { code: "MNG 231", name: "Electrical Engineering", hours: 3, prereq: ["PHY 112"] },
+                    { code: "MNG 213", name: "Mechanics of Materials", hours: 3, prereq: ["MEC 111"] },
+                    { code: "MNG 222", name: "Manufacturing Processes", hours: 3 }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "MTH 216", name: "Numerical Methods", hours: 3, prereq: ["MTH 215"] },
+                    { code: "EGL 214", name: "Communication & Presentation Skills", hours: 3, prereq: ["EGL 213"] },
+                    { code: "MNG 241", name: "Modeling & Simulation of Dynamic Systems", hours: 3, prereq: ["MTH 215"] },
+                    { code: "MNG 232", name: "Electronic Circuits", hours: 3, prereq: ["MNG 231"] },
+                    { code: "MNG 223", name: "Mechanical Design I", hours: 3, prereq: ["MNG 213"] },
+                    { code: "MNG 271", name: "Thermodynamics I", hours: 3, prereq: ["PHY 111"] },
+                    { code: "MNG 291", name: "Practical Training I", hours: 1 }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "MNG 381", name: "Fluid Mechanics I", hours: 3, prereq: ["MNG 271"] },
+                    { code: "MNG 314", name: "Kinematics & Dynamics of Mechanical Systems", hours: 3, prereq: ["MEC 112"] },
+                    { code: "MNG 323", name: "Computer Aided Design", hours: 3, prereq: ["MNG 223"] },
+                    { code: "MNG 361", name: "Measurements & Instrumentation", hours: 3, prereq: ["MNG 232"] },
+                    { code: "MNG 342", name: "Automatic Control Systems", hours: 3, prereq: ["MNG 241"] },
+                    { code: "MNG 324", name: "Mechanical Design II", hours: 3, prereq: ["MNG 223"] }
+                ]
+            },
+            {
+                id: "sem6", name: "Year 3 - Semester 6",
+                courses: [
+                    { code: "MNG 372", name: "Heat Transfer I", hours: 3, prereq: ["MNG 271"] },
+                    { code: "MNG 336", name: "Logic Design for Mechatronics", hours: 3, prereq: ["MNG 232"] },
+                    { code: "MNG 323B", name: "Computer Aided Manufacturing", hours: 3, prereq: ["MNG 222"] },
+                    { code: "MNG 333", name: "AC Circuits & Electrical Machines", hours: 3, prereq: ["MNG 231"] },
+                    { code: "MNG 335", name: "Signal Processing for Mechatronics", hours: 3, prereq: ["MNG 361"] },
+                    { code: "MNG 363", name: "Robotics", hours: 3, prereq: ["MNG 342"] },
+                    { code: "MNG 392", name: "Practical Training II", hours: 1, prereq: ["MNG 291"] }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "MNG 493", name: "Graduation Project I", hours: 3 },
+                    { code: "MNG 412", name: "Economics & Project Management", hours: 3 },
+                    { code: "MCT E1", name: "Elective (1)", hours: 3 },
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 },
+                    { code: "MCT E2", name: "Elective (2)", hours: 3 }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "MNG 494", name: "Graduation Project II", hours: 3, prereq: ["MNG 493"] },
+                    { code: "MCT E3", name: "Elective (3)", hours: 3 },
+                    { code: "MCT E4", name: "Elective (4)", hours: 3 },
+                    { code: "MCT E5", name: "Elective (5)", hours: 3 },
+                    { code: "EBS 111", name: "Selected Topics in Entrepreneurship", hours: 2 },
+                    { code: "MNG 415", name: "Mechanical Vibrations", hours: 3, prereq: ["MNG 314"] }
+                ]
+            }
+        ]
+    },
+    tse: {
+        name: "Thermal Sciences & Energy Engineering",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 },
+                    { code: "MEC 111", name: "Engineering Mechanics I", hours: 3 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities Elective", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "PHY 112", name: "Physics II", hours: 3, prereq: ["PHY 111"] },
+                    { code: "MTH 113", name: "Probability & Statistics", hours: 3 },
+                    { code: "ECE 151", name: "Introduction to Programming", hours: 3 },
+                    { code: "MEC 112", name: "Engineering Mechanics II", hours: 3, prereq: ["MEC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & ML", hours: 3, prereq: ["MTH 112"] },
+                    { code: "MTH 215", name: "Differential Equations", hours: 3, prereq: ["MTH 112"] },
+                    { code: "MNG 231", name: "Electrical Engineering", hours: 3, prereq: ["PHY 112"] },
+                    { code: "MNG 213", name: "Mechanics of Materials", hours: 3, prereq: ["MEC 111"] },
+                    { code: "MNG 222", name: "Manufacturing Processes", hours: 3 }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "MTH 216", name: "Numerical Methods", hours: 3, prereq: ["MTH 215"] },
+                    { code: "EGL 214", name: "Communication Skills", hours: 3, prereq: ["EGL 213"] },
+                    { code: "MNG 241", name: "Modeling & Simulation", hours: 3, prereq: ["MTH 215"] },
+                    { code: "MNG 232", name: "Electronic Circuits", hours: 3, prereq: ["MNG 231"] },
+                    { code: "MNG 223", name: "Mechanical Design I", hours: 3, prereq: ["MNG 213"] },
+                    { code: "MNG 271", name: "Thermodynamics I", hours: 3, prereq: ["PHY 111"] },
+                    { code: "MNG 291", name: "Practical Training I", hours: 1 }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "MNG 381", name: "Fluid Mechanics I", hours: 3, prereq: ["MNG 271"] },
+                    { code: "MNG 314", name: "Kinematics & Dynamics", hours: 3, prereq: ["MEC 112"] },
+                    { code: "MNG 323", name: "Computer Aided Design", hours: 3, prereq: ["MNG 223"] },
+                    { code: "MNG 361", name: "Measurements & Instrumentation", hours: 3, prereq: ["MNG 232"] },
+                    { code: "MNG 342", name: "Automatic Control Systems", hours: 3, prereq: ["MNG 241"] },
+                    { code: "MNG 324", name: "Mechanical Design II", hours: 3, prereq: ["MNG 223"] }
+                ]
+            },
+            {
+                id: "sem6", name: "Year 3 - Semester 6",
+                courses: [
+                    { code: "MNG 372", name: "Heat Transfer I", hours: 3, prereq: ["MNG 271"] },
+                    { code: "MNG 333", name: "AC Circuits & Electrical Machines", hours: 3, prereq: ["MNG 231"] },
+                    { code: "MNG 373", name: "Thermodynamics II", hours: 3, prereq: ["MNG 271"] },
+                    { code: "MNG 382", name: "Fluid Mechanics II", hours: 3, prereq: ["MNG 381"] },
+                    { code: "MNG 392", name: "Practical Training II", hours: 1, prereq: ["MNG 291"] }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "MNG 493", name: "Graduation Project I", hours: 3 },
+                    { code: "MNG 474", name: "Heat Transfer II", hours: 3, prereq: ["MNG 372"] },
+                    { code: "TSE E1", name: "Elective (1)", hours: 3 },
+                    { code: "TSE E2", name: "Elective (2)", hours: 3 },
+                    { code: "TSE E3", name: "Elective (3)", hours: 3 },
+                    { code: "MNG 412", name: "Economics & Project Management", hours: 3 },
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "MNG 494", name: "Graduation Project II", hours: 3, prereq: ["MNG 493"] },
+                    { code: "MNG 475", name: "Combustion", hours: 3, prereq: ["MNG 373"] },
+                    { code: "TSE E4", name: "Elective (4)", hours: 3 },
+                    { code: "TSE E5", name: "Elective (5)", hours: 3 },
+                    { code: "MNG 477", name: "Internal Combustion Engines", hours: 3, prereq: ["MNG 373"] },
+                    { code: "EBS 111", name: "Entrepreneurship Topics", hours: 2 },
+                    { code: "MNG 415", name: "Mechanical Vibrations", hours: 3, prereq: ["MNG 314"] }
+                ]
+            }
+        ]
+    },
+    ece: {
+        name: "Electronics & Communications Engineering",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer & Information Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "MEC 111", name: "Engineering Mechanics I", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities Elective", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "PHY 112", name: "Physics II", hours: 3, prereq: ["PHY 111"] },
+                    { code: "MTH 113", name: "Probability & Statistics", hours: 3 },
+                    { code: "ECE 151", name: "Introduction to Programming", hours: 3, prereq: ["CSC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & Machine Learning", hours: 3, prereq: ["MTH 112"] },
+                    { code: "MTH 215", name: "Differential Equations", hours: 3, prereq: ["MTH 112"] },
+                    { code: "ECE 211", name: "Electrical Circuit I", hours: 3, prereq: ["PHY 112"] },
+                    { code: "ECE 212", name: "Fundamentals of Semiconductor Devices", hours: 3, prereq: ["PHY 112"] },
+                    { code: "ECE 231", name: "Signals and Systems", hours: 3, prereq: ["MTH 112"] },
+                    { code: "ECE 121", name: "Digital Logic Design", hours: 3 }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "MTH 217", name: "Discrete Mathematics", hours: 3, prereq: ["MTH 111"] },
+                    { code: "MTH 216", name: "Numerical Methods", hours: 3, prereq: ["MTH 215"] },
+                    { code: "ECE 213", name: "Electrical Circuit II", hours: 3, prereq: ["ECE 211"] },
+                    { code: "ECE 241", name: "Computer Systems Engineering", hours: 3, prereq: ["ECE 121"] },
+                    { code: "ECE 232", name: "Fundamentals of Electromagnetics", hours: 3, prereq: ["PHY 112"] },
+                    { code: "ECE 233", name: "Fundamental of Communications", hours: 3, prereq: ["ECE 231"] },
+                    { code: "ECE 291", name: "Practical Training-1", hours: 1 }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "ECE 334", name: "Digital Communication", hours: 3, prereq: ["ECE 233"] },
+                    { code: "ECE 322", name: "Electronics Circuits", hours: 3, prereq: ["ECE 213"] },
+                    { code: "ECE 336", name: "Applied Electromagnetics", hours: 3, prereq: ["ECE 232"] },
+                    { code: "ECE 342", name: "Computer Organization", hours: 3, prereq: ["ECE 241"] },
+                    { code: "ECE 344", name: "Control Systems", hours: 3, prereq: ["ECE 231"] },
+                    { code: "ECE 343", name: "Microprocessor System Design", hours: 3, prereq: ["ECE 241"] }
+                ]
+            },
+            {
+                id: "sem6", name: "Year 3 - Semester 6",
+                courses: [
+                    { code: "EGL 214", name: "Communication & Presentation Skills", hours: 3, prereq: ["EGL 213"] },
+                    { code: "ECE 346", name: "Embedded Real-Time Systems", hours: 3, prereq: ["ECE 343"] },
+                    { code: "ECE 315", name: "Measurements and Instrumentation", hours: 3, prereq: ["ECE 213"] },
+                    { code: "ECE 314", name: "Analog Circuits", hours: 3, prereq: ["ECE 322"] },
+                    { code: "ECE 338", name: "Computer Networks", hours: 3, prereq: ["ECE 233"] },
+                    { code: "ECE 335", name: "Digital Signal Processing", hours: 3, prereq: ["ECE 231"] },
+                    { code: "ECE 392", name: "Practical Training-2", hours: 1, prereq: ["ECE 291"] }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "ECE E1", name: "Major Elective (1)", hours: 3 },
+                    { code: "ECE 423", name: "Digital System Design", hours: 3, prereq: ["ECE 322"] },
+                    { code: "ECE 437", name: "Optical Engineering", hours: 3, prereq: ["ECE 336"] },
+                    { code: "ECE 439", name: "Mobile Communications", hours: 3, prereq: ["ECE 334"] },
+                    { code: "EBS 111", name: "Entrepreneurship Topics", hours: 2 },
+                    { code: "ECE 493", name: "Graduation Project I", hours: 3 }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "ECE E2", name: "Major Elective (2)", hours: 3 },
+                    { code: "ECE E3", name: "Major Elective (3)", hours: 3 },
+                    { code: "ECE E4", name: "Major Elective (4)", hours: 3 },
+                    { code: "ECE E5", name: "Major Elective (5)", hours: 3 },
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 },
+                    { code: "ECE 494", name: "Graduation Project II", hours: 3, prereq: ["ECE 493"] }
+                ]
+            }
+        ]
+    },
+    cpe: {
+        name: "Computer Engineering",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer & Information Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "MEC 111", name: "Engineering Mechanics I", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities Elective", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "PHY 112", name: "Physics II", hours: 3, prereq: ["PHY 111"] },
+                    { code: "MTH 113", name: "Probability & Statistics", hours: 3 },
+                    { code: "ECE 151", name: "Introduction to Programming", hours: 3, prereq: ["CSC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & Machine Learning", hours: 3, prereq: ["MTH 112"] }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "MTH 217", name: "Discrete Mathematics", hours: 3, prereq: ["MTH 111"] },
+                    { code: "MTH 216", name: "Numerical Methods", hours: 3, prereq: ["MTH 215"] },
+                    { code: "ECE 213", name: "Electrical Circuit II", hours: 3, prereq: ["ECE 211"] },
+                    { code: "ECE 241", name: "Computer Systems Engineering", hours: 3 },
+                    { code: "ECE 252", name: "Database Management Systems", hours: 3, prereq: ["ECE 151"] },
+                    { code: "ECE 233", name: "Fundamental of Communications", hours: 3 },
+                    { code: "ECE 291", name: "Practical Training-1", hours: 1 }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "ECE 343", name: "Microprocessor System Design", hours: 3, prereq: ["ECE 241"] },
+                    { code: "ECE 322", name: "Electronics Circuits", hours: 3, prereq: ["ECE 213"] },
+                    { code: "ECE 342", name: "Computer Organization", hours: 3, prereq: ["ECE 241"] },
+                    { code: "ECE 353", name: "Software Engineering", hours: 3, prereq: ["ECE 252"] },
+                    { code: "ECE 344", name: "Control Systems", hours: 3 },
+                    { code: "ECE 354", name: "Image and Video Processing", hours: 3, prereq: ["ECE 151"] }
+                ]
+            },
+            {
+                id: "sem6", name: "Year 3 - Semester 6",
+                courses: [
+                    { code: "EGL 214", name: "Communication & Presentation Skills", hours: 3, prereq: ["EGL 213"] },
+                    { code: "ECE 355", name: "Operating Systems", hours: 3, prereq: ["ECE 342"] },
+                    { code: "ECE 315", name: "Measurements & Instrumentation", hours: 3, prereq: ["ECE 213"] },
+                    { code: "ECE 346", name: "Embedded Real-Time Systems", hours: 3, prereq: ["ECE 343"] },
+                    { code: "ECE 338", name: "Computer Networks", hours: 3, prereq: ["ECE 233"] },
+                    { code: "ECE 345", name: "Computer Architecture", hours: 3, prereq: ["ECE 342"] },
+                    { code: "ECE 392", name: "Practical Training-2", hours: 1, prereq: ["ECE 291"] }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "ECE E1", name: "Major Elective (1)", hours: 3 },
+                    { code: "ECE 457", name: "Computer & Network Security", hours: 3, prereq: ["ECE 338"] },
+                    { code: "ECE 447", name: "Advanced Computer Architecture", hours: 3, prereq: ["ECE 345"] },
+                    { code: "ECE 456", name: "Parallel & Distributed Computing", hours: 3, prereq: ["ECE 355"] },
+                    { code: "EBS 111", name: "Selected Topics in Entrepreneurship", hours: 2 },
+                    { code: "ECE 493", name: "Graduation Project I", hours: 3 }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "ECE E2", name: "Major Elective (2)", hours: 3 },
+                    { code: "ECE E3", name: "Major Elective (3)", hours: 3 },
+                    { code: "ECE E4", name: "Major Elective (4)", hours: 3 },
+                    { code: "ECE E5", name: "Major Elective (5)", hours: 3 },
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 },
+                    { code: "ECE 494", name: "Graduation Project II", hours: 3, prereq: ["ECE 493"] }
+                ]
+            }
+        ]
+    },
+    cem: {
+        name: "Construction Engineering & Management",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "MEC 111", name: "Mechanics I (Statics)", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities Elective", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "MTH 113", name: "Probability & Statistics", hours: 3 },
+                    { code: "CHM 111", name: "Chemistry", hours: 3 },
+                    { code: "ECE 151", name: "Introduction to Programming", hours: 3 },
+                    { code: "CVL 211", name: "Structural Analysis-1", hours: 3, prereq: ["MEC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & Machine Learning", hours: 3, prereq: ["MTH 112"] },
+                    { code: "CVL 281", name: "Introduction to Surveying", hours: 3 },
+                    { code: "CVL 212", name: "Structural Analysis-2", hours: 3, prereq: ["CVL 211"] },
+                    { code: "CVL 221", name: "Engineering Materials-1", hours: 3 }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "EGL 214", name: "Communication & Presentation Skills", hours: 3, prereq: ["EGL 213"] },
+                    { code: "MTH 215", name: "Differential Equations", hours: 3, prereq: ["MTH 112"] },
+                    { code: "CVL 231", name: "Construction Project Management", hours: 3 },
+                    { code: "CVL 282", name: "Civil Engineering Drafting", hours: 2, prereq: ["INT 121"] },
+                    { code: "CVL 311", name: "Reinforced Concrete Design-1", hours: 3, prereq: ["CVL 212"] },
+                    { code: "CVL 321", name: "Engineering Materials-2", hours: 3, prereq: ["CVL 221"] },
+                    { code: "CVL 331", name: "Construction Engineering & Methods", hours: 3, prereq: ["CVL 231"] }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "CVL 315", name: "Soil Mechanics", hours: 3, prereq: ["CVL 212"] },
+                    { code: "CVL 314", name: "Reinforced Concrete Design-2", hours: 3, prereq: ["CVL 311"] },
+                    { code: "CVL 332", name: "Quantity Surveying, Estimation & Specs", hours: 3, prereq: ["CVL 331"] },
+                    { code: "CVL 333", name: "Civil Engineering Economics", hours: 3 },
+                    { code: "CVL 341", name: "Fluid Mechanics", hours: 3, prereq: ["MEC 111"] },
+                    { code: "CVL 391", name: "Practical Training-1", hours: 1 }
+                ]
+            },
+            {
+                id: "sem6", name: "Year 3 - Semester 6",
+                courses: [
+                    { code: "MTH 216", name: "Numerical Methods", hours: 3, prereq: ["MTH 215"] },
+                    { code: "CVL 312", name: "Advanced Soil Mechanics", hours: 3, prereq: ["CVL 315"] },
+                    { code: "CVL 392", name: "Practical Training-2", hours: 1, prereq: ["CVL 391"] },
+                    { code: "CVL 431", name: "Value & Risk Management in Construction", hours: 3, prereq: ["CVL 231"] },
+                    { code: "CVL 432", name: "Construction of Foundations", hours: 3, prereq: ["CVL 315"] },
+                    { code: "CVL 433", name: "Structural Steel Design", hours: 3, prereq: ["CVL 212"] }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "CVL 411", name: "Design & Construction of Foundations", hours: 3, prereq: ["CVL 432"] },
+                    { code: "CVL 434", name: "Infrastructure Asset Management", hours: 3, prereq: ["CVL 331"] },
+                    { code: "CVL 441", name: "Fundamentals of Hydraulic Engineering", hours: 3, prereq: ["CVL 341"] },
+                    { code: "CVL 451", name: "Intro to Transportation & Highway Eng", hours: 3, prereq: ["CVL 281"] },
+                    { code: "CVL E1", name: "Major Elective (1)", hours: 3 },
+                    { code: "CVL E2", name: "Major Elective (2)", hours: 3 },
+                    { code: "CVL E3", name: "Major Elective (3)", hours: 3 }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "CVL 493", name: "Graduation Project I", hours: 3 },
+                    { code: "CVL 494", name: "Graduation Project II", hours: 3, prereq: ["CVL 493"] },
+                    { code: "CVL E4", name: "Major Elective (4)", hours: 3 },
+                    { code: "CVL E5", name: "Major Elective (5)", hours: 3 },
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 },
+                    { code: "EBS 111", name: "Selected Topics in Entrepreneurship", hours: 2 }
+                ]
+            }
+        ]
+    },
+    sse: {
+        name: "Smart Structural Engineering",
+        semesters: [
+            {
+                id: "sem1", name: "Year 1 - Semester 1",
+                courses: [
+                    { code: "EGL 111", name: "English I", hours: 3 },
+                    { code: "CSC 111", name: "Computer Skills", hours: 2 },
+                    { code: "MTH 111", name: "Analytical Geometry & Calculus I", hours: 3 },
+                    { code: "PHY 111", name: "Physics I", hours: 3 },
+                    { code: "MEC 111", name: "Mechanics I (Statics)", hours: 3 },
+                    { code: "INT 121", name: "Engineering Drawing", hours: 2 },
+                    { code: "INT E1", name: "Engineering History Elective", hours: 2 }
+                ]
+            },
+            {
+                id: "sem2", name: "Year 1 - Semester 2",
+                courses: [
+                    { code: "EGL 112", name: "English II", hours: 3, prereq: ["EGL 111"] },
+                    { code: "HUM E1", name: "Humanities Elective", hours: 2 },
+                    { code: "MTH 112", name: "Calculus II", hours: 3, prereq: ["MTH 111"] },
+                    { code: "MTH 113", name: "Probability & Statistics", hours: 3 },
+                    { code: "CHM 111", name: "Chemistry", hours: 3 },
+                    { code: "ECE 151", name: "Introduction to Programming", hours: 3 },
+                    { code: "CVL 211", name: "Structural Analysis-1", hours: 3, prereq: ["MEC 111"] }
+                ]
+            },
+            {
+                id: "sem3", name: "Year 2 - Semester 3",
+                courses: [
+                    { code: "EGL 213", name: "Writing Skills", hours: 3, prereq: ["EGL 112"] },
+                    { code: "MTH 214", name: "Linear Algebra & Machine Learning", hours: 3, prereq: ["MTH 112"] },
+                    { code: "CVL 281", name: "Introduction to Surveying", hours: 3 },
+                    { code: "CVL 212", name: "Structural Analysis-2", hours: 3, prereq: ["CVL 211"] },
+                    { code: "CVL 221", name: "Engineering Materials-1", hours: 3 }
+                ]
+            },
+            {
+                id: "sem4", name: "Year 2 - Semester 4",
+                courses: [
+                    { code: "EGL 214", name: "Communication & Presentation Skills", hours: 3, prereq: ["EGL 213"] },
+                    { code: "MTH 215", name: "Differential Equations", hours: 3, prereq: ["MTH 112"] },
+                    { code: "CVL 231", name: "Construction Project Management", hours: 3 },
+                    { code: "CVL 282", name: "Civil Engineering Drafting", hours: 2, prereq: ["INT 121"] },
+                    { code: "CVL 311", name: "Reinforced Concrete Design-1", hours: 3, prereq: ["CVL 212"] },
+                    { code: "CVL 321", name: "Engineering Materials-2", hours: 3, prereq: ["CVL 221"] },
+                    { code: "CVL 331", name: "Construction Engineering & Methods", hours: 3, prereq: ["CVL 231"] }
+                ]
+            },
+            {
+                id: "sem5", name: "Year 3 - Semester 5",
+                courses: [
+                    { code: "CVL 313", name: "Structural Analysis-3", hours: 3, prereq: ["CVL 212"] },
+                    { code: "CVL 314", name: "Reinforced Concrete Design-2", hours: 3, prereq: ["CVL 311"] },
+                    { code: "CVL 332", name: "Quantity Surveying, Estimation & Specs", hours: 3, prereq: ["CVL 331"] },
+                    { code: "CVL 341", name: "Fluid Mechanics", hours: 3, prereq: ["MEC 111"] },
+                    { code: "CVL 391", name: "Practical Training-1", hours: 1 }
+                ]
+            },
+            {
+                id: "sem6", name: "Year 3 - Semester 6",
+                courses: [
+                    { code: "CVL 315", name: "Structural Steel Design", hours: 3, prereq: ["CVL 313"] },
+                    { code: "CVL 361", name: "Python for Structural Programming", hours: 3, prereq: ["ECE 151"] },
+                    { code: "CVL 392", name: "Practical Training-2", hours: 1, prereq: ["CVL 391"] },
+                    { code: "CVL 412", name: "Repair & Strengthening of Buildings", hours: 3, prereq: ["CVL 314"] },
+                    { code: "CVL 421", name: "Smart Buildings and Materials", hours: 3, prereq: ["CVL 321"] },
+                    { code: "CVL 461", name: "Smart Cities & Intelligent Systems", hours: 3 }
+                ]
+            },
+            {
+                id: "sem7", name: "Year 4 - Semester 7",
+                courses: [
+                    { code: "CVL 411", name: "Design & Construction of Foundations", hours: 3, prereq: ["CVL 311"] },
+                    { code: "CVL 441", name: "Fundamentals of Hydraulic Engineering", hours: 3, prereq: ["CVL 341"] },
+                    { code: "CVL 451", name: "Intro to Transportation & Highway Eng", hours: 3, prereq: ["CVL 281"] },
+                    { code: "CVL E1", name: "Major Elective (1)", hours: 3 },
+                    { code: "CVL E2", name: "Major Elective (2)", hours: 3 },
+                    { code: "CVL E3", name: "Major Elective (3)", hours: 3 }
+                ]
+            },
+            {
+                id: "sem8", name: "Year 4 - Semester 8",
+                courses: [
+                    { code: "CVL 493", name: "Graduation Project I", hours: 3 },
+                    { code: "CVL 494", name: "Graduation Project II", hours: 3, prereq: ["CVL 493"] },
+                    { code: "CVL E4", name: "Major Elective (4)", hours: 3 },
+                    { code: "CVL E5", name: "Major Elective (5)", hours: 3 },
+                    { code: "INT E2", name: "Sustainable Development Elective", hours: 2 },
+                    { code: "EBS 111", name: "Selected Topics in Entrepreneurship", hours: 2 }
+                ]
+            }
+        ]
+    }
+};
 
         const departmentRoadmaps = {
-        helwan_freshman: helwanFreshmanData,
-        helwan_epme: epmeFullPlan,
-        helwan_cse: cseFullPlan,
-        helwan_pe: peFullPlan,
-        helwan_me: meFullPlan,
-        helwan_ece: eceFullPlan,
-        helwan_bme: bmeFullPlan,
-        helwan_ie: ieFullPlan,
-        helwan_epsge: epsgeFullPlan,
-        sbe: sbeFullPlan,
-        mep: mepFullPlan,
-        arc: arcFullPlan,
-        eec: eecFullPlan,
-        epe: epeFullPlan,
-        mdp: mdpFullPlan,
-        cve: cveFullPlan
-        };
+    helwan_freshman: helwanFreshmanData,
+    helwan_epme: epmeFullPlan,
+    helwan_cse: cseFullPlan,
+    helwan_pe: peFullPlan,
+    helwan_me: meFullPlan,
+    helwan_ece: eceFullPlan,
+    helwan_bme: bmeFullPlan,
+    helwan_ie: ieFullPlan,
+    helwan_epsge: epsgeFullPlan,
+    sbe: sbeFullPlan,
+    mep: mepFullPlan,
+    arc: arcFullPlan,
+    eec: eecFullPlan,
+    epe: epeFullPlan,
+    mdp: mdpFullPlan,
+    cve: cveFullPlan,
 
+    // Nile University Roadmaps
+    nu_ie: nileUniversityData.ie,
+    nu_mct: nileUniversityData.mct,
+    nu_tse: nileUniversityData.tse,
+    nu_ece: nileUniversityData.ece,
+    nu_cpe: nileUniversityData.cpe,
+    nu_cem: nileUniversityData.cem,
+    nu_sse: nileUniversityData.sse
+};
         function toggleTheme() {
         document.body.classList.toggle('dark-theme');
         const isDark = document.body.classList.contains('dark-theme');
@@ -2175,54 +2946,62 @@
         }
 
         function selectUniversity(uniKey) {
-        currentUniKey = uniKey;
-        document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
-        document.getElementById(`card-${uniKey}`).classList.add('active');
+    currentUniKey = uniKey;
 
-        const deptWrapperCU = document.getElementById('dept-wrapper-cu');
-        const deptWrapperHelwan = document.getElementById('dept-wrapper-helwan');
+    // إلغاء التحديد من جميع الكروت
+    document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
 
-        if (uniKey === 'cu') {
-        if (deptWrapperCU) deptWrapperCU.style.display = 'block';
-        if (deptWrapperHelwan) deptWrapperHelwan.style.display = 'none';
-        } else if (uniKey === 'helwan') {
-        if (deptWrapperCU) deptWrapperCU.style.display = 'none';
-        if (deptWrapperHelwan) deptWrapperHelwan.style.display = 'block';
-        } else {
-        if (deptWrapperCU) deptWrapperCU.style.display = 'none';
-        if (deptWrapperHelwan) deptWrapperHelwan.style.display = 'none';
+    // تفعيل الكارت المختار
+    const selectedCard = document.getElementById(`card-${uniKey}`);
+    if (selectedCard) selectedCard.classList.add('active');
+
+    // إخفاء جميع حاويات الأقسام الخاصة بالجامعات
+    const allWrappers = document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]');
+    allWrappers.forEach(w => w.style.display = 'none');
+
+    // إظهار أقسام الجامعة المختارة فوراً
+    const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
+    if (targetWrapper) {
+        targetWrapper.style.display = 'block';
+    } else {
         alert("🔒 Coming Soon! Send your university roadmap PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.");
-        }
-        }
+    }
+}
 
-        function selectDepartment(deptKey, evt) {
-        currentDeptKey = deptKey;
-        document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected'));
-        if (evt && evt.target) evt.target.classList.add('selected');
+     function selectDepartment(deptKey, evt) {
+    currentDeptKey = deptKey;
+    document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected'));
+    if (evt && evt.target) evt.target.classList.add('selected');
 
-        applyCurrentRoadmap();
-        }
+    applyCurrentRoadmap();
+    if (typeof goToCalculator === 'function') {
+        goToCalculator(); // الانتقال التلقائي لشاشة الحاسبة فور اختيار القسم
+    }
+}
 
-        function applyCurrentRoadmap() {
-        if (currentDeptKey === 'custom') return;
+function applyCurrentRoadmap() {
+    if (currentDeptKey === 'custom') return;
 
-        let combinedData = [];
+    let selectedPlan = null;
 
-        if (currentDeptKey === 'freshman') {
-        combinedData = JSON.parse(JSON.stringify(freshmanYearData));
-        } else if (departmentRoadmaps[currentDeptKey]) {
-        combinedData = JSON.parse(JSON.stringify(departmentRoadmaps[currentDeptKey]));
-        } else {
+    if (currentDeptKey === 'freshman') {
+        selectedPlan = freshmanYearData;
+    } else if (departmentRoadmaps[currentDeptKey]) {
+        selectedPlan = departmentRoadmaps[currentDeptKey];
+    } else {
         alert("🔒 Roadmap for this department is being processed! Send your Study Map PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.");
         return;
-        }
+    }
 
-        if (combinedData.length > 0) {
-        semestersData = combinedData;
+    if (selectedPlan) {
+        // استخراج فصول الدراسة سواء كانت البيانات Array مباشر أو Object جوه semesters
+        let rawSemesters = Array.isArray(selectedPlan) ? selectedPlan : (selectedPlan.semesters || []);
+        semestersData = JSON.parse(JSON.stringify(rawSemesters));
+        
         renderAll();
-        saveData();
-        }
-        }
+        if (typeof saveData === 'function') saveData();
+    }
+}
 
         function goToCalculator() {
         const cover = document.getElementById('cover-page');
@@ -2301,20 +3080,66 @@
         }
         }
 
-        function removeCourse(semId, courseIdx) {
-        const courseRow = document.getElementById(`course-row-${semId}-${courseIdx}`);
-        if (courseRow) {
-        courseRow.style.animation = 'fadeOutSlideDown 0.25s forwards';
-        setTimeout(() => {
-        const sem = semestersData.find(s => s.id === semId);
-        if (sem) {
-        sem.courses.splice(courseIdx, 1);
-        renderAll();
+       // 1. الدالة الجديدة لحذف المادة مع التنبيه الذكي للمتطلبات
+function removeCourse(semId, courseIdx) {
+  const sem = semestersData.find(s => s.id === semId);
+  if (!sem) return;
+
+  const targetCourse = sem.courses[courseIdx];
+  if (!targetCourse) return;
+
+  let dependentCourses = [];
+
+  semestersData.forEach(s => {
+    s.courses.forEach((c, idx) => {
+      if (c.prereq && c.prereq.includes(targetCourse.code)) {
+        dependentCourses.push({
+          semName: s.name,
+          code: c.code,
+          name: c.name,
+          semId: s.id,
+          idx: idx
+        });
+      }
+    });
+  });
+
+  if (dependentCourses.length > 0) {
+    let depListText = dependentCourses.map(d => `• [${d.code}] ${d.name} (${d.semName})`).join('\n');
+   let confirmMsg = `⚠️ Prerequisite Alert:\n\nThe course [${targetCourse.code}] ${targetCourse.name} is a prerequisite for the following course(s):\n${depListText}\n\nRemoving this course will automatically delete all dependent courses to prevent GPA calculation errors.\n\nDo you want to proceed and confirm deletion?`;
+
+    if (confirm(confirmMsg)) {
+      sem.courses.splice(courseIdx, 1);
+
+      dependentCourses.reverse().forEach(dep => {
+        const depSem = semestersData.find(s => s.id === dep.semId);
+        if (depSem) {
+          const foundIdx = depSem.courses.findIndex(c => c.code === dep.code);
+          if (foundIdx !== -1) {
+            depSem.courses.splice(foundIdx, 1);
+          }
+        }
+      });
+
+      renderAll();
+      if (typeof saveData === 'function') saveData();
+    }
+  } else {
+    sem.courses.splice(courseIdx, 1);
+    renderAll();
+    if (typeof saveData === 'function') saveData();
+  }
+}
+
+// 2. دالة التحديث تُترك كما هي تماماً
+function updateCourse(semId, courseIdx, field, value) {
+    const sem = semestersData.find(s => s.id === semId);
+    if (sem) {
+        sem.courses[courseIdx][field] = value;
+        calculateAndDisplay();
         saveData();
-        }
-        }, 250);
-        }
-        }
+    }
+}
 
         function updateCourse(semId, courseIdx, field, value) {
         const sem = semestersData.find(s => s.id === semId);
