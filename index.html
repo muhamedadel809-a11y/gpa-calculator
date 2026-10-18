@@ -1089,15 +1089,17 @@
             </div>
             <button class="btn-get-now" onclick="switchToHelwan()">Get Now</button>
         </div>
-        <!-- Banner 1: Nile University Update -->
+        <!-- بداية كود الإعلان -->
         <div class="update-banner nile-banner">
             <div class="banner-badge">NEW</div>
             <div class="banner-content">
                 <span class="banner-icon">🏛️</span>
                 <p>Added <strong>Nile University (NU)</strong> Engineering Programs & Curricula!</p>
-            </div>
-        </div>
+            </div> <!-- قفلة banner-content -->
+            <!-- الكود اللي هتأكد وجوده هنا (بعد القفلة اللي فوق وقبل القفلة اللي تحت) -->
+            <button class="btn-get-now" onclick="selectUniversity('nu')">Get Now</button>
 
+        </div> <!-- قفلة update-banner -->
         <!-- Banner 2: Smart Prerequisite Dependency System -->
         <div class="update-banner prereq-banner">
             <div class="banner-badge feature">FEATURE</div>
@@ -3077,20 +3079,23 @@
         document.getElementById('theme-text').innerText = 'Light Mode';
         }
         }
-
-       function selectUniversity(uniKey) {
-    // 1. Remove active state from all uni cards
+function selectUniversity(uniKey) {
+    // 1. نشل التفعيل من كل الكروت القديمة
     document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
     
-    // 2. Add active to current card
+    // 2. نحدد الكارت المختار ونفصله وننزل الشاشة عنده تلقائياً (Scroll)
     const selectedCard = document.getElementById(`card-${uniKey}`);
-    if (selectedCard) selectedCard.classList.add('active');
+    if (selectedCard) {
+        selectedCard.classList.add('active');
+        // السطر ده هو اللي بياخد الصفحة وينزل بيها لكارت الجامعة فوراً
+        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
-    // 3. Hide all dept wrappers
+    // 3. نخفي كل قوائم الأقسام التانية
     const allWrappers = document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]');
     allWrappers.forEach(w => w.style.display = 'none');
 
-    // 4. Show target wrapper or display Coming Soon modal
+    // 4. نظهر أقسام الجامعة المختارة
     const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
     if (targetWrapper) {
         targetWrapper.style.display = 'block';
