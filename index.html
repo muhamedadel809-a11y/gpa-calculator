@@ -3078,27 +3078,50 @@
         }
         }
 
-        function selectUniversity(uniKey) {
-        currentUniKey = uniKey;
+       function selectUniversity(uniKey) {
+    // 1. Remove active state from all uni cards
+    document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
+    
+    // 2. Add active to current card
+    const selectedCard = document.getElementById(`card-${uniKey}`);
+    if (selectedCard) selectedCard.classList.add('active');
 
-        // إلغاء التحديد من جميع الكروت
-        document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
+    // 3. Hide all dept wrappers
+    const allWrappers = document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]');
+    allWrappers.forEach(w => w.style.display = 'none');
 
-        // تفعيل الكارت المختار
-        const selectedCard = document.getElementById(`card-${uniKey}`);
-        if (selectedCard) selectedCard.classList.add('active');
-
-        // إخفاء جميع حاويات الأقسام الخاصة بالجامعات
-        const allWrappers = document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]');
-        allWrappers.forEach(w => w.style.display = 'none');
-
-        // إظهار أقسام الجامعة المختارة فوراً
-        const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
-        if (targetWrapper) {
+    // 4. Show target wrapper or display Coming Soon modal
+    const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
+    if (targetWrapper) {
         targetWrapper.style.display = 'block';
-        } else {
-        alert("🔒 Coming Soon! Send your university roadmap PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.");
+    } else {
+        showCustomModal({
+            title: 'Coming Soon!',
+            icon: '🔒',
+            message: 'Send your university roadmap PDF to add it instantly:',
+            subtext: '<a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" style="color:#38bdf8; font-weight:bold;">mohamed.abdefattah07@eng-st.cu.edu.eg</a>',
+            confirmText: 'Got It',
+            showCancel: false,
+            isWarning: false
+        });
+    }
+}
+
+        // دالة اختيار القسم
+        function selectDepartment(deptKey, evt) {
+        if (/* شرط إذا كان القسم غير متاح */ !deptKey) {
+        showCustomModal({
+        title: 'Coming Soon!',
+        icon: '🔒',
+        message: 'Roadmap for this department is being processed!',
+        subtext: 'Send your Study Map PDF to <a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" style="color:#38bdf8; font-weight:bold;">mohamed.abdefattah07@eng-st.cu.edu.eg</a> to add it instantly.',
+        confirmText: 'Got It',
+        showCancel: false,
+        isWarning: false
+        });
+        return;
         }
+        // باقي كود التنقل للقسم...
         }
 
         function selectDepartment(deptKey, evt) {
@@ -3122,7 +3145,15 @@
         } else if (departmentRoadmaps[currentDeptKey]) {
         selectedPlan = departmentRoadmaps[currentDeptKey];
         } else {
-        alert("🔒 Roadmap for this department is being processed! Send your Study Map PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.");
+        showCustomModal({
+        title: 'Coming Soon!',
+        icon: '🔒',
+        message: 'Send your university roadmap PDF to mohamed.abdefattah07@eng-st.cu.edu.eg to add it instantly.',
+        subtext: '',
+        confirmText: 'Got It',
+        showCancel: false,
+        isWarning: false
+        });
         return;
         }
 
@@ -3259,27 +3290,97 @@
         }
         }
 
-        function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
-        const modal = document.getElementById('custom-alert-modal');
-        const msgEl = document.getElementById('modal-prereq-msg');
-        const listEl = document.getElementById('modal-dep-list');
-        const btnCancel = document.getElementById('modal-btn-cancel');
-        const btnConfirm = document.getElementById('modal-btn-confirm');
+     // Generic Smart Custom Modal Trigger
+function showCustomModal({ title, icon, message, subtext, depList = [], confirmText = 'Got It', showCancel = false, isWarning = false, onConfirm = null }) {
+    const modal = document.getElementById('custom-alert-modal');
+    const titleEl = document.getElementById('modal-title');
+    const iconEl = document.getElementById('modal-icon');
+    const msgEl = document.getElementById('modal-prereq-msg');
+    const listEl = document.getElementById('modal-dep-list');
+    const subtextEl = document.getElementById('modal-subtext');
+    const btnCancel = document.getElementById('modal-btn-cancel');
+    const btnConfirm = document.getElementById('modal-btn-confirm');
 
-        if (!modal) return;
+    if (!modal) return;
 
-        msgEl.innerHTML = `The course <strong>[${targetCourse.code}] ${targetCourse.name}</strong> is a prerequisite for:`;
-        listEl.innerHTML = dependentCourses.map(d => `• [${d.code}] ${d.name} (${d.semName})`).join('<br>');
+    // 1. Reset Text Content
+    titleEl.innerText = title || 'Notification';
+    iconEl.innerText = icon || 'ℹ️';
+    msgEl.innerHTML = message || '';
+    
+    // 2. Dependent Courses List
+    if (depList && depList.length > 0) {
+        listEl.style.display = 'block';
+        listEl.innerHTML = depList.map(d => `• [${d.code}] ${d.name} (${d.semName})`).join('<br>');
+    } else {
+        listEl.style.display = 'none';
+        listEl.innerHTML = '';
+    }
 
-        modal.classList.add('active');
+    // 3. Subtext Control
+    if (subtext) {
+        subtextEl.style.display = 'block';
+        subtextEl.innerHTML = subtext;
+    } else {
+        subtextEl.style.display = 'none';
+        subtextEl.innerHTML = '';
+    }
 
-        const closeModal = () => modal.classList.remove('active');
+    btnConfirm.innerText = confirmText;
+    btnCancel.style.display = showCancel ? 'inline-block' : 'none';
 
-        btnCancel.onclick = () => closeModal();
-        btnConfirm.onclick = () => {
+    // 4. Styling based on Modal Type
+if (isWarning) {
+        btnConfirm.style.background = '#ef4444';
+        btnConfirm.style.boxShadow = '0 4px 14px rgba(239, 68, 68, 0.4)';
+        iconEl.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        iconEl.style.background = 'rgba(239, 68, 68, 0.15)';
+    } else {
+        btnConfirm.style.background = '#0284c7';
+        btnConfirm.style.boxShadow = '0 4px 14px rgba(56, 189, 248, 0.4)';
+        iconEl.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+        iconEl.style.background = 'rgba(56, 189, 248, 0.15)';
+    }
+
+    modal.classList.add('active');
+
+    const closeModal = () => modal.classList.remove('active');
+
+    btnCancel.onclick = () => closeModal();
+    btnConfirm.onclick = () => {
         closeModal();
-        onConfirm();
-        };
+        if (typeof onConfirm === 'function') onConfirm();
+    };
+}
+
+// Wrapper for Prerequisite Deletion Warning
+function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
+    showCustomModal({
+        title: 'Prerequisite Warning',
+        icon: '⚠️',
+        message: `The course <strong>[${targetCourse.code}] ${targetCourse.name}</strong> is a prerequisite for:`,
+        depList: dependentCourses,
+        subtext: 'Removing this course will automatically delete all dependent courses to prevent GPA calculation errors.',
+        confirmText: 'Delete Anyway',
+        showCancel: true,
+        isWarning: true,
+        onConfirm: onConfirm
+    });
+}
+
+        // Wrapper for Prerequisite Deletion Warning
+        function showPrereqModal(targetCourse, dependentCourses, onConfirm) {
+        showCustomModal({
+        title: 'Prerequisite Warning',
+        icon: '⚠️',
+        message: `The course <strong>[${targetCourse.code}] ${targetCourse.name}</strong> is a prerequisite for:`,
+        depList: dependentCourses,
+        subtext: 'Removing this course will automatically delete all dependent courses to prevent GPA calculation errors.',
+        confirmText: 'Delete Anyway',
+        showCancel: true,
+        isWarning: true,
+        onConfirm: onConfirm
+        });
         }
         // 2. دالة التحديث تُترك كما هي تماماً
         function updateCourse(semId, courseIdx, field, value) {
@@ -3346,7 +3447,7 @@
 
         calculateAndDisplay();
         // تحويل الإيموجيز لـ iOS فور رسم العناصر
-    if (typeof parseiOSEmojis === 'function') parseiOSEmojis();
+        if (typeof parseiOSEmojis === 'function') parseiOSEmojis();
 
         }
 
@@ -3425,5 +3526,23 @@
         // تشغيل التحويل فور تحميل الصفحة
         document.addEventListener("DOMContentLoaded", parseiOSEmojis);
     </script>
+    <!-- Custom Unified Modal -->
+    <div id="custom-alert-modal" class="custom-modal-overlay">
+        <div class="custom-modal-card">
+            <div class="modal-header">
+                <div id="modal-icon" class="modal-alert-icon">🔒</div>
+                <h3 id="modal-title">Coming Soon!</h3>
+            </div>
+            <div class="modal-body">
+                <p id="modal-prereq-msg"></p>
+                <div id="modal-dep-list" class="dep-list-box" style="display: none;"></div>
+                <p id="modal-subtext" class="modal-subtext" style="display: none;"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-btn-cancel" class="modal-btn btn-cancel" style="display: none;">Cancel</button>
+                <button id="modal-btn-confirm" class="modal-btn btn-confirm">Got It</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
