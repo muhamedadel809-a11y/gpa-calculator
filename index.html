@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="author" content="Mohamed Adel - mohamed.abdefattah07@eng-st.cu.edu.eg">
     <title>GPA & Cumulative Calculator</title>
     <style>
@@ -1392,6 +1392,61 @@
         #calculator-page > div,
         .calculator-container {
             margin-top: 0 !important;
+        }
+        /* إصلاح محاذاة الموبايل لمنع التمرير الأفقي (Horizontal Scroll) */
+        html, body {
+            max-width: 100% !important;
+            overflow-x: hidden !important; /* منع الخروج بره حدود الشاشة يميناً ويساراً */
+        }
+
+        /* تعديل الأحجام لشاشات الهواتف */
+        @media (max-width: 768px) {
+            /* ضبط الحاويات الرئيسية */
+            .hero-actions-container,
+            .semesters-grid,
+            .calculator-container,
+            #cover-page,
+            #calculator-page {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                box-sizing: border-box !important;
+            }
+
+            /* تحويل صفوف المواد لتصبح مرنة على شاشة الموبايل */
+            .course-row {
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+
+            .course-name-input {
+                width: 100% !important;
+                flex: none !important;
+            }
+
+            .course-hours-input {
+                flex: 1 !important;
+            }
+
+            .course-grade-select {
+                flex: 2 !important;
+            }
+
+            /* تظبيط البنرات والتنويهات */
+            .animated-hero-banner,
+            .disclaimer-banner,
+            .cover-disclaimer {
+                width: 95% !important;
+                max-width: 100% !important;
+                font-size: 0.85rem !important;
+            }
+
+            .midterm-text {
+                flex-direction: column !important;
+                gap: 2px !important;
+                text-align: center !important;
+            }
         }
     </style>
 </head>
