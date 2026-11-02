@@ -27,6 +27,7 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-G1FQS8D9MK');
+
     </script>
     <style>
         /* Announcement Banner */
@@ -3803,19 +3804,19 @@
         }
         }
 
-     function addSemesterData() {
-    semestersData.push({
+        function addSemesterData() {
+        semestersData.push({
         id: Date.now(),
         courses: [
-            { name: '', credits: '', grade: '' },
-            { name: '', credits: '', grade: '' },
-            { name: '', credits: '', grade: '' },
-            { name: '', credits: '', grade: '' }
+        { name: '', credits: '', grade: '' },
+        { name: '', credits: '', grade: '' },
+        { name: '', credits: '', grade: '' },
+        { name: '', credits: '', grade: '' }
         ]
-    });
-    renderAll();
-    saveData();
-}
+        });
+        renderAll();
+        saveData();
+        }
 
         function removeSemester(semId) {
         const semCard = document.getElementById(`sem-card-${semId}`);
@@ -4084,16 +4085,16 @@
         document.getElementById('total-credits').innerText = `Total Graded Credits: ${totalCredits}`;
         }
 
-        window.onload = function() {
-    currentDeptKey = 'custom';
-    const container = document.getElementById('semesters-container');
-    if (container) {
-        container.innerHTML = '';
-        if (typeof addSemester === 'function') {
+        window.addEventListener('load', function() {
+        // Do not overwrite the standalone default calculator rendered at DOMContentLoaded.
+        // The roadmap/card calculator is initialized only when a university/department is selected.
+        currentDeptKey = currentDeptKey || 'custom';
+        if (document.body.dataset.defaultCalculatorReady === 'true') return;
+        const container = document.getElementById('semesters-container');
+        if (container && !container.children.length && typeof addSemester === 'function') {
             addSemester();
         }
-    }
-};
+        });
     </script>
     <!-- Custom Prerequisite Alert Modal -->
     <div id="custom-alert-modal" class="custom-modal-overlay">
@@ -4125,57 +4126,7 @@
         });
         }
         }
-        // دالة إنشاء ترم افتراضي بمواد فارغة
-        function loadDefaultBlankCalculator() {
-        const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
-        if (!container) return;
 
-        // إلغاء تحديد أي كارت جامعة مسبق
-        document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
-
-        let html = `
-        <div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">
-        <div class="semester-box" id="semester-box-0" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-        <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
-        <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">Semester 1</h3>
-        <button class="btn-remove-semester" onclick="this.closest('.semester-box').remove()">Remove Semester</button>
-        </div>
-        <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
-        `;
-
-        // إنشاء 4 صفوف فارغة جاهزة للإدخال
-        for (let i = 1; i <= 4; i++) {
-        html += `
-        <div class="course-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
-        <input type="text" class="course-name-input" placeholder="Course ${i} Name" style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;">
-        <input type="number" class="course-hours-input" placeholder="CH" min="1" max="10" value="3" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
-        <select class="course-grade-select" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
-        <option value="">Grade</option>
-        <option value="4.0">A</option>
-        <option value="3.7">A-</option>
-        <option value="3.3">B+</option>
-        <option value="3.0">B</option>
-        <option value="2.7">B-</option>
-        <option value="2.3">C+</option>
-        <option value="2.0">C</option>
-        <option value="1.7">C-</option>
-        <option value="1.3">D+</option>
-        <option value="1.0">D</option>
-        <option value="0.0">F</option>
-        </select>
-        <button class="btn-remove-course" onclick="this.closest('.course-row').remove()" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
-        </div>
-        `;
-        }
-
-        html += `
-        </div>
-        </div>
-        </div>
-        `;
-
-        container.innerHTML = html;
-        }
         // دالة إضافة مادة فاضية جديدة داخل الترم
         function addBlankCourse(btn) {
         const semesterBox = btn.closest('.semester-box');
@@ -4205,7 +4156,7 @@
         `;
         coursesContainer.insertAdjacentHTML('beforeend', rowHtml);
         }
-     
+
         // ==========================================
         // ASU Programs Data & Loader System
         // ==========================================
@@ -5455,6 +5406,172 @@
         setTimeout(() => semBox.remove(), 300);
         }
         }
+        // 1. دالة حساب الـ GPA الشاملة لكل الكلاسات
+function calculateGPA() {
+    let totalPoints = 0;
+    let totalCredits = 0;
+
+    // Only calculate rows belonging to the standalone/default calculator.
+    const defaultContainer = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
+    const rows = defaultContainer ? defaultContainer.querySelectorAll('.course-row') : [];
+
+    rows.forEach(row => {
+        const creditInput = row.querySelector('.course-hours-input, .course-credit, input[type="number"]');
+        const gradeSelect = row.querySelector('.course-grade-select, .course-grade, select');
+
+        if (creditInput && gradeSelect) {
+            const credits = parseFloat(creditInput.value);
+            const gradePoint = parseFloat(gradeSelect.value);
+
+            if (Number.isFinite(credits) && credits > 0 && Number.isFinite(gradePoint) && gradeSelect.value !== '') {
+                totalCredits += credits;
+                totalPoints += credits * gradePoint;
+            }
+        }
+    });
+
+    const gpaNumber = totalCredits > 0 ? totalPoints / totalCredits : 0;
+    const gpa = gpaNumber.toFixed(2);
+    const gpaElem = document.getElementById('total-gpa') || document.getElementById('overall-gpa');
+    const creditsElem = document.getElementById('total-credits');
+
+    if (gpaElem) gpaElem.innerText = gpa;
+    if (creditsElem) creditsElem.innerText = `Total Graded Credits: ${totalCredits}`;
+
+    // Keep the gauge/needle synchronized with the GPA in the default calculator too.
+    const percentage = Math.max(0, Math.min(gpaNumber / 4, 1));
+    const angle = -90 + percentage * 180;
+    const needle = document.getElementById('needle');
+    if (needle) needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+    const gaugeProgress = document.getElementById('gauge-progress');
+    if (gaugeProgress) gaugeProgress.style.strokeDashoffset = 283 - percentage * 126;
+}
+
+// 2. دالة إضافة مادة جديدة للترم البلانك
+function addBlankCourse(btn) {
+    const semesterBox = btn.closest('.semester-box');
+    if (!semesterBox) return;
+    const coursesContainer = semesterBox.querySelector('.courses-container');
+    const count = coursesContainer.querySelectorAll('.course-row').length + 1;
+
+    const rowHtml = `
+    <div class="course-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+        <input type="text" class="course-name-input" placeholder="Course ${count} Name" style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;">
+        <input type="number" class="course-hours-input" placeholder="CH" min="1" max="10" value="3" oninput="calculateGPA()" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
+        <select class="course-grade-select" onchange="calculateGPA()" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
+            <option value="">Grade</option>
+            <option value="4.0">A</option>
+            <option value="3.7">A-</option>
+            <option value="3.3">B+</option>
+            <option value="3.0">B</option>
+            <option value="2.7">B-</option>
+            <option value="2.3">C+</option>
+            <option value="2.0">C</option>
+            <option value="1.7">C-</option>
+            <option value="1.3">D+</option>
+            <option value="1.0">D</option>
+            <option value="0.0">F</option>
+        </select>
+        <button class="btn-remove-course" type="button" onclick="this.closest('.course-row').remove(); calculateGPA();" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
+    </div>
+    `;
+    coursesContainer.insertAdjacentHTML('beforeend', rowHtml);
+    calculateGPA();
+}
+        // 1. دالة تحميل الواجهة الافتراضية عند فتح الصفحة
+function loadDefaultBlankCalculator() {
+    const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
+    if (!container) return;
+
+    document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
+
+    let html = `
+    <div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">
+        <div class="semester-box" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+            <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+                <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">Semester 1</h3>
+                <button class="btn-remove-semester btn-delete" type="button" onclick="this.closest('.semester-box').remove(); calculateGPA();" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Remove Semester</button>
+            </div>
+            <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
+    `;
+
+    for (let i = 1; i <= 4; i++) {
+        html += `
+        <div class="course-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+            <input type="text" class="course-name-input course-name" placeholder="Course ${i} Name" style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;">
+            <input type="number" class="course-hours-input course-credit" placeholder="CH" min="1" max="10" value="3" oninput="calculateGPA()" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
+            <select class="course-grade-select course-grade" onchange="calculateGPA()" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
+                <option value="">Grade</option>
+                <option value="4.0">A / A+</option>
+                <option value="3.7">A-</option>
+                <option value="3.3">B+</option>
+                <option value="3.0">B</option>
+                <option value="2.7">B-</option>
+                <option value="2.3">C+</option>
+                <option value="2.0">C</option>
+                <option value="1.7">C-</option>
+                <option value="1.3">D+</option>
+                <option value="1.0">D</option>
+                <option value="0.0">F</option>
+            </select>
+            <button class="btn-remove-course btn-delete" type="button" onclick="this.closest('.course-row').remove(); calculateGPA();" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
+        </div>
+        `;
+    }
+
+    html += `
+            </div>
+            <button class="btn-add-course" type="button" onclick="addBlankCourse(this)" style="margin-top: 14px; width: 100%; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px dashed rgba(56, 189, 248, 0.4); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">+ Add Course</button>
+        </div>
+    </div>
+    `;
+
+    container.innerHTML = html;
+    document.body.dataset.defaultCalculatorReady = 'true';
+    calculateGPA();
+}
+
+// Delegate clicks for default controls so newly-created buttons always work.
+document.addEventListener('click', function(e) {
+    const addCourseButton = e.target.closest('.btn-add-course');
+    if (addCourseButton && addCourseButton.closest('.semester-box')) {
+        e.preventDefault();
+        addBlankCourse(addCourseButton);
+        return;
+    }
+
+    const removeCourseButton = e.target.closest('.btn-remove-course');
+    if (removeCourseButton && removeCourseButton.closest('.semester-box')) {
+        e.preventDefault();
+        const row = removeCourseButton.closest('.course-row');
+        if (row) row.remove();
+        calculateGPA();
+        return;
+    }
+
+    const removeSemesterButton = e.target.closest('.btn-remove-semester');
+    if (removeSemesterButton && removeSemesterButton.closest('.semester-box')) {
+        e.preventDefault();
+        const semester = removeSemesterButton.closest('.semester-box');
+        if (semester) semester.remove();
+        calculateGPA();
+    }
+});
+
+// 2. التحديث اللحظي المباشر
+document.addEventListener('input', function(e) {
+    if (e.target.matches('input, select')) calculateGPA();
+});
+
+document.addEventListener('change', function(e) {
+    if (e.target.matches('input, select')) calculateGPA();
+});
+
+// 3. تشغيل الحساب والمكونات فور التحميل
+window.addEventListener('DOMContentLoaded', () => {
+    loadDefaultBlankCalculator();
+});
     </script>
     <!-- Custom Unified Modal -->
     <div id="custom-alert-modal" class="custom-modal-overlay">
