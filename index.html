@@ -1335,6 +1335,64 @@
             padding: 8px 14px !important;
             margin: 0 !important;
         }
+        /* إلغاء المساحة الفاضية والكبيرة بين الغلاف والحاسبة */
+        #cover-page {
+            min-height: auto !important;
+            height: auto !important;
+            padding-bottom: 20px !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* إلغاء أي الهوامش العلوية لصفحة الحاسبة نفسها */
+        #calculator-page,
+        #main-calculator,
+        .calculator-container {
+            margin-top: 0 !important;
+            padding-top: 20px !important;
+        }
+        /* إلغاء الارتفاع الكامل والشريط الفاضي نهائياً */
+        html, body {
+            height: auto !important;
+            min-height: 100% !important;
+            overflow-x: hidden;
+        }
+
+        #cover-page,
+        #calculator-page,
+        .hero-section,
+        .page-container {
+            min-height: auto !important;
+            height: auto !important;
+            max-height: none !important;
+            padding-top: 20px !important;
+            padding-bottom: 20px !important;
+        }
+
+        /* في حالة إن الصفحة بتستخدم نظام التنقل Display */
+        .page-section {
+            min-height: 0 !important;
+        }
+        /* إلغاء المسافات العلوية تماماً في صفحة الحاسبة والأزرار */
+        #calculator-page {
+            margin-top: 0 !important;
+            padding-top: 15px !important;
+        }
+
+        /* ضبط شريط الأزرار العلوية (Home, Light Mode, Clear Data) */
+        .nav-controls,
+        .calculator-header-controls,
+        div:has(> .Home),
+        div:has(> button:contains("Home")) {
+            margin-top: 0 !important;
+            margin-bottom: 10px !important;
+            padding-top: 0 !important;
+        }
+
+        /* إلغاء أي فراغات ضخمة قبل عنوان الحاسبة */
+        #calculator-page > div,
+        .calculator-container {
+            margin-top: 0 !important;
+        }
     </style>
 </head>
 <body>
@@ -3553,17 +3611,24 @@
         }
         }
 
-        function goToCalculator() {
-        const cover = document.getElementById('cover-page');
-        const calc = document.getElementById('calculator-page');
-        cover.style.opacity = '0';
-        cover.style.transform = 'scale(0.95)';
-        setTimeout(() => {
+   function goToCalculator() {
+    const cover = document.getElementById('cover-page');
+    const calc = document.getElementById('calculator-page');
+    
+    if (!cover || !calc) return;
+
+    cover.style.opacity = '0';
+    cover.style.transform = 'scale(0.95)';
+    
+    setTimeout(() => {
         cover.style.display = 'none';
         calc.style.display = 'block';
         calc.classList.add('page-active');
-        }, 350);
-        }
+        
+        // التوجيه المباشر لأعلى صفحة الحاسبة
+        calc.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }, 350);
+}
 
         function goToCover() {
         const cover = document.getElementById('cover-page');
