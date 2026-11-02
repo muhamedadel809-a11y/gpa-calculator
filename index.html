@@ -148,7 +148,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(rgba(15,23,42,0.82), rgba(15,23,42,0.82)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1600&auto=format&fit=crop') center/cover;
+            background: linear-gradient(rgba(15,23,42,0.82), rgba(15,23,42,0.82)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=60&w=900&auto=format&fit=crop') center/cover;
             color: white;
             text-align: center;
             padding: 20px;
@@ -202,7 +202,7 @@
         }
 
         .header-banner {
-            background: linear-gradient(var(--banner-overlay), var(--banner-overlay)), url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop') center/cover;
+            background: linear-gradient(var(--banner-overlay), var(--banner-overlay)), url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop') center/cover;
             color: white;
             padding: 28px;
             border-radius: 16px;
@@ -1457,6 +1457,70 @@
                 flex-direction: column !important;
                 gap: 2px !important;
                 text-align: center !important;
+            }
+        }
+        /* ===== Performance overrides ===== */
+
+        /* بنر الميد تيرم: نزول مرة واحدة + حركة خفيفة بالـ transform بس */
+        @keyframes floatSoft {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .animated-hero-banner {
+            animation: dropIn 0.8s ease-out both, floatSoft 4s ease-in-out 0.8s infinite;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+            will-change: transform;
+        }
+
+        .midterm-banner-wrapper {
+            perspective: none;
+        }
+
+        /* زرار Start: شيل نبض الظل المستمر */
+        .btn-start {
+            animation: fadeInSlideUp 1s ease both;
+        }
+
+        /* اسم المطور: شيل التوهج المستمر */
+        .animated-credit {
+            animation: none;
+        }
+
+        /* شيل الـ blur التقيل من كل العناصر */
+        .footer-badge, .disclaimer-banner, .update-banner,
+        .uni-card, .cover-disclaimer, .custom-modal-overlay {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        [class*="dept-"] {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .dept-card.active {
+            animation: none !important;
+        }
+
+        /* على الموبايل وللي مفعّل تقليل الحركة */
+        @media (max-width: 768px) {
+            .animated-hero-banner {
+                animation: dropIn 0.6s ease-out both;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
             }
         }
     </style>
