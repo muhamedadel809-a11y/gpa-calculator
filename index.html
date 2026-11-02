@@ -3806,7 +3806,7 @@
 
         function addSemesterData() {
         semestersData.push({
-        id: Date.now(),
+        id: 'sem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
         courses: [
         { name: '', credits: '', grade: '' },
         { name: '', credits: '', grade: '' },
@@ -3823,7 +3823,7 @@
         if (semCard) {
         semCard.style.animation = 'fadeOutSlideDown 0.3s forwards';
         setTimeout(() => {
-        semestersData = semestersData.filter(s => s.id !== semId);
+        semestersData = semestersData.filter(s => String(s.id) !== String(semId));
         if (semestersData.length === 0) addSemesterData();
         else { renderAll(); saveData(); }
         }, 300);
@@ -3831,7 +3831,7 @@
         }
 
         function addCourse(semId) {
-        const sem = semestersData.find(s => s.id === semId);
+        const sem = semestersData.find(s => String(s.id) === String(semId));
         if (sem) {
         sem.courses.push({ name: '', credits: '', grade: '' });
         renderAll();
@@ -3841,7 +3841,7 @@
 
         // 1. الدالة الجديدة لحذف المادة مع التنبيه الذكي للمتطلبات
         function removeCourse(semId, courseIdx) {
-        const sem = semestersData.find(s => s.id === semId);
+        const sem = semestersData.find(s => String(s.id) === String(semId));
         if (!sem) return;
 
         const targetCourse = sem.courses[courseIdx];
@@ -3869,7 +3869,7 @@
         showPrereqModal(targetCourse, dependentCourses, () => {
         sem.courses.splice(courseIdx, 1);
         dependentCourses.reverse().forEach(dep => {
-        const depSem = semestersData.find(s => s.id === dep.semId);
+        const depSem = semestersData.find(s => String(s.id) === String(dep.semId));
         if (depSem) {
         const foundIdx = depSem.courses.findIndex(c => c.code === dep.code);
         if (foundIdx !== -1) depSem.courses.splice(foundIdx, 1);
@@ -3979,7 +3979,7 @@
         }
         // 2. دالة التحديث تُترك كما هي تماماً
         function updateCourse(semId, courseIdx, field, value) {
-        const sem = semestersData.find(s => s.id === semId);
+        const sem = semestersData.find(s => String(s.id) === String(semId));
         if (sem) {
         sem.courses[courseIdx][field] = value;
         calculateAndDisplay();
@@ -3988,7 +3988,7 @@
         }
 
         function updateCourse(semId, courseIdx, field, value) {
-        const sem = semestersData.find(s => s.id === semId);
+        const sem = semestersData.find(s => String(s.id) === String(semId));
         if (sem) {
         sem.courses[courseIdx][field] = value;
         calculateAndDisplay();
@@ -4046,7 +4046,17 @@
 
         }
 
-        function addSemester() { addSemesterData(); }
+        function addSemester() {
+        const grid = document.querySelector('#semesters-container .semesters-grid');
+        if (grid && typeof blankSemesterBoxHTML === 'function') {
+        const n = grid.querySelectorAll('.semester-box').length + 1;
+        grid.insertAdjacentHTML('beforeend', blankSemesterBoxHTML('Semester ' + n));
+        if (typeof parseiOSEmojis === 'function') parseiOSEmojis();
+        calculateGPA();
+        return;
+        }
+        addSemesterData();
+        }
 
         function calculateAndDisplay() {
         let totalPoints = 0, totalCredits = 0;
@@ -5208,13 +5218,12 @@
 
         html += `
         </div>
+        <button class="btn-add-course" type="button" onclick="addBlankCourse(this)" style="margin-top: 14px; width: 100%; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px dashed rgba(56, 189, 248, 0.4); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">+ Add Course</button>
         </div>
         `;
         });
 
         html += `
-        <button class="btn-add-course" onclick="addBlankCourse(this)" style="margin-top: 14px; width: 100%; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px dashed rgba(56, 189, 248, 0.4); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">+ Add Course</button>
-        </div>
         </div>`;
 
         container.innerHTML = html;
@@ -5480,22 +5489,15 @@ function addBlankCourse(btn) {
     calculateGPA();
 }
         // 1. دالة تحميل الواجهة الافتراضية عند فتح الصفحة
-function loadDefaultBlankCalculator() {
-    const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
-    if (!container) return;
-
-    document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
-
+function blankSemesterBoxHTML(title) {
     let html = `
-    <div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">
         <div class="semester-box" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
             <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
-                <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">Semester 1</h3>
+                <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">${title}</h3>
                 <button class="btn-remove-semester btn-delete" type="button" onclick="this.closest('.semester-box').remove(); calculateGPA();" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Remove Semester</button>
             </div>
             <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
     `;
-
     for (let i = 1; i <= 4; i++) {
         html += `
         <div class="course-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
@@ -5519,45 +5521,24 @@ function loadDefaultBlankCalculator() {
         </div>
         `;
     }
-
     html += `
             </div>
             <button class="btn-add-course" type="button" onclick="addBlankCourse(this)" style="margin-top: 14px; width: 100%; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px dashed rgba(56, 189, 248, 0.4); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">+ Add Course</button>
         </div>
-    </div>
     `;
+    return html;
+}
 
-    container.innerHTML = html;
+function loadDefaultBlankCalculator() {
+    const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
+    if (!container) return;
+
+    document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
+
+    container.innerHTML = `<div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">${blankSemesterBoxHTML('Semester 1')}</div>`;
     document.body.dataset.defaultCalculatorReady = 'true';
     calculateGPA();
 }
-
-// Delegate clicks for default controls so newly-created buttons always work.
-document.addEventListener('click', function(e) {
-    const addCourseButton = e.target.closest('.btn-add-course');
-    if (addCourseButton && addCourseButton.closest('.semester-box')) {
-        e.preventDefault();
-        addBlankCourse(addCourseButton);
-        return;
-    }
-
-    const removeCourseButton = e.target.closest('.btn-remove-course');
-    if (removeCourseButton && removeCourseButton.closest('.semester-box')) {
-        e.preventDefault();
-        const row = removeCourseButton.closest('.course-row');
-        if (row) row.remove();
-        calculateGPA();
-        return;
-    }
-
-    const removeSemesterButton = e.target.closest('.btn-remove-semester');
-    if (removeSemesterButton && removeSemesterButton.closest('.semester-box')) {
-        e.preventDefault();
-        const semester = removeSemesterButton.closest('.semester-box');
-        if (semester) semester.remove();
-        calculateGPA();
-    }
-});
 
 // 2. التحديث اللحظي المباشر
 document.addEventListener('input', function(e) {
