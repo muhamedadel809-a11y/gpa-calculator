@@ -1,0 +1,102 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.semester-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.semester-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.course-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+    .course-row input, .course-row select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+.course-name {
+    flex: 2;
+}
+
+.course-credit {
+    flex: 1;
+}
+
+.course-grade {
+    flex: 1;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+.btn-add-course {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.btn-delete {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.btn-add-semester {
+    background-color: #2196f3;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.result-card {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.gpa-display {
+    font-size: 48px;
+    font-weight: bold;
+    color: #4caf50;
+    margin: 10px 0;
+}
