@@ -1556,7 +1556,7 @@
 
             <div class="universities-grid">
                 <!-- Cairo University -->
-                <div class="uni-card active" id="card-cu" onclick="selectUniversity('cu')">
+                <div class="uni-card" id="card-cu" onclick="selectUniversity('cu')">
                     <div class="uni-logo-wrapper">
                         <!-- SVG Emblem: Cairo University Faculty of Engineering -->
                         <svg viewBox="0 0 100 100" class="uni-logo-inline" xmlns="http://www.w3.org/2000/svg">
@@ -1688,7 +1688,7 @@
             </div>
 
             <!-- Cairo University Departments -->
-            <div class="department-selector-wrapper" id="dept-wrapper-cu" style="display: block;">
+            <div class="department-selector-wrapper" id="dept-wrapper-cu" style="display: none;">
                 <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">📐 Choose Engineering Department:</div>
                 <div class="dept-grid">
                     <div class="dept-card" onclick="selectDepartment('freshman', event)">🌱 Freshman Year (إعدادي فقط)</div>
@@ -1838,7 +1838,7 @@
         }
         let semestersData = [];
         let currentDeptKey = 'custom';
-        let currentUniKey = 'cu';
+        let currentUniKey = 'custom';
 
         const freshmanYearData = [
         { id: 'fresh_1', courses: [
@@ -3666,24 +3666,24 @@
         }
         }
 
-   function goToCalculator() {
-    const cover = document.getElementById('cover-page');
-    const calc = document.getElementById('calculator-page');
-    
-    if (!cover || !calc) return;
+        function goToCalculator() {
+        const cover = document.getElementById('cover-page');
+        const calc = document.getElementById('calculator-page');
 
-    cover.style.opacity = '0';
-    cover.style.transform = 'scale(0.95)';
-    
-    setTimeout(() => {
+        if (!cover || !calc) return;
+
+        cover.style.opacity = '0';
+        cover.style.transform = 'scale(0.95)';
+
+        setTimeout(() => {
         cover.style.display = 'none';
         calc.style.display = 'block';
         calc.classList.add('page-active');
-        
+
         // التوجيه المباشر لأعلى صفحة الحاسبة
         calc.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }, 350);
-}
+        }, 350);
+        }
 
         function goToCover() {
         const cover = document.getElementById('cover-page');
@@ -3723,11 +3723,19 @@
         }
         }
 
-        function addSemesterData() {
-        semestersData.push({ id: Date.now(), courses: [{ name: '', credits: '', grade: '' }] });
-        renderAll();
-        saveData();
-        }
+     function addSemesterData() {
+    semestersData.push({
+        id: Date.now(),
+        courses: [
+            { name: '', credits: '', grade: '' },
+            { name: '', credits: '', grade: '' },
+            { name: '', credits: '', grade: '' },
+            { name: '', credits: '', grade: '' }
+        ]
+    });
+    renderAll();
+    saveData();
+}
 
         function removeSemester(semId) {
         const semCard = document.getElementById(`sem-card-${semId}`);
@@ -4028,9 +4036,87 @@
         });
         }
         }
+        // دالة إنشاء ترم افتراضي بمواد فارغة
+        function loadDefaultBlankCalculator() {
+        const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
+        if (!container) return;
 
-        // تشغيل التحويل فور تحميل الصفحة
-        document.addEventListener("DOMContentLoaded", parseiOSEmojis);
+        // إلغاء تحديد أي كارت جامعة مسبق
+        document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
+
+        let html = `
+        <div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">
+        <div class="semester-box" id="semester-box-0" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+        <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">Semester 1</h3>
+        <button class="btn-remove-semester" onclick="this.closest('.semester-box').remove()">Remove Semester</button>
+        </div>
+        <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
+        `;
+
+        // إنشاء 4 صفوف فارغة جاهزة للإدخال
+        for (let i = 1; i <= 4; i++) {
+        html += `
+        <div class="course-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+        <input type="text" class="course-name-input" placeholder="Course ${i} Name" style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;">
+        <input type="number" class="course-hours-input" placeholder="CH" min="1" max="10" value="3" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
+        <select class="course-grade-select" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
+        <option value="">Grade</option>
+        <option value="4.0">A</option>
+        <option value="3.7">A-</option>
+        <option value="3.3">B+</option>
+        <option value="3.0">B</option>
+        <option value="2.7">B-</option>
+        <option value="2.3">C+</option>
+        <option value="2.0">C</option>
+        <option value="1.7">C-</option>
+        <option value="1.3">D+</option>
+        <option value="1.0">D</option>
+        <option value="0.0">F</option>
+        </select>
+        <button class="btn-remove-course" onclick="this.closest('.course-row').remove()" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
+        </div>
+        `;
+        }
+
+        html += `
+        </div>
+        </div>
+        </div>
+        `;
+
+        container.innerHTML = html;
+        }
+        // دالة إضافة مادة فاضية جديدة داخل الترم
+        function addBlankCourse(btn) {
+        const semesterBox = btn.closest('.semester-box');
+        const coursesContainer = semesterBox.querySelector('.courses-container');
+        const count = coursesContainer.querySelectorAll('.course-row').length + 1;
+
+        const rowHtml = `
+        <div class="course-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+        <input type="text" class="course-name-input" placeholder="Course ${count} Name" style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;">
+        <input type="number" class="course-hours-input" placeholder="CH" min="1" max="10" value="3" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
+        <select class="course-grade-select" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
+        <option value="">Grade</option>
+        <option value="4.0">A</option>
+        <option value="3.7">A-</option>
+        <option value="3.3">B+</option>
+        <option value="3.0">B</option>
+        <option value="2.7">B-</option>
+        <option value="2.3">C+</option>
+        <option value="2.0">C</option>
+        <option value="1.7">C-</option>
+        <option value="1.3">D+</option>
+        <option value="1.0">D</option>
+        <option value="0.0">F</option>
+        </select>
+        <button class="btn-remove-course" onclick="this.closest('.course-row').remove()" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
+        </div>
+        `;
+        coursesContainer.insertAdjacentHTML('beforeend', rowHtml);
+        }
+     
         // ==========================================
         // ASU Programs Data & Loader System
         // ==========================================
@@ -5025,72 +5111,75 @@
         }
         };
 
-function loadASUProgram(programKey) {
-    const progData = asuProgramsData[programKey];
-    if (!progData) return;
+        function loadASUProgram(programKey) {
+        const progData = asuProgramsData[programKey];
+        if (!progData) return;
 
-    // تفعيل كارت القسم المختار
-    document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
-    if (window.event && window.event.currentTarget) {
+        // تفعيل كارت القسم المختار
+        document.querySelectorAll('.dept-card').forEach(card => card.classList.remove('active'));
+        if (window.event && window.event.currentTarget) {
         window.event.currentTarget.classList.add('active');
-    }
+        }
 
-    const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
-    if (!container) return;
+        const container = document.getElementById('semesters-container') || document.getElementById('main-courses-view');
+        if (!container) return;
 
-    let html = `
+        let html = `
         <div class="program-header" style="margin-bottom: 25px; text-align: center;">
-            <h2 class="program-title" style="font-size: 1.6rem; color: #f8fafc; font-weight: bold; margin-bottom: 5px;">${progData.name}</h2>
-            <p class="program-subtitle" style="color: #38bdf8; font-size: 0.95rem;">Ain Shams University - Credit Hours System</p>
+        <h2 class="program-title" style="font-size: 1.6rem; color: #f8fafc; font-weight: bold; margin-bottom: 5px;">${progData.name}</h2>
+        <p class="program-subtitle" style="color: #38bdf8; font-size: 0.95rem;">Ain Shams University - Credit Hours System</p>
         </div>
         <div class="semesters-grid" style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto;">
-    `;
-
-    progData.semesters.forEach((sem, semIdx) => {
-        html += `
-            <div class="semester-box" id="semester-box-${semIdx}" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-                <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
-                    <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">${sem.name}</h3>
-                    <button class="btn-remove-semester" onclick="removeASUSemester(this)">Remove Semester</button>
-                </div>
-                <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
         `;
-        
+
+        progData.semesters.forEach((sem, semIdx) => {
+        html += `
+        <div class="semester-box" id="semester-box-${semIdx}" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <div class="semester-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+        <h3 class="semester-title" style="margin: 0; color: #f8fafc; font-size: 1.25rem; font-weight: 600;">${sem.name}</h3>
+        <button class="btn-remove-semester" onclick="removeASUSemester(this)">Remove Semester</button>
+        </div>
+        <div class="courses-container" style="display: flex; flex-direction: column; gap: 12px;">
+        `;
+
         sem.courses.forEach(course => {
-            html += `
-                <div class="course-row" id="course-${course.code}" style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                    <input type="text" class="course-name-input" value="${course.name} (${course.code})" readonly style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    <input type="number" class="course-hours-input" value="${course.ch}" min="1" max="10" placeholder="CH" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
-                    <select class="course-grade-select" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
-                        <option value="">Grade</option>
-                        <option value="4.0">A</option>
-                        <option value="3.7">A-</option>
-                        <option value="3.3">B+</option>
-                        <option value="3.0">B</option>
-                        <option value="2.7">B-</option>
-                        <option value="2.3">C+</option>
-                        <option value="2.0">C</option>
-                        <option value="1.7">C-</option>
-                        <option value="1.3">D+</option>
-                        <option value="1.0">D</option>
-                        <option value="0.0">F</option>
-                    </select>
-                    <button class="btn-remove-course" onclick="handleASUCourseRemoval('${course.code}', '${course.name.replace(/'/g, "\\'")}')" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
-                </div>
-            `;
+        html += `
+        <div class="course-row" id="course-${course.code}" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+        <input type="text" class="course-name-input" value="${course.name} (${course.code})" readonly style="flex: 2; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <input type="number" class="course-hours-input" value="${course.ch}" min="1" max="10" placeholder="CH" style="width: 70px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none;">
+        <select class="course-grade-select" style="width: 110px; background: #0b1120; border: 1px solid #1e293b; color: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">
+        <option value="">Grade</option>
+        <option value="4.0">A</option>
+        <option value="3.7">A-</option>
+        <option value="3.3">B+</option>
+        <option value="3.0">B</option>
+        <option value="2.7">B-</option>
+        <option value="2.3">C+</option>
+        <option value="2.0">C</option>
+        <option value="1.7">C-</option>
+        <option value="1.3">D+</option>
+        <option value="1.0">D</option>
+        <option value="0.0">F</option>
+        </select>
+        <button class="btn-remove-course" onclick="handleASUCourseRemoval('${course.code}', '${course.name.replace(/'/g, "\\'")}')" title="Remove Course" style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; flex-shrink: 0;">✕</button>
+        </div>
+        `;
         });
 
         html += `
-                </div>
-            </div>
+        </div>
+        </div>
         `;
-    });
+        });
 
-    html += `</div>`;
+        html += `
+        <button class="btn-add-course" onclick="addBlankCourse(this)" style="margin-top: 14px; width: 100%; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px dashed rgba(56, 189, 248, 0.4); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">+ Add Course</button>
+        </div>
+        </div>`;
 
-    container.innerHTML = html;
-    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+        container.innerHTML = html;
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         // ASU Master Prerequisite Tree for Cascade Deletion
 
         const asuPrerequisites = {
@@ -5226,57 +5315,57 @@ function loadASUProgram(programKey) {
         'CSE391': ['CSE491'], 'CSE491': ['CSE492']
         };
         // دالة حذف المادة مع تفعيل نظام التنبيه للمواد الاعتمادية Cascade Prerequisite Remover
-function handleASUCourseRemoval(courseCode, courseName) {
-    const dependentCodes = asuPrerequisites[courseCode] || [];
-    
-    // التكتيك العام: التأكد مما إذا كان هناك مواد تعتمد عليها
-    if (dependentCodes.length > 0) {
+        function handleASUCourseRemoval(courseCode, courseName) {
+        const dependentCodes = asuPrerequisites[courseCode] || [];
+
+        // التكتيك العام: التأكد مما إذا كان هناك مواد تعتمد عليها
+        if (dependentCodes.length > 0) {
         // إذا توفرت دالة المودال الموحدة في مشروعك
         if (typeof showPrereqModal === 'function') {
-            const dependentList = dependentCodes.map(code => ({
-                code: code,
-                name: `Course [${code}]`,
-                semName: 'Upcoming Semester'
-            }));
-            
-            showPrereqModal(
-                { code: courseCode, name: courseName },
-                dependentList,
-                function() {
-                    removeASUCourseElement(courseCode);
-                    dependentCodes.forEach(depCode => removeASUCourseElement(depCode));
-                }
-            );
-        } else if (confirm(`Warning: Deleting ${courseName} (${courseCode}) will also remove its dependent courses: ${dependentCodes.join(', ')}. Delete anyway?`)) {
-            removeASUCourseElement(courseCode);
-            dependentCodes.forEach(depCode => removeASUCourseElement(depCode));
-        }
-    } else {
-        removeASUCourseElement(courseCode);
-    }
-}
+        const dependentList = dependentCodes.map(code => ({
+        code: code,
+        name: `Course [${code}]`,
+        semName: 'Upcoming Semester'
+        }));
 
-// دالة حذف عنصر المادة فوراً من الشاشة
-function removeASUCourseElement(courseCode) {
-    const courseElem = document.getElementById(`course-${courseCode}`);
-    if (courseElem) {
+        showPrereqModal(
+        { code: courseCode, name: courseName },
+        dependentList,
+        function() {
+        removeASUCourseElement(courseCode);
+        dependentCodes.forEach(depCode => removeASUCourseElement(depCode));
+        }
+        );
+        } else if (confirm(`Warning: Deleting ${courseName} (${courseCode}) will also remove its dependent courses: ${dependentCodes.join(', ')}. Delete anyway?`)) {
+        removeASUCourseElement(courseCode);
+        dependentCodes.forEach(depCode => removeASUCourseElement(depCode));
+        }
+        } else {
+        removeASUCourseElement(courseCode);
+        }
+        }
+
+        // دالة حذف عنصر المادة فوراً من الشاشة
+        function removeASUCourseElement(courseCode) {
+        const courseElem = document.getElementById(`course-${courseCode}`);
+        if (courseElem) {
         courseElem.style.transition = 'all 0.3s ease';
         courseElem.style.opacity = '0';
         courseElem.style.transform = 'scale(0.9)';
         setTimeout(() => courseElem.remove(), 300);
-    }
-}
+        }
+        }
 
-// دالة حذف الترم بالكامل عند الضغط على Remove Semester
-function removeASUSemester(buttonElem) {
-    const semBox = buttonElem.closest('.semester-box');
-    if (semBox) {
+        // دالة حذف الترم بالكامل عند الضغط على Remove Semester
+        function removeASUSemester(buttonElem) {
+        const semBox = buttonElem.closest('.semester-box');
+        if (semBox) {
         semBox.style.transition = 'all 0.3s ease';
         semBox.style.opacity = '0';
         semBox.style.transform = 'translateY(-10px)';
         setTimeout(() => semBox.remove(), 300);
-    }
-}
+        }
+        }
     </script>
     <!-- Custom Unified Modal -->
     <div id="custom-alert-modal" class="custom-modal-overlay">
