@@ -1120,27 +1120,35 @@
             color: #38bdf8;
             font-weight: 700;
         }
-        /* Cover Disclaimer Styles (Resizing & Anti-Overlap) */
-        .cover-disclaimer {
-            background: rgba(15, 23, 42, 0.8) !important;
-            border: 1px solid rgba(56, 189, 248, 0.2) !important;
-            border-left: 4px solid #38bdf8 !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
-            padding: 12px 18px !important;
-            border-radius: 10px !important;
+        /* تصغير مظهر التنويه في الكفر ومنع التداخل مع شريط الاسم */
+        .cover-disclaimer-wrapper {
+            margin-top: 15px !important;
+            margin-bottom: 35px !important; /* مسافة كافية لتبتعد عن التوقيع */
+            display: flex !important;
+            justify-content: center !important;
             position: relative !important;
             z-index: 5 !important;
         }
 
+        .cover-disclaimer {
+            max-width: 580px !important; /* تصغير عرض الصندوق ليصبح ملموماً */
+            padding: 8px 14px !important; /* تقليل الحشوة الداخلية لتخفيض الارتفاع */
+            background: rgba(15, 23, 42, 0.85) !important;
+            border: 1px solid rgba(56, 189, 248, 0.25) !important;
+            border-left: 3px solid #38bdf8 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+        }
+
             .cover-disclaimer .disclaimer-icon {
-                width: 32px !important;
-                height: 32px !important;
-                font-size: 1.1rem !important;
+                width: 26px !important;
+                height: 26px !important;
+                font-size: 0.95rem !important;
             }
 
             .cover-disclaimer .disclaimer-content p {
-                font-size: 0.82rem !important; /* تصغير الخط قليلاً لمنع التضخم */
-                line-height: 1.5 !important;
+                font-size: 0.78rem !important; /* تصغير حجم الخط ليكون ممتازا وملموماً */
+                line-height: 1.4 !important;
                 color: #cbd5e1 !important;
             }
 
@@ -1151,6 +1159,182 @@
             position: relative !important;
             z-index: 2 !important;
         }
+        /* Container Positioning */
+        .midterm-banner-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+            perspective: 1000px;
+        }
+
+        /* Master Animated Banner */
+        .animated-hero-banner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 58, 138, 0.85));
+            border: 1px dashed rgba(56, 189, 248, 0.5);
+            border-radius: 50px;
+            padding: 12px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.25);
+            backdrop-filter: blur(12px);
+            /* 1. انيميشن النزول والاستقرار */
+            animation: dropIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, floatGlow 3.5s ease-in-out infinite 1.2s; /* 2. انيميشن الحركة المستمرة بعد النزول */
+        }
+
+        /* حركة النزول من أعلى الشاشة */
+        @keyframes dropIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-120px) scale(0.8);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translateY(10px) scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* الحركة الترددية المستمرة والتوهج (Floating & Glowing Effect) */
+        @keyframes floatGlow {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.25);
+                border-color: rgba(56, 189, 248, 0.4);
+            }
+
+            50% {
+                transform: translateY(-8px) rotate(0.5deg);
+                box-shadow: 0 18px 35px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.45);
+                border-color: rgba(56, 189, 248, 0.8);
+            }
+        }
+
+        /* تفاصيل النصوص والأيقونة */
+        .midterm-icon {
+            font-size: 1.3rem;
+            animation: pulseIcon 1.8s infinite ease-in-out;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.25);
+            }
+        }
+
+        .midterm-text {
+            display: flex;
+            gap: 8px;
+            font-size: 0.95rem;
+            color: #f8fafc;
+            font-weight: 500;
+        }
+
+            .midterm-text .highlight {
+                color: #38bdf8;
+                font-weight: 700;
+                text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+            }
+        /* Hero Action Container Layout */
+        .hero-actions-container {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 16px !important;
+            margin-top: 20px !important;
+            width: 100% !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+
+            .hero-actions-container .midterm-banner-wrapper,
+            .hero-actions-container .cover-disclaimer-wrapper {
+                margin: 0 !important;
+                width: 100% !important;
+                display: flex !important;
+                justify-content: center !important;
+            }
+
+            .hero-actions-container .cover-disclaimer {
+                max-width: 560px !important;
+                padding: 8px 14px !important;
+                background: rgba(15, 23, 42, 0.85) !important;
+                border: 1px solid rgba(56, 189, 248, 0.25) !important;
+                border-left: 3px solid #38bdf8 !important;
+                border-radius: 8px !important;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+            }
+
+                .hero-actions-container .cover-disclaimer .disclaimer-content p {
+                    font-size: 0.78rem !important;
+                    line-height: 1.4 !important;
+                    color: #cbd5e1 !important;
+                    margin: 0 !important;
+                }
+
+            .hero-actions-container .cover-footer {
+                margin-top: 8px !important;
+            }
+        /* حل التداخل الجذري في الـ Cover Page */
+        #cover-page {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 100vh !important;
+            padding: 40px 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        .hero-actions-container {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 18px !important;
+            width: 100% !important;
+            margin-top: 20px !important;
+        }
+
+        /* فك أي تثبيت مطلق للـ Footer ومنعه من الاختباء خلف التنويه */
+        .cover-footer,
+        .footer-badge,
+        .signature-container {
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            margin-top: 15px !important;
+            z-index: 20 !important;
+        }
+
+        /* ضبط حجم صندوق التنويه لمنع التضخم */
+        .cover-disclaimer-wrapper {
+            position: relative !important;
+            z-index: 10 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .cover-disclaimer {
+            max-width: 580px !important;
+            padding: 8px 14px !important;
+            margin: 0 !important;
+        }
     </style>
 </head>
 <body>
@@ -1159,30 +1343,47 @@
     <div id="cover-page">
         <h1>GPA Calculator</h1>
         <p>Track your academic progress and calculate your semester and cumulative GPA easily.</p>
-        <button class="btn-start" onclick="goToCalculator()">Go to Calculate Your GPA</button>
-        <!-- Wrapper to prevent overlapping in Cover -->
-        <div class="cover-disclaimer-wrapper" style="margin-top: 30px; margin-bottom: 25px; width: 100%; display: flex; justify-content: center; z-index: 10; position: relative;">
-            <div class="disclaimer-banner cover-disclaimer" style="margin: 0; max-width: 750px; width: 90%;">
-                <div class="disclaimer-icon">💡</div>
-                <div class="disclaimer-content">
-                    <p><strong>Important Note:</strong> When using university course roadmaps, minor discrepancies in credit hours may occur based on your specific college regulations. Please always consult your official faculty handbook or academic advisor to verify details. Thank you!</p>
+        <!-- Hero Action Area -->
+        <div class="hero-actions-container">
+            <!-- 1. Primary Button -->
+            <button class="btn-start" onclick="goToCalculator()">Go to Calculate Your GPA</button>
+
+            <!-- 2. Midterm Banner -->
+            <div class="midterm-banner-wrapper">
+                <div class="midterm-banner animated-hero-banner">
+                    <span class="midterm-icon">🎯</span>
+                    <div class="midterm-text">
+                        <span>Are you ready for midterms?</span>
+                        <span class="highlight">Are you ready to calculate your GPA?</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <footer class="cover-footer">
-            <div class="footer-badge">
-                <span class="animated-credit">Dir. By Mohamed Adel</span>
-                <div class="footer-divider"></div>
-                <a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" class="cover-email-btn">
-                    <svg class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                        <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg>
-                    <span>mohamed.abdefattah07@eng-st.cu.edu.eg</span>
-                </a>
+            <!-- 3. Small Clean Disclaimer Note -->
+            <div class="cover-disclaimer-wrapper">
+                <div class="disclaimer-banner cover-disclaimer">
+                    <div class="disclaimer-icon">💡</div>
+                    <div class="disclaimer-content">
+                        <p><strong>Important Note:</strong> When using university course roadmaps, minor discrepancies in credit hours may occur based on your specific college regulations. Please always consult your official faculty handbook or academic advisor to verify details. Thank you!</p>
+                    </div>
+                </div>
             </div>
-        </footer>
+
+            <!-- 4. Signature Badge -->
+            <footer class="cover-footer">
+                <div class="footer-badge">
+                    <span class="animated-credit">Dir. By Mohamed Adel</span>
+                    <div class="footer-divider"></div>
+                    <a href="mailto:mohamed.abdefattah07@eng-st.cu.edu.eg" class="cover-email-btn">
+                        <svg class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>mohamed.abdefattah07@eng-st.cu.edu.eg</span>
+                    </a>
+                </div>
+            </footer>
+        </div>
     </div>
 
     <!-- Calculator Page -->
