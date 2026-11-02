@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://muhamedadel809-a11y.github.io/gpa-calculator/sitemap.xml
