@@ -4084,7 +4084,16 @@
         document.getElementById('total-credits').innerText = `Total Graded Credits: ${totalCredits}`;
         }
 
-        window.onload = function() { loadData(); };
+        window.onload = function() {
+    currentDeptKey = 'custom';
+    const container = document.getElementById('semesters-container');
+    if (container) {
+        container.innerHTML = '';
+        if (typeof addSemester === 'function') {
+            addSemester();
+        }
+    }
+};
     </script>
     <!-- Custom Prerequisite Alert Modal -->
     <div id="custom-alert-modal" class="custom-modal-overlay">

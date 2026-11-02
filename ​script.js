@@ -90,10 +90,9 @@ function calculateGPA() {
 
     if (gpaElement) gpaElement.innerText = gpa;
     if (creditsElement) creditsElement.innerText = `Total Graded Credits: ${totalCredits}`;
-}
+}   
 
-// تشغيل إضافة أول ترم تلقائياً عند فتح الصفحة
-window.onload = function() {window.onload = function() {
+window.onload = function() {
     const container = document.getElementById('semesters-container');
     if (container) container.innerHTML = '';
     addSemester();
