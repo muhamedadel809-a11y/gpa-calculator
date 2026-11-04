@@ -3647,6 +3647,7 @@
         localStorage.setItem('gpa_theme', isDark ? 'dark' : 'light');
         }
 
+
         function loadTheme() {
         const savedTheme = localStorage.getItem('gpa_theme');
         if (savedTheme === 'dark') {
@@ -5551,6 +5552,7 @@ document.addEventListener('change', function(e) {
 
 // 3. تشغيل الحساب والمكونات فور التحميل
 window.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
     loadDefaultBlankCalculator();
 });
     </script>
