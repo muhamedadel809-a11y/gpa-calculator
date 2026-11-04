@@ -3697,6 +3697,7 @@
         const targetWrapper = document.getElementById(`dept-wrapper-${uniKey}`) || document.getElementById(`depts-${uniKey}`);
         if (targetWrapper) {
         targetWrapper.style.display = 'block';
+                rememberSelection({ uni: uniKey });
         } else {
         showCustomModal({
         title: 'Coming Soon!',
@@ -3717,6 +3718,8 @@ function selectDepartment(deptKey, evt) {
     document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected', 'active'));
     const clicked = evt && (evt.currentTarget || evt.target.closest('.dept-card'));
     if (clicked) clicked.classList.add('active');
+                const uKey = uniKeyOf(clicked);
+        rememberSelection(uKey ? { uni: uKey, dept: deptKey } : { dept: deptKey });
 
     applyCurrentRoadmap();
     if (typeof goToCalculator === 'function') {
@@ -3820,6 +3823,8 @@ function selectDepartment(deptKey, evt) {
 
         function clearAllDataNow() {
         localStorage.removeItem('gpa_data_v17');
+                localStorage.removeItem('gpa_selection_v1');
+        localStorage.removeItem('gpa_asu_v1');
         semestersData = [];
         document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected', 'active'));
         addSemesterData();
@@ -4023,6 +4028,8 @@ function selectDepartment(deptKey, evt) {
         }
 
         function renderAll() {
+                asuMode = false;
+        localStorage.removeItem('gpa_asu_v1');
         const container = document.getElementById('semesters-container');
         container.innerHTML = '';
 
@@ -5236,6 +5243,10 @@ function selectDepartment(deptKey, evt) {
         </div>`;
 
         container.innerHTML = html;
+                asuMode = true;
+        asuProgramKey = programKey;
+        saveASUState();
+        rememberSelection({ uni: 'asu', dept: programKey });
         container.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         // ASU Master Prerequisite Tree for Cascade Deletion
@@ -5559,11 +5570,102 @@ function selectDepartment(deptKey, evt) {
         });
 
         // 3. تشغيل الحساب والمكونات فور التحميل
-        window.addEventListener('DOMContentLoaded', () => {
-        loadTheme();
-        semestersData = [];
-        addSemesterData();
+// ===== حفظ صفحات ASU + تذكّر الجامعة والقسم المختار =====
+var asuMode = false;
+var asuProgramKey = null;
+var asuSaveTimer = null;
+
+function saveASUState() {
+    if (!asuMode) return;
+    const container = document.getElementById('semesters-container');
+    if (!container) return;
+    try {
+        const clone = container.cloneNode(true);
+        const liveInputs = container.querySelectorAll('input');
+        clone.querySelectorAll('input').forEach((el, i) => {
+            if (liveInputs[i]) el.setAttribute('value', liveInputs[i].value);
         });
+        const liveSelects = container.querySelectorAll('select');
+        clone.querySelectorAll('select').forEach((sel, i) => {
+            Array.from(sel.options).forEach(o => o.removeAttribute('selected'));
+            const idx = liveSelects[i] ? liveSelects[i].selectedIndex : -1;
+            if (idx >= 0 && sel.options[idx]) sel.options[idx].setAttribute('selected', 'selected');
+        });
+        localStorage.setItem('gpa_asu_v1', JSON.stringify({ program: asuProgramKey, html: clone.innerHTML }));
+    } catch (e) {}
+}
+
+function saveASUStateSoon() {
+    clearTimeout(asuSaveTimer);
+    asuSaveTimer = setTimeout(saveASUState, 150);
+}
+
+function restoreASUState() {
+    try {
+        const raw = localStorage.getItem('gpa_asu_v1');
+        if (!raw) return false;
+        const saved = JSON.parse(raw);
+        const container = document.getElementById('semesters-container');
+        if (!container || !saved || !saved.html) return false;
+        container.innerHTML = saved.html;
+        asuMode = true;
+        asuProgramKey = saved.program;
+        calculateGPA();
+        return true;
+    } catch (e) { return false; }
+}
+
+function rememberSelection(part) {
+    try {
+        const old = JSON.parse(localStorage.getItem('gpa_selection_v1') || '{}');
+        localStorage.setItem('gpa_selection_v1', JSON.stringify(Object.assign(old, part)));
+    } catch (e) {}
+}
+
+function uniKeyOf(el) {
+    const w = el && el.closest ? el.closest('[id^="dept-wrapper-"], [id^="depts-"]') : null;
+    return w ? w.id.replace(/^(dept-wrapper-|depts-)/, '') : null;
+}
+
+function restoreSelection() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('gpa_selection_v1') || 'null');
+        if (!saved) return;
+        if (saved.uni) {
+            const wrapper = document.getElementById('dept-wrapper-' + saved.uni) || document.getElementById('depts-' + saved.uni);
+            if (wrapper) {
+                document.querySelectorAll('.uni-card').forEach(c => c.classList.remove('active'));
+                const uniCard = document.getElementById('card-' + saved.uni);
+                if (uniCard) uniCard.classList.add('active');
+                document.querySelectorAll('[id^="dept-wrapper-"], [id^="depts-"]').forEach(w => w.style.display = 'none');
+                wrapper.style.display = 'block';
+            }
+        }
+        if (saved.dept) {
+            currentDeptKey = saved.dept;
+            document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected', 'active'));
+            const card = Array.from(document.querySelectorAll('.dept-card')).find(c =>
+                (c.getAttribute('onclick') || '').includes("'" + saved.dept + "'"));
+            if (card) card.classList.add('active');
+        }
+    } catch (e) {}
+}
+
+document.addEventListener('input', function () { if (asuMode) saveASUStateSoon(); });
+document.addEventListener('change', function () { if (asuMode) saveASUStateSoon(); });
+
+// 3. تشغيل الحساب والمكونات فور التحميل
+window.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    if (!restoreASUState()) loadData();
+    restoreSelection();
+
+    const asuContainer = document.getElementById('semesters-container');
+    if (asuContainer) {
+        new MutationObserver(function () { if (asuMode) saveASUStateSoon(); })
+            .observe(asuContainer, { childList: true, subtree: true });
+    }
+});
     </script>
     <!-- Custom Unified Modal -->
     <div id="custom-alert-modal" class="custom-modal-overlay">
